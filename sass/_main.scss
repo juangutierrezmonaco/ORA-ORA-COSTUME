@@ -139,6 +139,7 @@
         background-color: $color-primary;
         color: white;
         border: solid 1px black;
+        opacity: .9;
     }
 
     &__overlayStock {   // Cartel si no hay stock

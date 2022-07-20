@@ -47,7 +47,7 @@
                     
                     <input type="text" class="form-control" placeholder="Buscar..." id="buscador">
 
-                    <button class="btn btn-primary" type="button">
+                    <button class="btn btn-primary" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </form>
@@ -62,10 +62,9 @@
 
             <!-- Carrito y opciones de usuario -->
             <div class="col-4 flexFullCenter">
-
                 <div class="col-12 col-lg-9">
 
-                    <div class="p-0 mb-1">
+                    <div class="p-0 mb-1 header__carrito">
                         <button type="button" class="btn btn-primary rounded-0 w-100 text-white fs-5" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito" aria-controls="offcanvasCarrito">
                             <i class="fa-solid fa-cart-shopping"></i>
                             <span>CARRITO (0) $0</span>
@@ -80,7 +79,7 @@
                 </div> 
             </div>
         </div>
-        
+
         <!-- Navbar -->
         <div class="row">
             <nav class="navbar navbar-expand-md navbar-light p-md-0 header__nav">
@@ -127,7 +126,7 @@
                 </div>
             </nav>
         </div>
-        
+
         <!-- Carrito que se abre cuando se hace click en el carrito -->
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
             <div class="offcanvas-header">
@@ -141,111 +140,13 @@
                     <span>SUBTOTAL</span>
                 </div>
 
-                <div class="header__carrito__offcanvas__producto">
-                    <div class="header__carrito__offcanvas__producto__imagen">
-                        <img src="../assets/images/cosplays/dbz-androide-18.png" alt="DBZ - Androide Nro 18 - Cosplay">
-                    </div>
-
-                    <div class="header__carrito__offcanvas__producto__info">
-                        <span>COSPLAY ANDROIDE 18</span>
-                        <span>$9000</span>
-                        <select class="form-select">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                        </select>
-                    </div>
-
-                    <div>$9000</div>
-
-                    <a href="#">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </a>
+                <div id="carritoVacio">
+                    <h5>No hay productos en su carrito!</h5>
                 </div>
 
-                <div class="header__carrito__offcanvas__producto">
-                    <div class="header__carrito__offcanvas__producto__imagen">
-                        <img src="../assets/images/cosplays/tokyo-revengers-draken-chaqueta.png" alt="Tokyo Revengers - Draken - Chaqueta">
-                    </div>
+                <form id="galeria__carrito"></form>
 
-                    <div class="header__carrito__offcanvas__producto__info">
-                        <span>CHAQUETA DRAKEN</span>
-                        <span>$3900</span>
-                        <select class="form-select">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                        </select>
-                    </div>
-
-                    <div>$3900</div>
-
-                    <a href="#">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </a>
-                </div>
-
-                <div class="header__carrito__offcanvas__producto">
-                    <div class="header__carrito__offcanvas__producto__imagen">
-                        <img src="../assets/images/cosplays/kimetsu-no-yaiba-tanjiro.png" alt="Kimetsu No Yaiba - Tanjiro Kamado - Cosplay">
-                    </div>
-
-                    <div class="header__carrito__offcanvas__producto__info">
-                        <span>COSPLAY TANJIRO KAMADO</span>
-                        <span>$11000</span>
-                        <select class="form-select">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                        </select>
-                    </div>
-
-                    <div>$11000</div>
-
-                    <a href="#">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </a>
-                </div>
-
-                <div class="header__carrito__offcanvas__footer">
-                    <div class="fs-5">
-                        <span>Subtotal (sin envío):</span>
-                        <span>$23900</span>
-                    </div>
-
-                    <div class="fs-5">
-                        <span>Envío (CP 7600): </span>
-                        <span>$586,88</span>
-                    </div>
-
-                    <div class="fs-4">
-                        <span>TOTAL: </span>
-                        <span>$24486,88</span>
-                    </div>
-
-                    <button class="btn btn-dark mt-2 me-2 ">INICIAR COMPRA</button>
-                </div>
+                <form id="footer__carrito"></form>
             </div>
         </div>
 
