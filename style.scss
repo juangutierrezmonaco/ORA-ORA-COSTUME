@@ -1,0 +1,11 @@
+@import './sass/variables';
+@import './sass/animations';
+
+@import './sass/global';
+@import './sass/header';
+@import './sass/footer';
+@import './sass/main';
+
+@import './sass/media-query';
+
+// NOTA: Las etiquetas header, main y footer tienen una clase llamada con el mismo nombre. Esto se debe a que hay clases que tienen de nombre, por ejemplo, "main__titulo" que es el título de cada main. Para hacer uso correcto de la metodología BEM y aplicarla en SASS, se optó por darle a las etiquetas una clase con su mismo nombre, a pesar de que esto sea redundante.

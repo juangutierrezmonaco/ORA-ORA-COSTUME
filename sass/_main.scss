@@ -1,0 +1,288 @@
+// Acá agrego los estilos de todos los main, ya que por ahora no hay mucho código. Para no tener muchos archivos con poco código de cada main.
+
+/**************************************************************/
+/*                      GENERALES                             */
+/**************************************************************/
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; 
+
+    &__titulo {
+        text-align: center;
+        width: 100%;
+
+        border: solid black;
+        border-width: 2px 0;
+        background-image: url("../assets/images/backgrounds/seccion__titulo--alt.webp");
+        background-size: cover;
+        background-position: center;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    }
+
+    &__descripcion {
+        text-align: center;
+        border: solid black;
+        border-width: 2px 0;
+        margin-bottom: 30px;
+        width: 100%;
+        padding: 30px 50px;
+    
+        background-image: url("../assets/images/backgrounds/seccion__descripcion.jpg");
+        background-size: cover;
+        background-position: center;
+    }
+
+    &__seccion {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+    }
+
+    &__boton {      /* Estilo para algunos botones en los main */
+        color: white;
+        background-color: black;
+        width: fit-content;
+        padding: 10px;
+
+        @extend .flexFullCenter;
+
+        transition: all .5s;
+
+        &:hover {
+            background-color: $color-danger;
+            color: antiquewhite;
+            filter:contrast(1.5);
+            transform: scale(1.2);
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:active:focus {
+            background-color: $color-primary-focus;
+            box-shadow: $color-primary-focus 0px 0px 10px;
+        }
+
+        &--go {     //Si el botón direcciona a alguna parte
+            transition: all .7s;
+
+            &::after {
+                font-family: "Font Awesome 5 Free";
+                content: " \f061";
+                font-weight: 900;
+                vertical-align: middle;
+
+                
+                height: 0;
+                width: 0;
+                opacity: 0;
+                transition: all .5s;
+            }
+
+            &:hover {
+                &::after {
+                    margin-left: 10px;
+                    padding-right: 3px;
+                    opacity: 1;
+                    height: 100%;
+                    width: auto;
+                }
+            }
+        }
+    }
+}
+
+/**************************************************************/
+/*                  INDEX Y TIENDA                            */
+/**************************************************************/
+.cosplay {
+    padding: 10px;
+    position: relative;
+    background-image: url("../assets/images/backgrounds/cosplay.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    transition: all .5s;
+
+    &__carrito{     //Icono de carrito
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    
+        padding: 5px;
+        font-size: 1.5rem;
+        background-color:#E3A077;
+        color: #FCF1EE;
+        border: none;
+    
+        opacity: 0;
+        transition: all .5s;
+    }
+
+    &__imagen {
+        object-fit: cover;
+    }
+
+    &__footer {
+        background-color: rgba($color: #FDE9E2, $alpha: 0.5);
+    }
+
+    &__descuento {     // Tiene un cartel con el descuento
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 5px;
+        
+        background-color: $color-primary;
+        color: white;
+        border: solid 1px black;
+    }
+
+    &__overlayStock {   // Cartel si no hay stock
+        height: 100%;
+        width: 100%;
+        z-index: 1000;
+        opacity: 0;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: .5s ease;
+        
+        color: white;
+        background-color: rgba($color: #000000, $alpha: 0.5);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+    }
+    
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: black 0px 0px 10px;
+
+        .cosplay__carrito {
+            opacity: 1;
+        }
+
+        .cosplay__overlayStock {
+            opacity: 1;
+        }
+    }
+}
+
+/**************************************************************/
+/*                           MEDIDAS                          */
+/**************************************************************/
+.medida {
+    height: 200px;
+    border: solid black;
+    background-image: url("../assets/images/backgrounds/medida.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+
+    &__titulo {
+        height: 100%;
+        width: 100%;
+        @extend .flexFullCenter;
+
+        h2 {
+            color: black;
+            width: 80%;
+            padding: 10px;
+            border: solid black;
+            background-color: white;
+            transition: all .3s ease;
+        }
+
+        &:hover {
+            box-shadow: black 0px 5px 15px;
+            backdrop-filter: blur(2px);
+
+            h2 {
+                background-color: $color-danger;
+                color: white;
+            }
+        }
+    }
+}
+
+.main--medidas {
+    .modal-body > * {
+        min-height: 60vh;
+        min-width: 100%;
+    }
+}
+
+/**************************************************************/
+/*                          PREGUNTAS                         */
+/**************************************************************/
+.talles {
+    button {
+        padding: 5px 20px;
+    }
+}
+
+.pagos {
+    li {
+        &::before {
+            font-family: "Font Awesome 5 Free";
+            content: " \f061";
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
+            font-weight: 900;
+        }
+    }
+
+}
+
+.preguntas__contacto{
+    width: fit-content;
+    
+    &:hover {
+        animation-play-state: paused;
+        color: $color-danger;
+    }
+}
+
+/**************************************************************/
+/*                           CONTACTO                          */
+/**************************************************************/
+#mensaje--contacto {
+    height: 150px;
+}
+
+.contacto__redes {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    li{
+        padding: 5px;
+        transition: all .3s;     //No funciona con instagram
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .instagram:hover {
+        background: #f09433; 
+        background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+        background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+        background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
+    }
+
+    .telefono:hover {
+        background-color: #FF4554;
+    }
+
+    .mail:hover {
+        background-color: #5E5485;
+    }
+}

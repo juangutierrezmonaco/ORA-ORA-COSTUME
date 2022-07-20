@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Description -->
+    <meta name="description" content="ORA ORA COSTUME! | Entra en nuestra tienda y mira todos los cosplays que tenemos para vos!">
+
+    <!-- Keywords -->
+    <meta name="keywords" content="venta de cosplays, cosplay, cosmaker, cosmaker en argentina, confección de cosplays, confección de disfraces, venta de disfraces, cosplay outfits, disfraces de anime, anime, tienda, tienda de cosplay, tienda de anime, accesorios de anime">
+
+    <!-- Title -->
+    <title>Tienda Online de Cosplays a Medida!</title>
+
+    <!-- Icono pestaña navegador -->
+    <link rel="shortcut icon" href="../assets/images/logo.jfif">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.min.css">
+    
+    <!-- Font Awesome - Icons -->
+    <script src="https://kit.fontawesome.com/d78df47158.js" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts - Akshar (Toda la familia)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="container-md header">
+
+        <!-- Parte superior del header -->
+        <div class="row m-0 mb-3 d-none d-md-flex">
+
+            <!-- Buscador -->
+            <div class="col-4 flexFullCenter">
+                <form class="input-group px-lg-3 header__buscador">
+                    
+                    <input type="text" class="form-control" placeholder="Buscar..." id="buscador">
+
+                    <button class="btn btn-primary" type="button">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Logo -->
+            <div class="col-4">
+                <a href="../index.html" class="flexFullCenter">
+                    <img src="../assets/images/logo.jfif" alt="Ora Ora Costume Logo" class="img-fluid col-lg-10 rounded-circle header__logo">
+                </a>
+            </div>
+
+            <!-- Carrito y opciones de usuario -->
+            <div class="col-4 flexFullCenter">
+
+                <div class="col-12 col-lg-9">
+
+                    <div class="p-0 mb-1">
+                        <button type="button" class="btn btn-primary rounded-0 w-100 text-white fs-5" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito" aria-controls="offcanvasCarrito">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span>CARRITO (0) $0</span>
+                        </button>
+                    </div>
+                    
+                    <div class="d-flex justify-content-evenly header__cuenta">
+                        <a href="">CREAR CUENTA</a>
+                        <span>|</span>
+                        <a href="">INICIAR SESIÓN</a>
+                    </div>  
+                </div> 
+            </div>
+        </div>
+        
+        <!-- Navbar -->
+        <div class="row">
+            <nav class="navbar navbar-expand-md navbar-light p-md-0 header__nav">
+                
+                <!-- Logo -->
+                <a class="navbar-toggler header__nav__item" href="../index.html">
+                    <img src="../assets/images/logo.jfif" alt="Ora Ora Costume Logo" class="rounded-circle img-fluid">
+                </a>
+        
+                <!-- Buscador -->
+                <button class="navbar-toggler header__nav__item">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+                <!-- Carrito -->
+                <button class="navbar-toggler header__nav__item" type="button"  data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito" aria-controls="offcanvasCarrito">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </button>
+
+                <!-- WhatsApp -->
+                <a target="_blank" href="https://api.whatsapp.com/send?phone=2236690005&text=Hola necesito más información!" class="navbar-toggler header__nav__item">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+
+                <!-- Opciones de usuario -->
+                <button class="navbar-toggler header__nav__item">
+                    <i class="fa-regular fa-user"></i>
+                </button>
+
+                <!-- Icono de hamburguesa -->
+                <button class="navbar-toggler header__nav__item" type="button" data-bs-toggle="collapse" data-bs-target="#header__nav__ul" aria-controls="header__nav__ul" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse fs-4" id="header__nav__ul">
+                    <ul class="nav nav-pills nav-fill w-100 d-md-flex justify-content-evenly flex-column flex-md-row p-md-0 py-5">
+                        <li class="nav-item"><a href="../index.html" class="nav-link">Inicio</a></li>
+                        <li class="nav-item"><a href="./tienda.html" class="nav-link activo">Tienda</a></li>
+                        <li class="nav-item"><a href="./medidas.html" class="nav-link">Medidas</a></li>
+                        <li class="nav-item"><a href="./envios.html" class="nav-link">Envios</a></li>
+                        <li class="nav-item"><a href="./preguntas.html" class="nav-link">Preguntas</a></li>
+                        <li class="nav-item"><a href="./contacto.html" class="nav-link">Contacto</a></li>
+                    </ul>                    
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Carrito que se abre cuando se hace click en el carrito -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasCarritoLabel">CARRITO DE COMPRAS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body header__carrito__offcanvas pt-0">
+                <div class="header__carrito__offcanvas__head">
+                    <span>PRODUCTO</span>
+                    <span>SUBTOTAL</span>
+                </div>
+
+                <div class="header__carrito__offcanvas__producto">
+                    <div class="header__carrito__offcanvas__producto__imagen">
+                        <img src="../assets/images/cosplays/dbz-androide-18.png" alt="DBZ - Androide Nro 18 - Cosplay">
+                    </div>
+
+                    <div class="header__carrito__offcanvas__producto__info">
+                        <span>COSPLAY ANDROIDE 18</span>
+                        <span>$9000</span>
+                        <select class="form-select">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                        </select>
+                    </div>
+
+                    <div>$9000</div>
+
+                    <a href="#">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+                </div>
+
+                <div class="header__carrito__offcanvas__producto">
+                    <div class="header__carrito__offcanvas__producto__imagen">
+                        <img src="../assets/images/cosplays/tokyo-revengers-draken-chaqueta.png" alt="Tokyo Revengers - Draken - Chaqueta">
+                    </div>
+
+                    <div class="header__carrito__offcanvas__producto__info">
+                        <span>CHAQUETA DRAKEN</span>
+                        <span>$3900</span>
+                        <select class="form-select">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                        </select>
+                    </div>
+
+                    <div>$3900</div>
+
+                    <a href="#">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+                </div>
+
+                <div class="header__carrito__offcanvas__producto">
+                    <div class="header__carrito__offcanvas__producto__imagen">
+                        <img src="../assets/images/cosplays/kimetsu-no-yaiba-tanjiro.png" alt="Kimetsu No Yaiba - Tanjiro Kamado - Cosplay">
+                    </div>
+
+                    <div class="header__carrito__offcanvas__producto__info">
+                        <span>COSPLAY TANJIRO KAMADO</span>
+                        <span>$11000</span>
+                        <select class="form-select">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                        </select>
+                    </div>
+
+                    <div>$11000</div>
+
+                    <a href="#">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+                </div>
+
+                <div class="header__carrito__offcanvas__footer">
+                    <div class="fs-5">
+                        <span>Subtotal (sin envío):</span>
+                        <span>$23900</span>
+                    </div>
+
+                    <div class="fs-5">
+                        <span>Envío (CP 7600): </span>
+                        <span>$586,88</span>
+                    </div>
+
+                    <div class="fs-4">
+                        <span>TOTAL: </span>
+                        <span>$24486,88</span>
+                    </div>
+
+                    <button class="btn btn-dark mt-2 me-2 ">INICIAR COMPRA</button>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- MAIN -->
+   <main class="container p-0 mt-3 mb-4 main main main--tienda">
+        <div class="main__titulo p-4">
+            <h1 class="bounce-top">TIENDA</h1>
+        </div>
+
+        <!-- Seccion principal -->
+        <section class="d-flex flex-column gap-5">
+
+            <div class="row d-flex justify-content-evenly w-100">
+
+                <!-- Botones de orden-->
+                <div class="col-5">
+                    <form class="form">
+                        <label for="orden" class="form-label">Ordenar por</label>
+                        <select name="orden" id="orden" class="form-select">
+                            <option value="pred"><span>Mas populares</span></option>
+                            <option value="menor-precio">Menor precio</option>
+                            <option value="mayor-precio">Mayor precio</option>
+                            <option value="nombre-asc">Nombre ascendente</option>
+                            <option value="nombre-des">Nombre descendente</option>
+                        </select>
+                    </form>
+                </div>
+
+                <!-- Opciones de filtro-->
+                <div class="col-5 d-none d-md-flex justify-content-center">
+                    <form>
+                        <h2>Filtrar por</h2>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="oferta" name="filtrado-articulos" class="form-check-input">
+                            <label for="oferta" class="form-check-label">Oferta</label>
+                            <br>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" id="stock" name="filtrado-articulos" class="form-check-input">
+                            <label for="stock" class="form-check-label">En stock</label>
+                            <br>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="accesorios" name="filtrado-articulos" class="form-check-input">
+                            <label for="accesorios" class="form-check-label">Accesorios</label>
+                            <br>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="especiales" name="filtrado-articulos" class="form-check-input">
+                            <label for="especiales" class="form-check-label">Especiales</label>
+                            <br>
+                        </div>
+                                            
+                    </form>
+                </div>
+
+                <div class="form col-5 d-flex d-md-none">
+                    <form class="col-12">
+                        <label for="filtradoMobile" class="form-label">Filtrar por</label>
+                        <select name="filtradoMobile" id="filtradoMobile" class="form-select">
+                            <option value="pred"><span>Oferta</span></option>
+                            <option value="menor-precio">En stock</option>
+                            <option value="mayor-precio">Accesorios</option>
+                            <option value="nombre-asc">Especiales</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Catálogo -->
+            <section class="d-flex flex-column align-items-center">
+
+                <div class="row d-flex gap-5 justify-content-center mb-5 text-center w-100">
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        <img src="../assets/images/cosplays/chihiro-noface.png" class="cosplay__imagen mb-2 img-fluid" alt="El viaje de Chihiro - Kaonashi - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY KAONASHI</h3>
+                            <h5>El viaje de Chihiro</h5>
+                            <h4>$ 8000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <!-- Lo dejo armado con una clase para agregar la funcionalidad cuando se agrega algo al carrito en un futuro -->
+                            <a href="">
+                                <i class="fa-solid fa-cart-plus"></i>
+                            </a>
+                        </div>
+
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/snk-full.png" class="cosplay__imagen mb-2 img-fluid" alt="Shingeki no Kiojin - Legión de Reconocimiento - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY LEGIÓN DE RECONOCIMIENTO</h3>
+                            <h5>Shingeki no Kyojin</h5>
+                            <h4>$ 8000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/naruto-kaguya.png" class="cosplay__imagen mb-2 img-fluid" alt="Naruto Shippuden - Kaguya - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY KAGUYA OOTSUTSUKI</h3>
+                            <h5>Naruto Shippuden</h5>
+                            <h4>$ 12000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/kuroshitsuji-ciel.png" class="cosplay__imagen mb-2 img-fluid" alt="Kuroshitsuji - Ciel Phantomhive - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY CIEL PHANTOMHIVE</h3>
+                            <h5>Kuroshitsuji</h5>
+                            <h4>$ 14000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/gintama-gintoki.png" class="cosplay__imagen mb-2 img-fluid" alt="Gintama - Gintoki Sakata - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY GINTOKI SAKATA</h3>
+                            <h5>Gintama</h5>
+                            <h4>$ 12000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/sailormoon-sailormoon.png" class="cosplay__imagen mb-2 img-fluid" alt="Sailor Moon - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY SAILOR MOON</h3>
+                            <h5>Sailor Moon</h5>
+                            <h4>$ 10000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/tokyo-revengers-draken-chaqueta.png" class="cosplay__imagen mb-2 img-fluid" alt="Tokyo Revengers - Draken - Chaqueta">
+
+                        <div class="cosplay__footer">
+                            <h3>CHAQUETA DRAKEN</h3>
+                            <h5>Tokyo Revengers</h5>
+                            <h4>$ 3900</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/dbz-androide-18.png" class="cosplay__imagen mb-2 img-fluid" alt="DBZ - Androide Nro 18 - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY ANDROIDE 18</h3>
+                            <h5>Dragon Ball Z</h5>
+                            <h4>$ 9000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/jojo-jolyne-cujoh.png" class="cosplay__imagen mb-2 img-fluid" alt="Jojo's Bizarre Adventure - Jolyne Cujoh - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY JOLYNE CUJOH</h3>
+                            <h5>Jojo's Bizarre Adventure</h5>
+                            <h4>$ 14000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/touken-ranbu-kashuu-kiyomitsu.png" alt="Touken Ranbu - Kashuu Kiyomitsu - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY KASHUU KIYOMITSU</h3>
+                            <h5>Touken Ranbu</h5>
+                            <h4>$ 8000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/sao-kirito.png" alt="Sword Art Online - Kirito - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY KIRITO</h3>
+                            <h5>Sword Art Online</h5>
+                            <h4>$ 10000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/jovenes-titanes-raven.png" alt="Jovenes Titanes - Raven - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY RAVEN</h3>
+                            <h5>Jóvenes Titanes</h5>
+                            <h4>$ 10000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/jibaku-shonen-tsukasa-yugi.png" alt="Jibaku Shonen - Tsukasa Yugi - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY TSUKASA YUGI</h3>
+                            <h5>Jibaku Shonen</h5>
+                            <h4>$ 9500</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                    <article class="col-8 col-sm-4 col-md-3 cosplay">
+                        
+                        <img src="../assets/images/cosplays/kimetsu-no-yaiba-tanjiro.png" alt="Kimetsu No Yaiba - Tanjiro Kamado - Cosplay">
+
+                        <div class="cosplay__footer">
+                            <h3>COSPLAY TANJIRO KAMADO</h3>
+                            <h5>Kimetsu No Yaiba</h5>
+                            <h4>$ 11000</h4>
+                        </div>
+        
+                        <div class="cosplay__carrito">  
+                            <a href=""><i class="fa-solid fa-cart-plus"></i></a>
+                        </div>
+                    </article>
+
+                </div>
+                    
+                <button class="btn main__boton col-4 mt-2">
+                    Mostrar más
+                </button>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="container-fluid pt-4 footer">
+        <div class="row justify-content-md-evenly gap-2">
+
+            <!-- Navegación -->
+            <div class="col-12 col-sm-6 col-md-3 footer__nav">
+                <h3>NAVEGACIÓN</h3>
+                <ul class="p-0">
+                    <li><a href="../index.html">Inicio</a></li>
+                    <li><a href="./tienda.html">Tienda</a></li>
+                    <li><a href="./medidas.html">Medidas</a></li>
+                    <li><a href="./envios.html">Envios</a></li>
+                    <li><a href="./preguntas.html">Preguntas</a></li>
+                    <li><a href="./contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+
+            <!-- MEDIOS DE PAGO Y ENVIOS-->
+            <div class="row col-md-3">
+                <div class="col-6 col-md-12 footer__pagosEnvios">
+                    <h3>MEDIOS DE PAGO</h3>
+                    <ul>
+                        <li><img src="../assets/images/pagos/visa.png" alt="visa"></li>
+                        <li><img src="../assets/images/pagos/mastercard.png" alt="master"></li>
+                        <li><img src="../assets/images/pagos/tarjeta-naranja.png" alt="naranja"></li>
+                        <li><img src="../assets/images/pagos/mercadopago.png" alt="mercadopago"></li>
+                        <li><img src="../assets/images/pagos/pagofacil.png" alt="pagofacil"></li>
+                        <li><img src="../assets/images/pagos/rapipago.png" alt="rapipago"></li>
+                    </ul>
+                </div>
+            
+                <div class="col-6 col-md-12 footer__pagosEnvios">
+                    <h3>ENVÍOS</h3>
+                    <ul>
+                        <li><img src="../assets/images/envio/mercado-envios.png" alt="mercado envios"></li>
+                        <li><img src="../assets/images/envio/andreani.png" alt="andreani"></li>
+                        <li><img src="../assets/images/envio/oca.png" alt="oca"></li>
+                        <li><img src="../assets/images/envio/correo-argentino.png" alt="correo argentino"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- NEWSLETTER Y REDES-->
+            <div class="row col-md-3">
+
+                <!-- NEWSLETTER -->
+                <div class="col-6 col-md-12  mb-4">
+                    <h3>NEWSLETTER</h3>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Mail..." id="newsletter">
+                        <button class="btn btn-dark text-white">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- REDES -->
+                <nav class="col-6 col-md-12 ">
+                    <h3>REDES</h3>
+                    <ul class="footer__redes p-0">
+                        <li>
+                            <a target="_blank" href="https://www.instagram.com/">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://www.facebook.com/">
+                                <i class="fa-brands fa-facebook-f facebook"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://www.youtube.com/">
+                                <i class="fa-brands fa-youtube youtube"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- LOGO -->
+            <div class="col-5 col-md-3 footer__logo d-none d-md-flex justify-content-center">
+                <a href="#">
+                    <img src="../assets/images/logo.jfif" alt="Ora Ora Costume Logo">
+                </a>
+            </div>
+
+        </div>
+
+        <!-- DERECHOS RESERVADOS -->
+        <div class="row footer__legales">
+            <p class="d-flex justify-content-center gap-2 m-0 p-2">
+                <span>Todos los derechos reservados</span>
+                <span class="">-</span>
+                <span class="d-flex gap-2 align-items-center">
+                    ORA ORA Costume
+                    <i class="fa-solid fa-registered"></i>
+                </span>
+            </p>
+        </div>
+        
+    </footer>
+    
+    <!-- Botón fijo de WhatsApp -->
+    <a target="_blank" href="https://api.whatsapp.com/send?phone=2236690005&text=Hola necesito más información!" class="boton__fijo boton__fijo--whatsApp d-none d-md-flex">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Botón fijo para ir arribar en version mobile -->
+    <a href="#" class="boton__fijo boton__fijo--goUp">
+        <i class="fa-solid fa-chevron-up"></i>
+    </a>
+    <!-- JS -->
+    <script src="../js/global.js"></script>
+    <script src="../js/menu.js"></script>
+    <script src="../js/cosplay.js"></script>
+    <script src="../js/cliente.js"></script>
+    <script src="../js/carrito.js"></script>
+    <script src="../index.js"></script>
+</body>
+
+</html>

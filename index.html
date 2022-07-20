@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <!-- Description -->
+    <meta name="description" content="ORA ORA COSTUME! | Venta de cosplays y accesorios de anime hechos a tu medida. Encarganos el que más te guste!">
+
+    <!-- Keywords -->
+    <meta name="keywords" content="venta de cosplays, cosplay, cosmaker, cosmaker en argentina, confección de cosplays, confección de disfraces, venta de disfraces, cosplay outfits, disfraces de anime, anime, juegos, tienda, tienda de cosplay, tienda de anime, accesorios de anime">
+
+    <!-- Title --> 
+    <title>ORA ORA COSTUME - Cosplays a Medida!</title>
+
+    <!-- Icono pestaña navegador -->
+    <link rel="shortcut icon" href="./assets/images/logo.jfif">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/style.min.css">
+    
+    <!-- Font Awesome - Icons -->
+    <script src="https://kit.fontawesome.com/d78df47158.js" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts - Akshar (Toda la familia)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="container-md header">
+
+        <!-- Parte superior del header -->
+        <div class="row m-0 mb-3 d-none d-md-flex">
+
+            <!-- Buscador -->
+            <div class="col-4 flexFullCenter">
+                <form class="input-group px-lg-3 header__buscador">
+                    
+                    <input type="text" class="form-control" placeholder="Buscar..." id="buscador">
+
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Logo -->
+            <div class="col-4">
+                <a href="./index.html" class="flexFullCenter">
+                    <img src="./assets/images/logo.jfif" alt="Ora Ora Costume Logo" class="img-fluid col-lg-10 rounded-circle header__logo">
+                </a>
+            </div>
+
+            <!-- Carrito y opciones de usuario -->
+            <div class="col-4 flexFullCenter">
+                <div class="col-12 col-lg-9">
+
+                    <div class="p-0 mb-1 header__carrito">
+                        <button type="button" class="btn btn-primary rounded-0 w-100 text-white fs-5" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito" aria-controls="offcanvasCarrito">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span>CARRITO (0) $0</span>
+                        </button>
+                    </div>
+                    
+                    <div class="d-flex justify-content-evenly header__cuenta">
+                        <a href="">CREAR CUENTA</a>
+                        <span>|</span>
+                        <a href="">INICIAR SESIÓN</a>
+                    </div>  
+                </div> 
+            </div>
+        </div>
+
+        <!-- Navbar -->
+        <div class="row">
+            <nav class="navbar navbar-expand-md navbar-light p-md-0 header__nav">
+                
+                <!-- Logo -->
+                <a class="navbar-toggler header__nav__item" href="./index.html">
+                    <img src="./assets/images/logo.jfif" alt="Ora Ora Costume Logo" class="rounded-circle img-fluid">
+                </a>
+        
+                <!-- Buscador -->
+                <button class="navbar-toggler header__nav__item">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+                <!-- Carrito -->
+                <button class="navbar-toggler header__nav__item" type="button"  data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito" aria-controls="offcanvasCarrito">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </button>
+
+                <!-- WhatsApp -->
+                <a target="_blank" href="https://api.whatsapp.com/send?phone=2236690005&text=Hola necesito más información!" class="navbar-toggler header__nav__item">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+
+                <!-- Opciones de usuario -->
+                <button class="navbar-toggler header__nav__item">
+                    <i class="fa-regular fa-user"></i>
+                </button>
+
+                <!-- Icono de hamburguesa -->
+                <button class="navbar-toggler header__nav__item" type="button" data-bs-toggle="collapse" data-bs-target="#header__nav__ul" aria-controls="header__nav__ul" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse fs-4" id="header__nav__ul">
+                    <ul class="nav nav-pills nav-fill w-100 d-md-flex justify-content-evenly flex-column flex-md-row p-md-0 py-5">
+                        <li class="nav-item"><a href="./index.html" class="nav-link activo">Inicio</a></li>
+                        <li class="nav-item"><a href="./pages/tienda.html" class="nav-link">Tienda</a></li>
+                        <li class="nav-item"><a href="./pages/medidas.html" class="nav-link">Medidas</a></li>
+                        <li class="nav-item"><a href="./pages/envios.html" class="nav-link">Envios</a></li>
+                        <li class="nav-item"><a href="./pages/preguntas.html" class="nav-link">Preguntas</a></li>
+                        <li class="nav-item"><a href="./pages/contacto.html" class="nav-link">Contacto</a></li>
+                    </ul>                    
+                </div>
+            </nav>
+        </div>
+
+        <!-- Carrito que se abre cuando se hace click en el carrito -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasCarritoLabel">CARRITO DE COMPRAS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body header__carrito__offcanvas pt-0">
+                <div class="header__carrito__offcanvas__head">
+                    <span>PRODUCTO</span>
+                    <span>SUBTOTAL</span>
+                </div>
+
+                <div id="carritoVacio">
+                    <h5>No hay productos en su carrito!</h5>
+                </div>
+
+                <form id="galeria__carrito"></form>
+
+                <form id="footer__carrito"></form>
+            </div>
+        </div>
+
+    </header>
+    
+    <!-- MAIN -->
+    <main class="container p-0 mt-3 mb-4 main main--index">
+        
+        <div class="main__titulo p-4">
+            <h1 class="bounce-top">COSPLAYS MÁS PEDIDOS</h1>
+            <h3 class="bounce-top">A MEDIDA</h3>
+        </div>
+
+        <!-- Seccion 1 -->
+        <section class="main__seccion row">
+
+            <div class="d-flex justify-content-center flex-wrap mb-5 w-75">
+
+                <!-- Botones de orden-->
+                <div class="col-5">
+                    <form class="form">
+                        <label for="orden" class="form-label">Ordenar por</label>
+                        <select name="orden" id="orden" class="form-select">
+                            <option value="pred"><span>Mas populares</span></option>
+                            <option value="menor-precio">Menor precio</option>
+                            <option value="mayor-precio">Mayor precio</option>
+                            <option value="nombre-asc-anime">Nombre ascendente (Según anime)</option>
+                            <option value="nombre-des-anime">Nombre descendente (Según anime)</option>
+                            <option value="nombre-asc-personaje">Nombre ascendente (Según personaje)</option>
+                            <option value="nombre-des-personaje">Nombre descendente (Según personaje)</option>
+                        </select>
+                    </form>
+                </div>
+
+                <!-- Buscador -->
+                <div class="col-5 d-flex align-items-end">
+                    <form class="input-group px-lg-3 " id="buscadorTienda">
+                        <input type="text" class="form-control" placeholder="Buscar..." id="inputBuscador">
+
+                        <button class="btn btn-primary buttonBuscador" type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Opciones de filtro -->
+                <div class="dropdown mt-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                      Filtrar por
+                    </button>
+
+                    <form class="form dropdown-menu p-4" id="filtro">
+
+                        <div class="form-check">
+                            <input type="checkbox" id="oferta" name="filtrado-articulos" class="form-check-input">
+                            <label for="oferta" class="form-check-label">Oferta</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" id="stock" name="filtrado-articulos" class="form-check-input">
+                            <label for="stock" class="form-check-label">En stock</label>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" id="especial" name="filtrado-articulos" class="form-check-input">
+                            <label for="especiales" class="form-check-label">Especiales</label>
+                        </div>
+                    </form>
+                </div> 
+            </div>
+
+            <form class="row d-flex gap-5 justify-content-center mb-5 text-center w-100 galeria">
+
+            </form>
+            
+            <div class="btn col-4 mt-2 main__boton main__boton--go">
+                <a href="pages/tienda.html">IR A LA TIENDA!</a>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="container-fluid pt-4 footer">
+        <div class="row justify-content-md-evenly gap-2">
+
+            <!-- Navegación -->
+            <div class="col-12 col-sm-6 col-md-3 footer__nav">
+                <h3>NAVEGACIÓN</h3>
+                <ul class="p-0">
+                    <li><a href="./index.html">Inicio</a></li>
+                    <li><a href="./pages/tienda.html">Tienda</a></li>
+                    <li><a href="./pages/medidas.html">Medidas</a></li>
+                    <li><a href="./pages/envios.html">Envios</a></li>
+                    <li><a href="./pages/preguntas.html">Preguntas</a></li>
+                    <li><a href="./pages/contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+
+            <!-- MEDIOS DE PAGO Y ENVIOS-->
+            <div class="row col-md-3">
+                <div class="col-6 col-md-12 footer__pagosEnvios">
+                    <h3>MEDIOS DE PAGO</h3>
+                    <ul>
+                        <li><img src="./assets/images/pagos/visa.png" alt="visa"></li>
+                        <li><img src="./assets/images/pagos/mastercard.png" alt="mastercard"></li>
+                        <li><img src="./assets/images/pagos/tarjeta-naranja.png" alt="naranja"></li>
+                        <li><img src="./assets/images/pagos/mercadopago.png" alt="mercadopago"></li>
+                        <li><img src="./assets/images/pagos/pagofacil.png" alt="pagofacil"></li>
+                        <li><img src="./assets/images/pagos/rapipago.png" alt="rapipago"></li>
+                    </ul>
+                </div>
+            
+                <div class="col-6 col-md-12 footer__pagosEnvios">
+                    <h3>ENVÍOS</h3>
+                    <ul>
+                        <li><img src="./assets/images/envio/mercado-envios.png" alt="mercado envios"></li>
+                        <li><img src="./assets/images/envio/andreani.png" alt="andreani"></li>
+                        <li><img src="./assets/images/envio/oca.png" alt="oca"></li>
+                        <li><img src="./assets/images/envio/correo-argentino.png" alt="correo argentino"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- NEWSLETTER Y REDES-->
+            <div class="row col-md-3">
+
+                <!-- NEWSLETTER -->
+                <div class="col-6 col-md-12 mb-4">
+                    <h3>NEWSLETTER</h3>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Mail..." id="newsletter">
+                        <button class="btn btn-dark text-white">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- REDES -->
+                <nav class="col-6 col-md-12 ">
+                    <h3>REDES</h3>
+                    <ul class="footer__redes p-0">
+                        <li>
+                            <a target="_blank" href="https://www.instagram.com/">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://www.facebook.com/">
+                                <i class="fa-brands fa-facebook-f facebook"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://www.youtube.com/">
+                                <i class="fa-brands fa-youtube youtube"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- LOGO -->
+            <div class="col-5 col-md-3 footer__logo d-none d-md-flex justify-content-center">
+                <a href="#">
+                    <img src="./assets/images/logo.jfif" alt="Ora Ora Costume Logo">
+                </a>
+            </div>
+
+        </div>
+
+        <!-- DERECHOS RESERVADOS -->
+        <div class="row footer__legales">
+            <p class="d-flex justify-content-center gap-2 m-0 p-2">
+                <span>Todos los derechos reservados</span>
+                <span class="">-</span>
+                <span class="d-flex gap-2 align-items-center">
+                    ORA ORA Costume
+                    <i class="fa-solid fa-registered"></i>
+                </span>
+            </p>
+        </div>
+        
+    </footer>
+    
+    <!-- Botón fijo de WhatsApp -->
+    <a target="_blank" href="https://api.whatsapp.com/send?phone=2236690005&text=Hola necesito más información!" class="boton__fijo boton__fijo--whatsApp d-none d-md-flex">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Botón fijo para ir arribar en version mobile -->
+    <a href="#" class="boton__fijo boton__fijo--goUp">
+        <i class="fa-solid fa-chevron-up"></i>
+    </a>
+
+    <!-- JS -->
+    <script src="./js/global.js"></script>
+    <script src="./js/menu.js"></script>
+    <script src="./js/cosplay.js"></script>
+    <script src="./js/cliente.js"></script>
+    <script src="./js/carrito.js"></script>
+    <script src="./index.js"></script>
+</body>
+
+</html>

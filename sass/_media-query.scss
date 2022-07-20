@@ -1,0 +1,197 @@
+@media screen and (min-width: 992px) {
+    // Main
+    .cosplay {
+        &__descuento {
+            font-size: 2rem;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    // Generales
+    body {  //Espacio para header en mobile
+        padding-bottom: 15vh;
+    }
+
+    .boton__fijo--goUp {
+        bottom: 20vh;  
+        right: 15px;
+    }
+
+    // Header
+    .header {
+        &__nav {
+            min-height: 16vh;
+            background: none;
+            background-color: blueviolet;
+            border-top: solid rgba($color: #000000, $alpha: .5) 1px;
+    
+            position: fixed;
+            bottom: 0;
+            z-index: 1000000;
+        }
+    
+        &__carrito {
+            &__offcanvas {
+                width: 100vw;
+
+                &__producto {
+                    &__tachito {
+                        position: absolute;
+                        right: 50px;
+                        bottom: 30px;
+                    }
+                }
+            }
+        }
+    }
+    
+
+    // Main
+    .cosplay {
+        &__descuento {
+            font-size: 1.2rem;
+        }
+    }
+
+    // Footer
+    .footer {
+        &__redes {
+            li {
+                i {
+                    font-size: 6vw;
+                    height: 9vw;
+                    aspect-ratio: 1/1;
+                }
+            }
+        }
+    }
+}
+
+// Media Query ÚNICA para 768px. Está hecha para deshacer la que está arriba.
+// Resulta que en exactamente 768px, con max-width incluye el valor pero con 
+// 767px no lo incluye, por lo cual tuve que hacer esto para solucionarlo.
+@media screen and (min-width: 768px) and (max-width: 768px){
+    // Generales
+    body {
+        padding-bottom: 0vh;
+    }
+
+    // Header
+    .header {
+        &__nav {
+            min-height: 0;
+            background: linear-gradient(338deg, rgba(89,110,141,1) 
+            0%, rgba(223,208,231,1) 35%, rgba(225,250,237,1) 100%); 
+            border-top: solid rgb(164, 160, 160) 1px;
+    
+            position: relative;
+            z-index: 0;
+        }
+    }
+
+    // Footer
+    .footer {
+        &__redes {
+            li {
+                i {
+                    font-size: 3vw;
+                    height: 5vw;
+                    aspect-ratio: 1/1;
+                }
+            }
+        }
+    }
+}
+    
+@media screen and (max-width: 433px) {
+    // Header
+    .header {
+        &__nav {
+            &__item {
+    
+                > * {
+                    font-size: 1.1rem;
+                }
+            }
+    
+            img {
+                height: 60%;
+            }
+        }
+    }
+    
+    // Footer
+    .footer {
+        &__redes {
+            li {
+                i {
+                    font-size: 8vw;
+                    height: 12vw;
+                    aspect-ratio: 1/1;
+                }
+            }
+        }
+
+        &__legales {
+            p {
+                display: flex;
+                flex-flow: column wrap;
+                align-items: center;
+    
+                span:nth-child(2) {     //Elimino el guión
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 320px){  //Diseñada principalmente para 280px
+    // Header
+    .header {
+        &__nav {
+            &__item {
+    
+                &:first-child {     //Elimino el logo 
+                    display: none;
+                }
+            }
+        }
+
+        &__carrito {
+            &__offcanvas {
+                font-size: .8rem;
+            }
+        }
+    }
+
+    // Footer 
+    .footer {
+        .row:first-of-type {  //Selecciono la primera fila
+            div {  //Todos los div de la primer fila
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media screen and (pointer:coarse), print, (max-width: 768px) {
+
+    //Que el carrito se haga visible en dispositivos touch, si se imprime o si la pantalla tiene una resolución menor o igual a 768px
+    .cosplay{
+        &__carrito {
+            opacity: 1;
+        }
+
+        &__overlayStock {
+            opacity: 1;
+        }
+
+        &:hover {
+            transform: scale(1); /*Para anular el hover*/
+        }
+    }
+}
+
+// Nota: La página funciona sin romperse hasta exactamente 285px inclusive.

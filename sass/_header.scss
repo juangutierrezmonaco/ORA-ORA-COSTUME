@@ -1,0 +1,172 @@
+/**     Estilos    **/
+.header {  
+    // Buscador
+    &__buscador {
+        height: 20%;
+    }
+
+    // Logo
+    &__logo {
+        &:hover {
+            animation: rotate-in-center .9s both;
+        }
+    }
+
+    // Carrito 
+    
+    #offcanvasCarrito {
+        width: fit-content;
+        z-index: 1000001;   // Para que en vistas mobile tape el header
+    }
+
+    &__carrito {
+
+        &__offcanvas {
+            width: 50vw;
+
+            &__head {
+                border: solid rgba($color: #000000, $alpha: 0.3);
+                border-width: 1px 0px;
+                padding: 10px 12% 10px 0px;
+                margin-bottom: 10px;
+
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            &__producto {
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+                border-bottom: solid rgba($color: #000000, $alpha: 0.3) 1px;
+                position: relative; 
+
+                display: flex;
+                justify-content: space-between;
+
+                &__imagen {
+                    width: 20%;
+                    height: auto;
+                }
+
+                &__info {
+                    width: 30%;
+                    display: flex;
+                    flex-direction: column;
+
+                    &__cantidad {
+                        background-color: black;
+                        width: fit-content; 
+                        height: fit-content;
+                        display: flex;
+                        border: solid 1px black;
+
+                        button {
+                            width: fit-content;
+                            padding: 0px 5px;
+                            margin: none;   
+                            border-radius: 0%;
+                        }
+
+                        span {
+                            color: white;
+                            display: flex;
+                            justify-content: center;
+                            min-width: 30px;
+                        }
+                        
+                    }
+                }
+
+                &__tachito {
+                    position: absolute;
+                    right: 10px;
+                }
+            }
+
+            &__footer {
+                div {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+        }
+    }
+
+    // Opciones de cuenta
+    &__cuenta {
+        font-size: 0.9rem;
+
+        a{
+            position: relative;
+
+            &::after {
+                content: "";
+                height: 1px;
+                width: 0;
+                background-color: $color-primary-focus;
+            
+                position: absolute;
+                left: 0;
+                bottom: 10%;
+            
+                transition: 0.3s;
+            }
+
+            &:hover {
+                color: $color-primary-focus;
+
+                &::after {
+                    width: 100%;
+                }
+            }
+        }
+    }
+    
+    // Nav
+    &__nav {
+        text-transform: uppercase;
+        background: linear-gradient(338deg, rgba(89,110,141,1) 
+        0%, rgba(223,208,231,1) 35%, rgba(225,250,237,1) 100%); 
+        border: solid rgb(164, 160, 160);
+        border-width: 1px 0;
+
+        .nav-link{
+            color: black;
+            height: 100%;
+
+            &:hover {
+                color: white;
+                background-color: $color-primary;
+            }
+        }
+
+        .activo {
+            color: white;
+            background-color: $color-primary;
+            border: solid 1px black;
+            @extend .shadow-pop-bl;
+        }
+
+        &__item {
+            height: 12vh;
+            border: none;
+            outline: none;  
+            display: flex;
+            align-items: center;  
+
+            > * {
+                height: 100%;
+                font-size: 2rem;
+                @extend .flexFullCenter;
+            }
+
+            i {     //Si no se creaba un bug con los iconos a veces
+                @extend .flexFullCenter;
+            }
+
+            &:hover {
+                color: white;
+            }
+        }
+    }
+}

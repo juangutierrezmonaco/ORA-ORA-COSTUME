@@ -1,0 +1,30 @@
+// Colores
+$color-primary: #49406F;
+$color-primary-hover: #645899;
+$color-primary-focus: #7B1FA2;
+
+$color-danger: #E60686;
+$color-danger-hover: #f81798;
+$color-danger-focus: #fa5fb8;
+
+$color-info: #E1FAED;
+
+$facebook-color: #3b5998;
+$youtube-color: red;
+$wpp-color: #43CC51;
+
+// Mapa de redes sociales
+$redes: (
+    facebook: $facebook-color,
+    wpp: $wpp-color,
+    youtube: $youtube-color
+);
+
+@each $name, $color in $redes {
+    .#{$name} {
+        &:hover {
+            color: white;
+            background-color: $color;
+        }
+    }
+}

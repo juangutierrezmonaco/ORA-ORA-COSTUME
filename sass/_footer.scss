@@ -1,0 +1,89 @@
+.footer {
+    color: white;
+    font-size: 1.2rem;
+    background-color: #5C5284;
+    border-top: solid black 2px;
+
+    &__nav {
+        li:hover {
+            box-shadow: inset 100px 0 0 0 $color-danger;
+            color: white;
+            padding: 0px 3px;
+            transition: all .3s;
+        }
+    }
+
+    &__pagosEnvios { 
+
+        ul {
+            /* Grilla de las imágenes de formas de pago y envíos */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            padding: 0;
+        }
+
+        img {
+            /* Relación de aspecto para imágenes */
+            width: 100%;
+            aspect-ratio: 8/5;
+            object-fit: cover;
+        }
+    }
+
+    &__redes {
+        color: black;
+        display: flex;
+        gap: 10px;
+
+        li {
+            
+            transition: all .3s ease;
+
+            i {
+                background-color: white;
+                border-radius: 100%;
+                height: 5vw;
+                aspect-ratio: 1/1;
+                font-size: 3vw;
+
+                @extend .flexFullCenter;
+            }
+
+            &:hover {
+                color: white;
+
+                i {
+                    border: solid 1px white;
+                    box-shadow: 0px 0px 3px white;
+                }
+
+                .fa-instagram {
+                    background: #d6249f;
+                    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); 
+                }
+
+            }
+
+        }
+    }
+
+    &__logo {
+        padding: 20px;
+        a {
+            width: 130px;
+            height: 130px;
+            border-radius: 100%;
+
+            img {
+                border-radius: 100%;
+                height: 100%;
+            } 
+        }
+    }
+
+    &__legales {
+        color: black;
+        background-color: #DFD0E7;
+    }
+}
