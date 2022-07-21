@@ -246,12 +246,13 @@ function cargarTienda(){
         let buscadorBoton = buscadorHeader.querySelector("button");
         let buscadorInput = buscadorHeader.querySelector("input");
 
-        // Pongo la palabra en el input
+        // Pongo la palabra en el input y la borro del storage
         buscadorInput.focus();
         buscadorInput.value = localStorage.getItem("busquedaTermino");
         localStorage.removeItem("busquedaTermino");
-        buscadorBoton.onclick = true;
-        console.log(buscadorInput);
+
+        // Hago click en el boton
+        buscadorBoton.click();
 
     }
     
