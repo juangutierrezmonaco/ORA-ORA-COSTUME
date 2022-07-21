@@ -1,3 +1,19 @@
+// Variables globales
+let codigosDescuento;
+let cosplays;
+let carrito = new Carrito();
+
+let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
+let galeriaCosplays;
+let carritoHtmlGaleria = document.querySelector("#galeria__carrito");
+let carritoHtmlFooter = document.querySelector("#footer__carrito");
+
+
+
+
+
+
+
 /**
  *  Funciones que son de uso general para todas las clases y funciones.
  */

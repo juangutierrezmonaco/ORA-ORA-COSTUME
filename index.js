@@ -1,14 +1,3 @@
-// Arreglos globales que se usan a lo largo del código
-let codigosDescuento;
-let cosplays;
-let carrito = new Carrito();
-
-// Referencias al html usadas a lo largo del programa
-let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
-let galeriaCosplays;
-let buscadorHeader = document.querySelector(".header__buscador");
-let carritoHtmlGaleria = document.querySelector("#galeria__carrito");
-let carritoHtmlFooter = document.querySelector("#footer__carrito");
 
 function main () {
     // Recupero información de la base de datos
@@ -21,9 +10,8 @@ function main () {
     // Paso código de descuento si existía de antes
     let codigoTexto = localStorage.getItem("inputCodigo") == null ? "" : localStorage.getItem("inputCodigo");
     actualizarCarrito(codigoTexto);
-
-    let thisPath = document.URL.split("/").pop();
-    switch (thisPath) {
+    
+    switch (thisURL) {
         case "index.html":
             cargarIndex();
             break;
@@ -55,7 +43,29 @@ function cargarIndex(){
     cargarGaleria(cosplaysIndex);
 }
 
+// Búsqueda desde el header - Dispara el buscador de la tienda
+function cargarTienda(){
+    // Si alguien buscó en el header, recupero la búsqueda del localStorage
+    if (localStorage.getItem("busquedaTermino")){
+        let buscadorBoton = buscadorHeader.querySelector("button");
+        let buscadorInput = buscadorHeader.querySelector("input");
 
+        // Pongo la palabra en el input y la borro del storage
+        buscadorInput.focus();
+        buscadorInput.value = localStorage.getItem("busquedaTermino");
+        localStorage.removeItem("busquedaTermino");
+
+        
+        // Hago click en el boton
+        /* buscadorBoton.click(); */
+    }
+    
+    
+    // Referencia a la galería del index
+    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
+    let cosplaysTienda = cosplays.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad
+    cargarGaleria(cosplaysTienda);
+}
 
 /* FUNCIONES UTILIZADAS Y EVENTOS */
 
@@ -92,7 +102,7 @@ function getCosplaysFromHtml () {
 
 if (thisURL.includes("tienda.html")){   // Eventos de la tienda
     // Orden en la galería  - Ordena lo que está a la vista (o sea, lo que está en el html), si se filtra o se busca, ordena eso y no el arreglo original.
-    let opcionesOrden = document.querySelector("#orden");
+    let opcionesOrden = document.querySelector("#ordenCosplaysTienda");
     opcionesOrden.onchange = () => {
         let cosplaysOrdenados = getCosplaysFromHtml();
 
@@ -155,7 +165,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
     }
 
     // Aplicación de filtros a la galería
-    let opcionesFiltro = document.querySelector("#filtro");
+    let opcionesFiltro = document.querySelector("#filtroCosplaysTienda");
 
     opcionesFiltro.onchange = () => {
         let checkBoxes = document.querySelectorAll('input[name=filtrado-articulos]');
@@ -187,14 +197,14 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
     }
 
     // Búsqueda en la galería
-    let buscador = document.querySelector("#buscadorTienda");
-    let buscadorInput = document.querySelector("#inputBuscador");
+    let buscadorTienda = document.querySelector("#buscadorTienda");
+    let buscadorTiendaInput = buscadorTienda.querySelector("input");
 
-    buscador.addEventListener("submit", buscar);    // Para hacer click en la lupa y que busque
+    buscadorTienda.addEventListener("submit", buscar);    // Para hacer click en la lupa y que busque
 
-    buscadorInput.addEventListener("change", buscar);    // En caso de que se desenfoque
+    buscadorTiendaInput.addEventListener("change", buscar);    // En caso de que se desenfoque
 
-    buscadorInput.addEventListener("keydown", (e) => {  
+    buscadorTiendaInput.addEventListener("keydown", (e) => {  
         if (e.key == "\n") {    // Para hacer click en enter y que busque
             buscar(e);
         } 
@@ -202,6 +212,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         // Si se borra, se restaura el arreglo al original y se busca nuevamente (porque en la búsqueda modifico el arreglo). También aplica para el caso que no se ponga nada en la búsqueda, se restaura el arreglo. Luego de que se restaura se disparan los otros eventos para buscar.
         if (e.key = "\r") {     
             cosplays = getCosplaysFromDB();
+            console.log(cosplays);
         }
     });
 }
@@ -239,58 +250,9 @@ function buscar (e) {
 }
 
 // HEADER 
-// Búsqueda desde el header - Dispara el buscador de la tienda
-function cargarTienda(){
-    // Si alguien buscó en el header, recupero la búsqueda del localStorage
-    if (localStorage.getItem("busquedaTermino") != null){
-        let buscadorBoton = buscadorHeader.querySelector("button");
-        let buscadorInput = buscadorHeader.querySelector("input");
 
-        // Pongo la palabra en el input y la borro del storage
-        buscadorInput.focus();
-        buscadorInput.value = localStorage.getItem("busquedaTermino");
-        localStorage.removeItem("busquedaTermino");
 
-        // Hago click en el boton
-        buscadorBoton.click();
 
-    }
-    
-    
-    // Referencia a la galería del index
-    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
-    let cosplaysTienda = cosplays.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad
-    cargarGaleria(cosplaysTienda);
-}
-
-buscadorHeader.addEventListener("submit", (e) => {
-    e.preventDefault();
-    
-    let headerBuscador = e.target.querySelector("#buscador");
-    
-    if (thisURL.includes("tienda.html")){   // Si estoy en la tienda
-        let buscador = document.querySelector("#buscadorTienda");
-        let buscadorInput = document.querySelector("#inputBuscador");
-
-        // Elementos del buscador de la galeria - Pongo la palabra en el input, le hago focus y disparo el botón
-        let buscadorBoton = buscador.querySelector(".buttonBuscador");
-        buscadorInput.focus();
-        buscadorInput.value = headerBuscador.value; 
-        buscadorBoton.click();
-        
-        // Limpio el input y saco el focus
-        headerBuscador.value = "";
-        headerBuscador.blur();
-        document.querySelector(".main--tienda .main__titulo").scrollIntoView();
-
-    } else {    // Voy a la tienda y guardo la información para lanzar el evento en la carga
-        localStorage.setItem("busquedaTermino", headerBuscador.value);
-
-        let tiendaURL = thisURL.includes("index.html") ? document.URL.replace(thisURL, "pages/tienda.html") : document.URL.replace(thisURL, "tienda.html");
-        location.href = tiendaURL;
-
-    }
-})
 
 /**************************************************************/
 /*                          CARRITO                           */
