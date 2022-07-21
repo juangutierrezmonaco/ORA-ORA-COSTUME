@@ -242,15 +242,19 @@ function buscar (e) {
 // Búsqueda desde el header - Dispara el buscador de la tienda
 function cargarTienda(){
     // Si alguien buscó en el header, recupero la búsqueda del localStorage
-    /* if (localStorage.getItem("busquedaTermino")){ */
+    if (localStorage.getItem("busquedaTermino")){
         let buscadorBoton = buscadorHeader.querySelector("button");
         let buscadorInput = buscadorHeader.querySelector("input");
 
+        // Pongo la palabra en el input
         buscadorInput.focus();
         buscadorInput.value = localStorage.getItem("busquedaTermino");
         localStorage.removeItem("busquedaTermino");
 
-    /* } */
+        // Hago click en el botón
+        buscadorBoton.click();
+
+    }
     
 
     // Referencia a la galería del index
