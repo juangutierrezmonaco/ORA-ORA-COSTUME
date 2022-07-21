@@ -6,6 +6,9 @@
 let buscadorHeader = document.querySelector(".header__buscador");
 buscadorHeader.addEventListener("submit", (e) => {
     e.preventDefault();
+
+    // Antes que nada restauro los cosplays y luego busco (Porque acá no tengo el evento de que se borre "\r" en el input. O sea, si se escribe algo en el header y se busca anda, pero si luego se vuelve a buscar no se restauran los cosplays)
+    cosplays = getCosplaysFromDB();
     
     let buscadorHeaderInput = e.target.querySelector("input");
     
@@ -16,7 +19,7 @@ buscadorHeader.addEventListener("submit", (e) => {
         // Pongo la palabra en el input del buscador de la tienda, le hago focus y disparo el botón
         let buscadorTiendaBoton = buscadorTienda.querySelector("button");
         buscadorTiendaInput.focus();
-        buscadorTiendaInput.value = buscadorHeaderInput.value; 
+        buscadorTiendaInput.value = buscadorHeaderInput.value;
         buscadorTiendaBoton.click();
         
         // Luego limpio el input del buscador del header, le saco el focus y scrolleo hasta la sección
@@ -33,6 +36,8 @@ buscadorHeader.addEventListener("submit", (e) => {
 
     }
 })
+
+
 
 /*        */
 /* FOOTER */

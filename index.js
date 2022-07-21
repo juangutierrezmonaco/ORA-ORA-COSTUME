@@ -41,7 +41,8 @@ function cargarIndex(){
 }
 
 // Búsqueda desde el header - Dispara el buscador de la tienda
-function cargarTienda(){
+function cargarTienda(){  
+
     // Si alguien buscó en el header, recupero la búsqueda del localStorage
     if (localStorage.getItem("busquedaTermino")){
         let buscadorBoton = buscadorHeader.querySelector("button");
@@ -53,12 +54,14 @@ function cargarTienda(){
         localStorage.removeItem("busquedaTermino");
 
         
-        // Hago click en el boton
-        /* buscadorBoton.click(); */
+        // Hago click en el boton, UNA VEZ QUE LA PÁGINA YA ESTÁ CARGADA (Sino error de asincronía)
+        window.addEventListener("DOMContentLoaded", () => {
+            buscadorBoton.click();
+        })
+        
     }
     
-    
-    // Referencia a la galería del index
+    // Referencia a la galería de la tienda
     galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
     let cosplaysTienda = cosplays.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad
     cargarGaleria(cosplaysTienda);
@@ -209,40 +212,39 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         // Si se borra, se restaura el arreglo al original y se busca nuevamente (porque en la búsqueda modifico el arreglo). También aplica para el caso que no se ponga nada en la búsqueda, se restaura el arreglo. Luego de que se restaura se disparan los otros eventos para buscar.
         if (e.key = "\r") {     
             cosplays = getCosplaysFromDB();
-            console.log(cosplays);
         }
     });
-}
 
-function buscar (e) {
-    e.preventDefault();
-    let word;
-    let form = e.target;
-
-    if (e.type == "submit") {   // Se llamó haciendo click en el botón
-        word = form.children[0].value;
-    } else {                    // Se llamó desenfocando el input
-        word = form.value;
-    }
-
-    cosplays = cosplays.filter(c => 
-        c.personaje.toLowerCase().includes(word.toLowerCase()) ||
-        c.anime.toLowerCase().includes(word.toLowerCase())  ||
-        c.tipo.toLowerCase().includes(word.toLowerCase())
-    )
-
-    let mensaje = "";
-    if (cosplays.length == 0) {
-        mensaje = "No hay coincidencias con la búsqueda";
-    }
-
-    actualizarGaleria(cosplays, mensaje);
-
-    // Por último, cuando se busca se borran todos los filtros.
-    // Esto es porque se puede buscar y filtrar esos resultados, pero no buscar en los resultados filtrados.
-    let checkBoxes = document.querySelectorAll('input[name=filtrado-articulos]');
-    for (const cb of checkBoxes) {
-        cb.checked = false;
+    function buscar (e) {
+        e.preventDefault();
+        let word;
+        let form = e.target;
+    
+        if (e.type == "submit") {   // Se llamó haciendo click en el botón
+            word = form.children[0].value;
+        } else {                    // Se llamó desenfocando el input
+            word = form.value;
+        }
+    
+        cosplays = cosplays.filter(c => 
+            c.personaje.toLowerCase().includes(word.toLowerCase()) ||
+            c.anime.toLowerCase().includes(word.toLowerCase())  ||
+            c.tipo.toLowerCase().includes(word.toLowerCase())
+        )
+    
+        let mensaje = "";
+        if (cosplays.length == 0) {
+            mensaje = "No hay coincidencias con la búsqueda";
+        }
+    
+        actualizarGaleria(cosplays, mensaje);
+    
+        // Por último, cuando se busca se borran todos los filtros.
+        // Esto es porque se puede buscar y filtrar esos resultados, pero no buscar en los resultados filtrados.
+        let checkBoxes = document.querySelectorAll('input[name=filtrado-articulos]');
+        for (const cb of checkBoxes) {
+            cb.checked = false;
+        }
     }
 }
 
