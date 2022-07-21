@@ -8,12 +8,6 @@ let galeriaCosplays;
 let carritoHtmlGaleria = document.querySelector("#galeria__carrito");
 let carritoHtmlFooter = document.querySelector("#footer__carrito");
 
-
-
-
-
-
-
 /**
  *  Funciones que son de uso general para todas las clases y funciones.
  */

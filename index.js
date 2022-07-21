@@ -26,10 +26,7 @@ function main () {
 
 main();
 
-let newsletter = document.querySelector("#newsletter");
-newsletter.addEventListener("input", (e) => {
-    console.log(e.data);
-})
+
 
 /**************************************************************/
 /*                      INDEX Y TIENDA                        */
