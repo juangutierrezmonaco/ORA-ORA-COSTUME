@@ -4,7 +4,9 @@ let cosplays;
 let carrito = new Carrito();
 
 // Referencias al html usadas a lo largo del programa
-let galeriaIndex = document.querySelector(".main--index .galeria");
+let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
+let galeriaCosplays;
+let buscadorHeader = document.querySelector(".header__buscador");
 let carritoHtmlGaleria = document.querySelector("#galeria__carrito");
 let carritoHtmlFooter = document.querySelector("#footer__carrito");
 
@@ -13,17 +15,25 @@ function main () {
     codigosDescuento = getCodigosFromDB();
     cosplays = getCosplaysFromDB();
 
-    cosplays.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad
-
-    // Creación de galería y muestra
-    cargarGaleria(cosplays);
-
     // Recupero carrito
     carrito.recuperarCarrito();
-    
+
     // Paso código de descuento si existía de antes
     let codigoTexto = localStorage.getItem("inputCodigo") == null ? "" : localStorage.getItem("inputCodigo");
     actualizarCarrito(codigoTexto);
+
+    let thisPath = document.URL.split("/").pop();
+    switch (thisPath) {
+        case "index.html":
+            cargarIndex();
+            break;
+        case "tienda.html":
+            cargarTienda();
+            break;
+    
+        default:
+            break;
+    }
 }
 
 main();
@@ -34,23 +44,35 @@ newsletter.addEventListener("input", (e) => {
 })
 
 /**************************************************************/
-/*                          GALERIA                           */
+/*                      INDEX Y TIENDA                        */
 /**************************************************************/
+function cargarIndex(){
+    // Referencia a la galería del index
+    galeriaCosplays = document.querySelector(".main--index .galeriaCosplays");
+
+    // Creación de galería y muestra
+    let cosplaysIndex = cosplays.filter((c) => c.especial);
+    cargarGaleria(cosplaysIndex);
+}
+
+
+
+/* FUNCIONES UTILIZADAS Y EVENTOS */
 
 // Convierte un cosplay al formato que tiene que tener en el html
 function cargarGaleria (arrCosplays) {
     for (const cosplay of arrCosplays) {
-        galeriaIndex.append(cosplay.toHtml());
+        galeriaCosplays.append(cosplay.toHtml());
     }
 }
 
 // Modificación de galería, se puede pasar un cartel para mostrar antes de la galeria
 function actualizarGaleria (cosplaysModificados, mensaje = "") {
-    galeriaIndex.innerHTML = ""; // Borro lo que ya estaba
+    galeriaCosplays.innerHTML = ""; // Borro lo que ya estaba
 
     let titulo = document.createElement("h2");
     titulo.innerHTML = `<h2>${mensaje}</h2>`;
-    galeriaIndex.append(titulo);
+    galeriaCosplays.append(titulo);
 
     cargarGaleria(cosplaysModificados);
 }
@@ -58,7 +80,7 @@ function actualizarGaleria (cosplaysModificados, mensaje = "") {
 // Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados)
 function getCosplaysFromHtml () {
     let cosplaysModificados = [];
-    let cosplaysHtml = galeriaIndex.querySelectorAll(".cosplay");
+    let cosplaysHtml = galeriaCosplays.querySelectorAll(".cosplay");
 
     for (const cosplay of cosplaysHtml) {
         let thisId = getIdCosplayHtml(cosplay);
@@ -68,119 +90,121 @@ function getCosplaysFromHtml () {
     return cosplaysModificados;
 }
 
-// Orden en la galería  - Ordena lo que está a la vista (o sea, lo que está en el html), si se filtra o se busca, ordena eso y no el arreglo original.
-let opcionesOrden = document.querySelector("#orden");
-opcionesOrden.onchange = () => {
-    let cosplaysOrdenados = getCosplaysFromHtml();
+if (thisURL.includes("tienda.html")){   // Eventos de la tienda
+    // Orden en la galería  - Ordena lo que está a la vista (o sea, lo que está en el html), si se filtra o se busca, ordena eso y no el arreglo original.
+    let opcionesOrden = document.querySelector("#orden");
+    opcionesOrden.onchange = () => {
+        let cosplaysOrdenados = getCosplaysFromHtml();
 
-    switch (opcionesOrden.value) {
-        case "nombre-asc-anime":
-            cosplaysOrdenados.sort((a, b) => {
-                if (a.anime > b.anime) {
-                    return 1;
-                } else if (a.anime < b.anime) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            });
-            break;
-        case "nombre-des-anime":
-            cosplaysOrdenados.sort((a, b) => {
-                if (a.anime > b.anime) {
-                    return -1;
-                } else if (a.anime < b.anime) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
-            break;
-        case "nombre-asc-personaje":
-            cosplaysOrdenados.sort((a, b) => {
-                if (a.personaje > b.personaje) {
-                    return 1;
-                } else if (a.personaje < b.personaje) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            });
-            break;
-        case "nombre-des-personaje":
-            cosplaysOrdenados.sort((a, b) => {
-                if (a.personaje > b.personaje) {
-                    return -1;
-                } else if (a.personaje < b.personaje) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
-            break;
-        case "menor-precio":
-            cosplaysOrdenados.sort((a, b) => a.calcularPrecio() - b.calcularPrecio());
-            break;
-        case "mayor-precio":
-            cosplaysOrdenados.sort((a, b) => b.calcularPrecio() - a.calcularPrecio());
-            break;
-        case "pred":
-            cosplaysOrdenados.sort((a, b) => b.popularidad - a.popularidad); // No hay default porque la opción ya está validada
-    }
-
-    actualizarGaleria(cosplaysOrdenados);
-}
-
-// Aplicación de filtros a la galería
-let opcionesFiltro = document.querySelector("#filtro");
-
-opcionesFiltro.onchange = () => {
-    let checkBoxes = document.querySelectorAll('input[name=filtrado-articulos]');
-
-    // Genero un filtro que retorna una función que es la conjunción de los 3 filtros, por si se aplican 1, 2 o n filtros al mismo tiempo o algunos.
-    const filtro = (c) => {
-        let funcion = true;
-        for (const checkBox of checkBoxes) {
-            if (checkBox.checked) {
-                switch (checkBox.id) {
-                    case "oferta":
-                        funcion = funcion & c.oferta > 0;
-                    break;
-                    case "stock":
-                        funcion = funcion & c.stock > 0;
-                    break;  
-                    case "especial":
-                        funcion = funcion & c.especial > 0;
-                    break;
-                }
-            }
+        switch (opcionesOrden.value) {
+            case "nombre-asc-anime":
+                cosplaysOrdenados.sort((a, b) => {
+                    if (a.anime > b.anime) {
+                        return 1;
+                    } else if (a.anime < b.anime) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+                break;
+            case "nombre-des-anime":
+                cosplaysOrdenados.sort((a, b) => {
+                    if (a.anime > b.anime) {
+                        return -1;
+                    } else if (a.anime < b.anime) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+                break;
+            case "nombre-asc-personaje":
+                cosplaysOrdenados.sort((a, b) => {
+                    if (a.personaje > b.personaje) {
+                        return 1;
+                    } else if (a.personaje < b.personaje) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+                break;
+            case "nombre-des-personaje":
+                cosplaysOrdenados.sort((a, b) => {
+                    if (a.personaje > b.personaje) {
+                        return -1;
+                    } else if (a.personaje < b.personaje) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+                break;
+            case "menor-precio":
+                cosplaysOrdenados.sort((a, b) => a.calcularPrecio() - b.calcularPrecio());
+                break;
+            case "mayor-precio":
+                cosplaysOrdenados.sort((a, b) => b.calcularPrecio() - a.calcularPrecio());
+                break;
+            case "pred":
+                cosplaysOrdenados.sort((a, b) => b.popularidad - a.popularidad); // No hay default porque la opción ya está validada
         }
 
-        return funcion;
+        actualizarGaleria(cosplaysOrdenados);
     }
-    
-    let cosplaysFiltrados = cosplays.filter(filtro);
-    actualizarGaleria(cosplaysFiltrados); 
+
+    // Aplicación de filtros a la galería
+    let opcionesFiltro = document.querySelector("#filtro");
+
+    opcionesFiltro.onchange = () => {
+        let checkBoxes = document.querySelectorAll('input[name=filtrado-articulos]');
+
+        // Genero un filtro que retorna una función que es la conjunción de los 3 filtros, por si se aplican 1, 2 o n filtros al mismo tiempo o algunos.
+        const filtro = (c) => {
+            let funcion = true;
+            for (const checkBox of checkBoxes) {
+                if (checkBox.checked) {
+                    switch (checkBox.id) {
+                        case "oferta":
+                            funcion = funcion & c.oferta > 0;
+                        break;
+                        case "stock":
+                            funcion = funcion & c.stock > 0;
+                        break;  
+                        case "especial":
+                            funcion = funcion & c.especial > 0;
+                        break;
+                    }
+                }
+            }
+
+            return funcion;
+        }
+        
+        let cosplaysFiltrados = cosplays.filter(filtro);
+        actualizarGaleria(cosplaysFiltrados); 
+    }
+
+    // Búsqueda en la galería
+    let buscador = document.querySelector("#buscadorTienda");
+    let buscadorInput = document.querySelector("#inputBuscador");
+
+    buscador.addEventListener("submit", buscar);    // Para hacer click en la lupa y que busque
+
+    buscadorInput.addEventListener("change", buscar);    // En caso de que se desenfoque
+
+    buscadorInput.addEventListener("keydown", (e) => {  
+        if (e.key == "\n") {    // Para hacer click en enter y que busque
+            buscar(e);
+        } 
+
+        // Si se borra, se restaura el arreglo al original y se busca nuevamente (porque en la búsqueda modifico el arreglo). También aplica para el caso que no se ponga nada en la búsqueda, se restaura el arreglo. Luego de que se restaura se disparan los otros eventos para buscar.
+        if (e.key = "\r") {     
+            cosplays = getCosplaysFromDB();
+        }
+    });
 }
-
-// Búsqueda en la galería
-let buscador = document.querySelector("#buscadorTienda");
-let buscadorInput = document.querySelector("#inputBuscador");
-
-buscador.addEventListener("submit", buscar);    // Para hacer click en la lupa y que busque
-
-buscadorInput.addEventListener("change", buscar);    // En caso de que se desenfoque
-
-buscadorInput.addEventListener("keydown", (e) => {  
-    if (e.key == "\n") {    // Para hacer click en enter y que busque
-        buscar(e);
-    } 
-
-    // Si se borra, se restaura el arreglo al original y se busca nuevamente (porque en la búsqueda modifico el arreglo). También aplica para el caso que no se ponga nada en la búsqueda, se restaura el arreglo. Luego de que se restaura se disparan los otros eventos para buscar.
-    if (e.key = "\r") {     
-        cosplays = getCosplaysFromDB();
-    }
-});
 
 function buscar (e) {
     e.preventDefault();
@@ -214,22 +238,56 @@ function buscar (e) {
     }
 }
 
-// Búsqueda desde el header - Dispara el buscador de arriba
-let buscadorHeader = document.querySelector(".header__buscador");
+// HEADER 
+// Búsqueda desde el header - Dispara el buscador de la tienda
+function cargarTienda(){
+    // Si alguien buscó en el header, recupero la búsqueda del localStorage
+    /* if (localStorage.getItem("busquedaTermino")){ */
+        let buscadorBoton = buscadorHeader.querySelector("button");
+        let buscadorInput = buscadorHeader.querySelector("input");
+
+        buscadorInput.focus();
+        buscadorInput.value = localStorage.getItem("busquedaTermino");
+        localStorage.removeItem("busquedaTermino");
+
+    /* } */
+    
+
+    // Referencia a la galería del index
+    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
+
+    let cosplaysTienda = cosplays.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad
+    cargarGaleria(cosplaysTienda);
+}
+
 buscadorHeader.addEventListener("submit", (e) => {
     e.preventDefault();
-    let headerBuscador =e.target.querySelector("#buscador");
+    
+    let headerBuscador = e.target.querySelector("#buscador");
+    
+    if (thisURL.includes("tienda.html")){   // Si estoy en la tienda
+        
+        let buscador = document.querySelector("#buscadorTienda");
+        let buscadorInput = document.querySelector("#inputBuscador");
 
-    // Elementos del buscador de la galeria - Pongo la palabra en el input, le hago focus y disparo el botón
-    let buscadorBoton = buscador.querySelector(".buttonBuscador");
-    buscadorInput.focus();
-    buscadorInput.value = headerBuscador.value; 
-    buscadorBoton.click();
+        // Elementos del buscador de la galeria - Pongo la palabra en el input, le hago focus y disparo el botón
+        let buscadorBoton = buscador.querySelector(".buttonBuscador");
+        buscadorInput.focus();
+        buscadorInput.value = headerBuscador.value; 
+        buscadorBoton.click();
+    
+        // Limpio el input y saco el focus
+        headerBuscador.value = "";
+        headerBuscador.blur();
+        document.querySelector(".main--tienda .main__titulo").scrollIntoView();
 
-    // Limpio el input y saco el focus
-    headerBuscador.value = "";
-    headerBuscador.blur();
-    document.querySelector(".main--index .main__titulo").scrollIntoView();
+    } else {    // Voy a la tienda y guardo la información para lanzar el evento en la carga
+        localStorage.setItem("busquedaTermino", headerBuscador.value);
+
+        let tiendaURL = thisURL.includes("index.html") ? document.URL.replace(thisURL, "pages/tienda.html") : document.URL.replace(thisURL, "tienda.html");
+        location.href = tiendaURL;
+
+    }
 })
 
 /**************************************************************/
@@ -283,9 +341,9 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigo"
         carrito.descuento = 0;
     }
 }
-
+/* 
 // Click en carrito de los cosplays
-galeriaIndex.addEventListener("submit", (e) => {
+galeriaCosplays.addEventListener("submit", (e) => {
     e.preventDefault();
     let thisId = getIdCosplayHtml(e.submitter.parentElement);
     let selectedCosplay = searchCosplayById(cosplays, thisId);
@@ -315,7 +373,7 @@ galeriaIndex.addEventListener("submit", (e) => {
         let botonMas = nodoCosplay.querySelector(".carritoMas");
         botonMas.click();
     }
-})
+}) */
 
 // Click en el más, menos, o tachito
 carritoHtmlGaleria.addEventListener("submit", (e) => {

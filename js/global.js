@@ -64,10 +64,10 @@ function actualizarStock () {
 function getCosplaysFromDB () {
     let cosplays = [];
 
-    cosplays.push(new Cosplay("Nobara Kugisaki", "Jujutsu Kaisen", "Cosplay", 7000, 0, 10, 5, "./assets/images/cosplays/hechos-a-medida/jujutsu-nobara.png"));
+    cosplays.push(new Cosplay("Nobara Kugisaki", "Jujutsu Kaisen", "Cosplay", 7000, 0, 10, 5, "./assets/images/cosplays/hechos-a-medida/jujutsu-nobara.png", true));
     cosplays.push(new Cosplay("Rei Ayanami", "Evangelion", "Seifuku", 5500, 0, 2, 100, "./assets/images/cosplays/hechos-a-medida/evangelion-rei.png", true));
-    cosplays.push(new Cosplay("Tradicional", "Anime", "Seifuku", 6000, 0, 100, 20, "./assets/images/cosplays/hechos-a-medida/school-girl.png"));
-    cosplays.push(new Cosplay("Legión de Reconocimiento", "Shingeki no Kyojin", "Chaqueta", 6500, 10, 100, 0, "./assets/images/cosplays/hechos-a-medida/shingeki-chaqueta.png"));
+    cosplays.push(new Cosplay("Tradicional", "Anime", "Seifuku", 6000, 0, 100, 20, "./assets/images/cosplays/hechos-a-medida/school-girl.png", true));
+    cosplays.push(new Cosplay("Legión de Reconocimiento", "Shingeki no Kyojin", "Chaqueta", 6500, 10, 100, 0, "./assets/images/cosplays/hechos-a-medida/shingeki-chaqueta.png", true));
     cosplays.push(new Cosplay("Legión de Reconocimiento", "Shingeki no Kyojin", "Saco", 9500, 25, 120, 5, "./assets/images/cosplays/hechos-a-medida/shigenki-saco.png", true));
     cosplays.push(new Cosplay("Kaonashi", "El viaje de Chihiro", "Cosplay", 8000, 15, 40, 7, "./assets/images/cosplays/chihiro-noface.png"));
     cosplays.push(new Cosplay("Legión de Reconocimiento", "Shingeki no Kyojin", "Cosplay", 8000, 0, 200, 20, "./assets/images/cosplays/snk-full.png"));
