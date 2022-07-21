@@ -242,7 +242,7 @@ function buscar (e) {
 // Búsqueda desde el header - Dispara el buscador de la tienda
 function cargarTienda(){
     // Si alguien buscó en el header, recupero la búsqueda del localStorage
-    if (localStorage.getItem("busquedaTermino")){
+    if (localStorage.getItem("busquedaTermino") != null){
         let buscadorBoton = buscadorHeader.querySelector("button");
         let buscadorInput = buscadorHeader.querySelector("input");
 
@@ -250,16 +250,14 @@ function cargarTienda(){
         buscadorInput.focus();
         buscadorInput.value = localStorage.getItem("busquedaTermino");
         localStorage.removeItem("busquedaTermino");
-
-        // Hago click en el botón
-        buscadorBoton.click();
+        buscadorBoton.onclick = true;
+        console.log(buscadorInput);
 
     }
     
-
+    
     // Referencia a la galería del index
     galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
-
     let cosplaysTienda = cosplays.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad
     cargarGaleria(cosplaysTienda);
 }
@@ -270,7 +268,6 @@ buscadorHeader.addEventListener("submit", (e) => {
     let headerBuscador = e.target.querySelector("#buscador");
     
     if (thisURL.includes("tienda.html")){   // Si estoy en la tienda
-        
         let buscador = document.querySelector("#buscadorTienda");
         let buscadorInput = document.querySelector("#inputBuscador");
 
@@ -279,7 +276,7 @@ buscadorHeader.addEventListener("submit", (e) => {
         buscadorInput.focus();
         buscadorInput.value = headerBuscador.value; 
         buscadorBoton.click();
-    
+        
         // Limpio el input y saco el focus
         headerBuscador.value = "";
         headerBuscador.blur();
@@ -345,7 +342,7 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigo"
         carrito.descuento = 0;
     }
 }
-/* 
+
 // Click en carrito de los cosplays
 galeriaCosplays.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -377,7 +374,7 @@ galeriaCosplays.addEventListener("submit", (e) => {
         let botonMas = nodoCosplay.querySelector(".carritoMas");
         botonMas.click();
     }
-}) */
+})
 
 // Click en el más, menos, o tachito
 carritoHtmlGaleria.addEventListener("submit", (e) => {
