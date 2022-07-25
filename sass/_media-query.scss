@@ -178,18 +178,14 @@
 
 @media screen and (pointer:coarse), print, (max-width: 768px) {
 
-    //Que el carrito se haga visible en dispositivos touch, si se imprime o si la pantalla tiene una resolución menor o igual a 768px
+    //Que el cartel del stock se haga visible en dispositivos touch, si se imprime o si la pantalla tiene una resolución menor o igual a 768px
     .cosplay{
-        &__carrito {
-            opacity: 1;
-        }
-
         &__overlayStock {
             opacity: 1;
         }
 
-        &:hover {
-            transform: scale(1); /*Para anular el hover*/
+        &:hover {   
+            transform: scale(1); 
         }
     }
 }

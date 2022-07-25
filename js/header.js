@@ -47,8 +47,28 @@ newsletter.addEventListener("submit", (e) => {
     e.preventDefault();
 
     let email = e.target.querySelector("input").value;
-    validarEmail(email) ? alert("GRACIAS POR SUSCRIBIRTE! A PARTIR DE AHORA VAS A RECIBIR NUESTRAS NOVEDADES EN TU EMAIL") : 
-                          alert("INGRESASTE UN EMAIL INVÁLIDO!");
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 5000,
+        color: "#645899"
+    })
+
+    if (validarEmail(email)) {
+        Toast.fire({
+            icon: 'success',
+            title: 'Gracias por suscribirte! Te vamos a estar comunicando todas nuestras novedades ♡'
+        })
+    } else {
+        Toast.fire({
+            icon: 'error',
+            title: 'Vamos a necesitar un email válido para poder comunicarnos con vos!'
+        })
+    }
+      
+    
 })
 
 /**

@@ -104,6 +104,10 @@
     background-image: url("../assets/images/backgrounds/cosplay.webp");
     background-repeat: no-repeat;
     background-size: cover;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
     transition: all .5s;
 

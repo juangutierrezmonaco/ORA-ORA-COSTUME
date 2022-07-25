@@ -15,6 +15,9 @@ function main () {
         case "index.html":
             cargarIndex();
             break;
+        case "":
+            cargarIndex();
+            break;
         case "tienda.html":
             cargarTienda();
             break;
@@ -69,7 +72,7 @@ function cargarTienda(){
 
 /* FUNCIONES UTILIZADAS Y EVENTOS */
 
-// Convierte un cosplay al formato que tiene que tener en el html
+// Convierte los cosplays al formato que tienen que tener en el html y los agrega
 function cargarGaleria (arrCosplays) {
     for (const cosplay of arrCosplays) {
         galeriaCosplays.append(cosplay.toHtml());
@@ -248,11 +251,6 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
     }
 }
 
-// HEADER 
-
-
-
-
 /**************************************************************/
 /*                          CARRITO                           */
 /**************************************************************/
@@ -306,37 +304,39 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigo"
 }
 
 // Click en carrito de los cosplays
-galeriaCosplays.addEventListener("submit", (e) => {
-    e.preventDefault();
-    let thisId = getIdCosplayHtml(e.submitter.parentElement);
-    let selectedCosplay = searchCosplayById(cosplays, thisId);
-
-    // Primero veo si existe en el carrito
-    if (!carrito.existeCosplay(selectedCosplay)) {
-        carrito.agregarCosplay(selectedCosplay);
-        actualizarCarrito();
-    } else {
-        // Ahora necesito ir a la galería del carrito y buscar el cosplay que coincida y disparar el evento del botón más de ese,
-        // para validar si se puede agregar y mostrar el cartel de que no hay stock, y funcionalidades ya hechas ahí.
-        let nodosCarrito = carritoHtmlGaleria.childNodes;
-
-        let nodoCosplay = "";   // Este sería el encontrado
-        let i = 0;
-        
-        // Mientras no lo encuentre o se recorran todos los nodos y no lo encuentre (error que no tendría que pasar, pero evito el loop infinito)
-        while (nodoCosplay == "" && i < nodosCarrito.length) {  
-            let thisCosplay = nodosCarrito[i++].querySelector(".header__carrito__offcanvas__producto__info");
-
-            if (getIdCosplayHtml(thisCosplay) == selectedCosplay.id) {
-                nodoCosplay = thisCosplay;
+if(thisURL.includes("tienda.html") || thisURL.includes("index.html")) {
+    galeriaCosplays.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let thisId = getIdCosplayHtml(e.submitter.parentElement);
+        let selectedCosplay = searchCosplayById(cosplays, thisId);
+    
+        // Primero veo si existe en el carrito
+        if (!carrito.existeCosplay(selectedCosplay)) {
+            carrito.agregarCosplay(selectedCosplay);
+            actualizarCarrito();
+        } else {
+            // Ahora necesito ir a la galería del carrito y buscar el cosplay que coincida y disparar el evento del botón más de ese,
+            // para validar si se puede agregar y mostrar el cartel de que no hay stock, y funcionalidades ya hechas ahí.
+            let nodosCarrito = carritoHtmlGaleria.childNodes;
+    
+            let nodoCosplay = "";   // Este sería el encontrado
+            let i = 0;
+            
+            // Mientras no lo encuentre o se recorran todos los nodos y no lo encuentre (error que no tendría que pasar, pero evito el loop infinito)
+            while (nodoCosplay == "" && i < nodosCarrito.length) {  
+                let thisCosplay = nodosCarrito[i++].querySelector(".header__carrito__offcanvas__producto__info");
+    
+                if (getIdCosplayHtml(thisCosplay) == selectedCosplay.id) {
+                    nodoCosplay = thisCosplay;
+                }
             }
+    
+            // Accedo a su botón de más y lo clickleo
+            let botonMas = nodoCosplay.querySelector(".carritoMas");
+            botonMas.click();
         }
-
-        // Accedo a su botón de más y lo clickleo
-        let botonMas = nodoCosplay.querySelector(".carritoMas");
-        botonMas.click();
-    }
-})
+    })
+}
 
 // Click en el más, menos, o tachito
 carritoHtmlGaleria.addEventListener("submit", (e) => {
