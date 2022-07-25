@@ -1,10 +1,11 @@
 class Medida {
     static count = 0;   // Por el momento, es para generar un id
 
-    constructor (nombre, tipo, url) {
+    constructor (nombre, tipo, url, yaCargada = false) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.url = url;
+        this.yaCargada = yaCargada;
 
         this.id = ++Medida.count; 
     }

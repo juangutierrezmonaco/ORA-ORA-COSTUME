@@ -261,15 +261,57 @@ function cargarMedidas(){
     for (const medida of medidas) {
         galeriaDeMedidas.append(medida.toHtml());
     }
+
+    // Recupero las que ya están cargadas   ---> Próximamente
 }
 
 if (thisURL.includes("medidas.html")){
     let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
 
     galeriaDeMedidas.addEventListener("click", (e) => {
-        
-        
-        
+        let elementoClickleado = e.target;
+
+        if(elementoClickleado.classList.contains("botonMedida")){   // Si estoy haciendo click en guardar de la medida
+            // Obtengo el valor ingresado
+            let valorMedida = elementoClickleado.parentElement.querySelector("input").value;
+
+            // Obtengo el id de la medida
+            let padreMayor = elementoClickleado;
+            while (padreMayor.id == "") {
+                padreMayor = padreMayor.parentElement;
+            }
+
+            let idMedida = padreMayor.id;
+
+            // Y obtengo el padre mayor para cambiar el color y designar que la medida ya está cargada
+            padreMayor = padreMayor.parentElement.querySelector(".medida__titulo");
+
+            padreMayor.classList.remove("medida__cargada");      // Se descolorea */
+            
+            if (valorMedida != ""){         // Si ingreso algo 
+
+                padreMayor.classList.add("medida__cargada");    // Se colorea
+
+                // Lo guardo en el array de medidas
+                medidasPersona.push(idMedida, valorMedida);
+                localStorage.removeItem("medidas");
+                localStorage.setItem("medidas", medidasPersona);
+
+            } else {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    showConfirmButton: false,   
+                    timer: 5000,
+                    position: "top-end",
+                    color: "#645899"
+                }).fire({
+                        icon: 'error',
+                        title: 'No ingresaste nada! No se guardo la medida.'
+                })
+            }
+
+        }
+
     })
 
 }

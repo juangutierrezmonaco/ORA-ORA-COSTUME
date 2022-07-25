@@ -1,6 +1,7 @@
 // Variables globales
 let codigosDescuento;
 let cosplays;
+let medidasPersona = [];
 let carrito = new Carrito();
 
 let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
