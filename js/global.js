@@ -117,7 +117,7 @@ function getCodigosFromDB () {
 function getMedidasFromDB () {
     let medidas = [];
 
-    /* medidas.push(new Medida("Contorno de Cabeza", "img", "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=19&tipoEscala=stretch&width=863&height=480"));
+    medidas.push(new Medida("Contorno de Cabeza", "img", "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=19&tipoEscala=stretch&width=863&height=480"));
     medidas.push(new Medida("Contorno de Cuello", "iframe", "https://www.youtube.com/embed/TZzaGHdcCZ0"));
     medidas.push(new Medida("Largo Talle Trasero", "iframe", "https://www.youtube.com/embed/6-uzsyLYXkU"));
     medidas.push(new Medida("Largo Talle Delantero", "iframe", "https://www.youtube.com/embed/Z8MqsQPbg70"));
@@ -141,7 +141,7 @@ function getMedidasFromDB () {
     medidas.push(new Medida("Contorno de Rodilla", "img", "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=33&tipoEscala=stretch&width=920&height=668"));
     medidas.push(new Medida("Contorno de Pantorrilla", "img", "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=25&tipoEscala=stretch&width=803&height=603"));
     medidas.push(new Medida("Contorno de Tobillo", "img", "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=35&tipoEscala=stretch&width=920&height=550"));
-    medidas.push(new Medida("Largo de Tiro Delantero", "img", "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=29&tipoEscala=stretch&width=771&height=1028" )); */
+    medidas.push(new Medida("Largo de Tiro Delantero", "img", "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=29&tipoEscala=stretch&width=771&height=1028" ));
     medidas.push(new Medida("Largo de Tiro Trasero", "img", "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=31&tipoEscala=stretch&width=771&height=1028" ));
 
     return medidas;
