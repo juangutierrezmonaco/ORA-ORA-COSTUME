@@ -10,20 +10,20 @@ function main () {
     // Paso código de descuento si existía de antes
     let codigoTexto = localStorage.getItem("inputCodigo") == null ? "" : localStorage.getItem("inputCodigo");
     actualizarCarrito(codigoTexto);
+
+
+    // Nota: Lo siguiente lo hago sin switch porque si hay un error o se va a una sección particular, la URL no es exactamente index o tienda, etc.
+    //       Por ejemplo, sería /index.html? o /index.html#seccionX --> Lo hago con if para que se pueda usar el includes y cargar la página
+    if (thisURL.includes("index.html") || thisURL == ""){
+        cargarIndex();
+    }
+
+    if (thisURL.includes("tienda.html")){
+        cargarTienda();
+    }
     
-    switch (thisURL) {
-        case "index.html":
-            cargarIndex();
-            break;
-        case "":
-            cargarIndex();
-            break;
-        case "tienda.html":
-            cargarTienda();
-            break;
-    
-        default:
-            break;
+    if (thisURL.includes("medidas.html")){
+        cargarMedidas();
     }
 }
 
@@ -249,6 +249,104 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
             cb.checked = false;
         }
     }
+}
+
+/**************************************************************/
+/*                         MEDIDAS                            */
+/**************************************************************/
+function cargarMedidas(){
+    let medidas = getMedidasFromDB();
+
+    let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
+    for (const medida of medidas) {
+        galeriaDeMedidas.append(medida.toHtml());
+    }
+}
+
+if (thisURL.includes("medidas.html")){
+    let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
+
+    galeriaDeMedidas.addEventListener("click", (e) => {
+        
+        
+        
+    })
+
+}
+
+/**************************************************************/
+/*                          ENVIOS                            */
+/**************************************************************/
+if (thisURL.includes("envios.html")){
+    let formEnvios = document.querySelector(".main--envios .formEnvios");
+    let goToOCA = formEnvios.querySelector(`button[type = "button"]`);
+    
+    goToOCA.addEventListener("click", () => {
+        Swal.fire({
+            title: "Esta siendo redireccionado a la página de OCA",
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+        }).then(() => {
+            window.open('https://www.oca.com.ar/Busquedas/CodigosPostales', '_blank');
+        })
+        Swal.showLoading();
+    })
+
+    formEnvios.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // De momento lo dejo así porque no sé cómo validar códigos postales y hallar su valor.
+        let codigoPostal = e.target.querySelector("#codigo-postal").value;
+        let costoEnvio = 1000;
+
+        Swal.fire({
+            title: `El envío al código postal ${codigoPostal} tiene un valor de $${costoEnvio}`,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar como mi código postal',
+            denyButtonText: `Volver atrás`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Código postal guardado!', '', 'success')
+            }
+        })
+    })
+}
+
+/**************************************************************/
+/*                        CONTACTO                            */
+/**************************************************************/
+if (thisURL.includes("contacto.html")){
+    let formContacto = document.querySelector(".main--contacto .formContacto");
+
+    formContacto.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        
+        let email = e.target.querySelector("#email--contacto").value;
+
+        const Toast = Swal.mixin({
+            toast: true,
+            showConfirmButton: false,   
+            timer: 5000,
+            position: "top-end",
+            color: "#645899"
+        })
+        
+        if (validarEmail(email)){
+            let nombre = e.target.querySelector("#nombre--contacto").value.toUpperCase();
+
+            Toast.fire({
+                icon: 'success',
+                title: `${nombre}! Vamos a estar comunicandonos con vos lo antes posible!`,
+            })
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: 'Vamos a necesitar un email válido para poder comunicarnos con vos!'
+            })
+        }
+    })
 }
 
 /**************************************************************/

@@ -173,7 +173,7 @@
                     </div>
                     
                     <div class="gap-1 mb-2 d-flex flex-column align-items-center">
-                        <form class="form col-12 col-sm-8 d-flex flex-column align-items-center">
+                        <form class="form col-12 col-sm-8 d-flex flex-column align-items-center formEnvios">
                             <div class="mb-2 col-10 col-md-6">
                                 <label class="form-label" for="codigo-postal"></label>
                                 <input required type="number" id="codigo-postal" name="codigo-postal" class="form-control"
@@ -183,7 +183,7 @@
                             <div class="d-flex gap-3 justify-content-between col-10 col-md-6">
                                 <button type="submit" class="btn btn-primary col-4">Usar</button>
 
-                                <a target="_blank" href="https://www.oca.com.ar/Busquedas/CodigosPostales" class="btn btn-primary col-7">No sé mi código</a>
+                                <button type="button" class="btn btn-primary col-7">No sé mi código</button>
                             </div>
                         </form>
                     </div>
@@ -304,6 +304,10 @@
     <a href="#" class="boton__fijo boton__fijo--goUp">
         <i class="fa-solid fa-chevron-up"></i>
     </a>
+    
+    <!-- Librerías JS -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>   <!-- Sweet Alert -->
+    
     <!-- JS -->
     <script src="../js/menu.js"></script>
     <script src="../js/cosplay.js"></script>

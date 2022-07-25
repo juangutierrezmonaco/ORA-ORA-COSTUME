@@ -67,8 +67,6 @@ newsletter.addEventListener("submit", (e) => {
             title: 'Vamos a necesitar un email válido para poder comunicarnos con vos!'
         })
     }
-      
-    
 })
 
 /**
