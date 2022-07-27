@@ -95,7 +95,7 @@ function getCosplaysFromDB () {
     cosplays.push(new Cosplay("Tsukasa Yugi", "Jibaku Shonen", "Cosplay", 9500, 50, 20, 5, "./assets/images/cosplays/jibaku-shonen-tsukasa-yugi.png"));
     cosplays.push(new Cosplay("Tanjiro Kamado", "Kimetsu No Yaiba", "Cosplay", 11000, 0, 60, 40, "./assets/images/cosplays/kimetsu-no-yaiba-tanjiro.png"));
 
-    if (!thisURL.includes("index.html") || thisURL != ""){  // Si no estoy en el index, la ruta es otra
+    if (!thisURL.includes("index.html") && thisURL != ""){  // Si no estoy en el index, la ruta es otra
         for (const cosplay of cosplays) {
             cosplay.imagen = "." + cosplay.imagen;
         }
