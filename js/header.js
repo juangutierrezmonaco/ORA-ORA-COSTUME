@@ -29,9 +29,21 @@ buscadorHeader.addEventListener("submit", (e) => {
 
     } else {    // Voy a la tienda y guardo la información para lanzar el evento en la carga
         localStorage.setItem("busquedaTermino", buscadorHeaderInput.value);
-
+        
         // Para ir a la tienda veo desde donde estoy yendo (index o las otras páginas)
-        let tiendaURL = thisURL.includes("index.html") ? document.URL.replace(thisURL, "pages/tienda.html") : document.URL.replace(thisURL, "tienda.html");
+        let tiendaURL;
+        switch (thisURL) {
+            case "":    // Estoy en el index pero sin la direccion index.html
+                tiendaURL = document.URL += "pages/tienda.html"; 
+                break;
+            case "index.html":    // Estoy en el index
+                tiendaURL = document.URL.replace(thisURL, "pages/tienda.html")
+                break;
+            default:    // Estoy al mismo nivel que tienda.html
+                tiendaURL = document.URL.replace(thisURL, "tienda.html")    
+                break;
+        }
+        
         location.href = tiendaURL;
 
     }

@@ -22,7 +22,7 @@ class Cosplay {
     toHtml () {
         let cosplayHtml = document.createElement("article");
         cosplayHtml.id = `galeriaIndex${this.id}`;
-        cosplayHtml.classList.add("col-6", "col-sm-4", "col-md-3", "col-lg-2", "cosplay", "d-flex", "justify-content-start");
+        cosplayHtml.classList.add("col-6", "col-sm-4", "col-md-3", "col-lg-2", "cosplay", "d-flex", "justify-content-start", "d-none");
         
         // Variables de cada cosplay
         let precio = this.oferta == 0 ? `<h4>$ ${this.precio}</h4>` : `<h4>(<del>$ ${this.precio}</del>) $ ${this.calcularPrecio()}</h4>`;

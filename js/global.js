@@ -72,6 +72,34 @@ function actualizarStock () {
     }
 }
 
+async function efectoCarga(sectionNode, delay = 1000){
+    try {
+        // Hago efecto de carga
+        let efectoCarga = document.createElement("div");
+        efectoCarga.classList.add("row", "d-flex", "justify-content-center");
+        efectoCarga.innerHTML = `<div class="lds-spinner">
+                                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                                </div>`;
+
+        // Lo agrego al elemento pasado
+        sectionNode.append(efectoCarga);
+
+        let later =  (delay) => {
+            return new Promise((resolve) => {
+                setTimeout(resolve, delay);
+            })
+        }
+        
+        await later(delay).then(() => {
+            galeriaCosplays.removeChild(efectoCarga);
+        });
+
+        return Promise.resolve();   // Devuelvo una promesa resuelta para hacer el then afuera
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // Estas funciones simulan cómo se recupera la data de la base de datos
 function getCosplaysFromDB () {
     let cosplays = [];

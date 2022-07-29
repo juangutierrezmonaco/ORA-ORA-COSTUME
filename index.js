@@ -30,7 +30,7 @@ function main () {
 main();
 
 /**************************************************************/
-/*                            INDEX                           */
+/*                      INDEX Y TIENDA                        */
 /**************************************************************/
 function cargarIndex(){
     // Referencia a la galería del index
@@ -51,40 +51,6 @@ function cargarGaleria (arrCosplays) {
             cosplayHtml.classList.remove("d-none"); // Muestro todos (Por defecto no se ven)
         } 
         galeriaCosplays.append(cosplayHtml);
-    }
-}
-
-
-/**************************************************************/
-/*                           TIENDA                           */
-/**************************************************************/
-
-
-async function efectoCarga(sectionNode, delay = 1000){
-    try {
-        // Hago efecto de carga
-        let efectoCarga = document.createElement("div");
-        efectoCarga.classList.add("row", "d-flex", "justify-content-center");
-        efectoCarga.innerHTML = `<div class="lds-spinner">
-                                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-                                </div>`;
-
-        // Lo agrego al elemento pasado
-        sectionNode.append(efectoCarga);
-
-        let later =  (delay) => {
-            return new Promise((resolve) => {
-                setTimeout(resolve, delay);
-            })
-        }
-        
-        await later(delay).then(() => {
-            galeriaCosplays.removeChild(efectoCarga);
-        });
-
-        return Promise.resolve();   // Devuelvo una promesa resuelta para hacer el then afuera
-    } catch (error) {
-        console.log(error);
     }
 }
 
@@ -110,14 +76,10 @@ function cargarTienda(){
     // Referencia a la galería de la tienda
     galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
     cargarGaleria(cosplays);   
+    mostrarCosplaysTienda(); 
 }
 
-
-
-/* FUNCIONES UTILIZADAS Y EVENTOS */
-
-
-function mostrarCosplaysTienda (arrCosplays, mult = 2) {    // Cuando carga por primera vez, muestro 2 filas
+function mostrarCosplaysTienda (mult = 2) {     // Cuando recarga toda la galería, muestro 2 filas
     // Obtengo la cantidad de cosplays que entran en una fila
     let resolucion = window.innerWidth;
     let cantPorFila;
@@ -139,17 +101,23 @@ function mostrarCosplaysTienda (arrCosplays, mult = 2) {    // Cuando carga por 
             break;
     }
 
-    cantPorFila *= mult;    // Si se desea que se muestre un número distinto de filas enteras
+    let quieroMostrar = cantPorFila * mult;    // quieroMostrar 
 
-    let cant = arrCosplays.length < cantPorFila ? arrCosplays.length : cantPorFila; // Muestro dependiendo de los que me quedan para mostrar
-    for (let i = 0; i < cant; i++) {
+    let quedanPorMostrar = galeriaCosplays.querySelectorAll(".cosplay.d-none").length;
 
-        galeriaCosplays.append(thisCosplay.toHtml());      // Lo agrego al html
+    let cant = quedanPorMostrar < quieroMostrar ? quedanPorMostrar : quieroMostrar; // Muestro dependiendo de los que me quedan para mostrar
+    quedanPorMostrar -= cant;   // Actualizo quedanPorMostrar 
+    
+    for (let i = indiceUltimoCosplayVisto; i < indiceUltimoCosplayVisto + cant; i++) {
+        galeriaCosplays.childNodes[i + 1].classList.remove("d-none");
     }
+
+    // Actualizo índice
+    indiceUltimoCosplayVisto += cant;
 
     // Por último si no tengo más desactivo el botón y si, se restaura el arreglo original (por un filtro por ejemplo), se vuelve a activar.
     let botonMas = document.querySelector(".main--tienda .botonMasTienda");
-    botonMas.disabled = arrCosplays.length == 0 ? true : false;
+    botonMas.disabled = quedanPorMostrar == 0 ? true : false;
 }
 
 
@@ -162,6 +130,8 @@ function actualizarGaleria (cosplaysModificados, mensaje = "") {
     galeriaCosplays.append(titulo);
 
     cargarGaleria(cosplaysModificados);
+    indiceUltimoCosplayVisto = 0;  // Actualizo porque se actualizó la galeria
+    mostrarCosplaysTienda(); // Cuando carga por primera vez, muestro 2 filas
 }
 
 // Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados)
@@ -289,6 +259,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         // Si se borra, se restaura el arreglo al original y se busca nuevamente (porque en la búsqueda modifico el arreglo). También aplica para el caso que no se ponga nada en la búsqueda, se restaura el arreglo. Luego de que se restaura se disparan los otros eventos para buscar.
         if (e.key = "\r") {     
             cosplays = getCosplaysFromDB();
+            
         }
     });
 
@@ -296,8 +267,10 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         e.preventDefault();
         let word;
         let form = e.target;
-    
+        form.querySelector(".btn").blur();  // Saco el focus del botón
+
         if (e.type == "submit") {   // Se llamó haciendo click en el botón
+            
             word = form.children[0].value;
         } else {                    // Se llamó desenfocando el input
             word = form.value;
@@ -322,14 +295,19 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         for (const cb of checkBoxes) {
             cb.checked = false;
         }
+        
+        // A su vez también el orden, lo vuelvo a predeterminado.
+        let opcionesOrden = document.querySelector("#ordenCosplaysTienda");
+        opcionesOrden.value = "pred"; 
     }
 
     // Click en el botón más de la galería
     let botonMas = document.querySelector(".main--tienda .botonMasTienda");
-    botonMas.addEventListener("click", () => {
+    botonMas.addEventListener("click", (e) => {
         efectoCarga(galeriaCosplays).then(() => {
-            mostrarTienda(cosplays, 1);
+            mostrarCosplaysTienda(1);
         });
+        e.target.blur();    // Remuevo el focus del botón
     });
 }
 
@@ -405,10 +383,12 @@ if (thisURL.includes("envios.html")){
     let formEnvios = document.querySelector(".main--envios .formEnvios");
     let goToOCA = formEnvios.querySelector(`button[type = "button"]`);
     
-    goToOCA.addEventListener("click", () => {
+    goToOCA.addEventListener("click", (e) => {
+        e.target.blur();    // Saco el focus del botón
+
         Swal.fire({
             title: "Esta siendo redireccionado a la página de OCA",
-            timer: 2000,
+            timer: 1500,
             timerProgressBar: true,
             showConfirmButton: false,
         }).then(() => {
@@ -419,7 +399,7 @@ if (thisURL.includes("envios.html")){
 
     formEnvios.addEventListener("submit", (e) => {
         e.preventDefault();
-
+        e.target.querySelector(".btn").blur();      // Saco el focus del botón
         // De momento lo dejo así porque no sé cómo validar códigos postales y hallar su valor.
         let codigoPostal = e.target.querySelector("#codigo-postal").value;
         let costoEnvio = 1000;
