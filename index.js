@@ -13,7 +13,7 @@ function main () {
 
     // Nota: Lo siguiente lo hago sin switch porque si hay un error o se va a una sección particular, la URL no es exactamente index o tienda, etc.
     //       Por ejemplo, sería /index.html? o /index.html#seccionX --> Lo hago con if para que se pueda usar el includes y cargar la página
-    if (thisURL.includes("index.html") || thisURL == ""){
+    if (estoyEnIndex()){
         cargarIndex();
     }
 
@@ -48,7 +48,7 @@ function cargarGaleria (arrCosplays) {
     for (const cosplay of arrCosplays) {
         let cosplayHtml = cosplay.toHtml();
 
-        if ( !thisURL.includes("tienda.html")) {    // Si estoy en el index, que sean más grandes los cosplays
+        if (estoyEnIndex()) {    // Si estoy en el index, que sean más grandes los cosplays
             cosplayHtml.classList.remove("col-lg-2") 
             cosplayHtml.classList.remove("d-none"); // Muestro todos (Por defecto no se ven)
         } 
@@ -508,7 +508,7 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigo"
 }
 
 // Click en carrito de los cosplays
-if(thisURL.includes("tienda.html") || thisURL.includes("index.html") || thisURL == "") {
+if(thisURL.includes("tienda.html") || estoyEnIndex()) {
     galeriaCosplays.addEventListener("submit", (e) => {
         e.preventDefault();
         let thisId = getIdCosplayHtml(e.submitter.parentElement);

@@ -72,6 +72,13 @@ function actualizarStock () {
     }
 }
 
+function estoyEnIndex () {
+    if (thisURL == "" || thisURL == "?" || thisURL.includes("index.html")){
+        return true;
+    }
+    return false;
+}
+
 async function efectoCarga(sectionNode, delay = 1000){
     try {
         // Hago efecto de carga
