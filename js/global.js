@@ -100,10 +100,29 @@ async function efectoCarga(sectionNode, delay = 1000){
     }
 }
 
-// Estas funciones simulan cómo se recupera la data de la base de datos
-function getCosplaysFromDB () {
-    let cosplays = [];
 
+async function getCosplaysFromDB(){
+    let res = await axios("../server/cosplays.json");
+    let cosplays = res.data;
+    let cPruebas = [];
+    for (const c of cosplays) {
+        let cosplay = new Cosplay();
+        Object.assign(cosplay, c);
+
+        if (!thisURL.includes("index.html") && thisURL != ""){  // Si no estoy en el index, la ruta es otra
+            cosplay.imagen = "." + cosplay.imagen;
+        }
+
+        cPruebas.push(cosplay);
+    }
+    
+    return cPruebas;
+}
+
+// Estas funciones simulan cómo se recupera la data de la base de datos
+/* function getCosplaysFromDB () {
+    let cosplays = [];
+    
     cosplays.push(new Cosplay("Nobara Kugisaki", "Jujutsu Kaisen", "Cosplay", 7000, 0, 10, 5, "./assets/images/cosplays/hechos-a-medida/jujutsu-nobara.png", true));
     cosplays.push(new Cosplay("Rei Ayanami", "Evangelion", "Seifuku", 5500, 0, 2, 100, "./assets/images/cosplays/hechos-a-medida/evangelion-rei.png", true));
     cosplays.push(new Cosplay("Tradicional", "Anime", "Seifuku", 6000, 0, 100, 20, "./assets/images/cosplays/hechos-a-medida/school-girl.png", true));
@@ -132,7 +151,7 @@ function getCosplaysFromDB () {
 
     return cosplays.sort((a, b) => b.popularidad - a.popularidad);
 }
-
+ */
 function getCodigosFromDB () {
     let codigosDescuento = new Map();
     codigosDescuento.set("ORA10", 10);
