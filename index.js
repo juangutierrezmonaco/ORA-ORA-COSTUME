@@ -1,4 +1,3 @@
-
 function main () {
     // Recupero información de la base de datos
     codigosDescuento = getCodigosFromDB();
@@ -25,14 +24,13 @@ function main () {
     if (thisURL.includes("medidas.html")){
         cargarMedidas();
     }
+
 }
 
 main();
 
-
-
 /**************************************************************/
-/*                      INDEX Y TIENDA                        */
+/*                            INDEX                           */
 /**************************************************************/
 function cargarIndex(){
     // Referencia a la galería del index
@@ -43,10 +41,52 @@ function cargarIndex(){
     cargarGaleria(cosplaysIndex);
 }
 
-// Búsqueda desde el header - Dispara el buscador de la tienda
+// Convierte los cosplays al formato que tienen que tener en el html y los agrega
+function cargarGaleria (arrCosplays) {
+    for (const cosplay of arrCosplays) {
+        let cosplayHtml = cosplay.toHtml();
+        !thisURL.includes("tienda.html") ? cosplayHtml.classList.remove("col-lg-2") : "";   // Si estoy en el index, que sean más grandes los cosplays
+        galeriaCosplays.append(cosplayHtml);
+    }
+}
+
+
+/**************************************************************/
+/*                           TIENDA                           */
+/**************************************************************/
+
+
+async function efectoCarga(sectionNode, delay = 1000){
+    try {
+        // Hago efecto de carga
+        let efectoCarga = document.createElement("div");
+        efectoCarga.classList.add("row", "d-flex", "justify-content-center");
+        efectoCarga.innerHTML = `<div class="lds-spinner">
+                                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                                </div>`;
+
+        // Lo agrego al elemento pasado
+        sectionNode.append(efectoCarga);
+
+        let later =  (delay) => {
+            return new Promise((resolve) => {
+                setTimeout(resolve, delay);
+            })
+        }
+        
+        await later(delay).then(() => {
+            galeriaCosplays.removeChild(efectoCarga);
+        });
+
+        return Promise.resolve();   // Devuelvo una promesa resuelta para hacer el then afuera
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 function cargarTienda(){  
 
-    // Si alguien buscó en el header, recupero la búsqueda del localStorage
+    // Si alguien buscó en el header DE OTRA PÁGINA, recupero la búsqueda del localStorage
     if (localStorage.getItem("busquedaTermino")){
         let buscadorBoton = buscadorHeader.querySelector("button");
         let buscadorInput = buscadorHeader.querySelector("input");
@@ -61,23 +101,56 @@ function cargarTienda(){
         window.addEventListener("DOMContentLoaded", () => {
             buscadorBoton.click();
         })
-        
     }
-    
+
     // Referencia a la galería de la tienda
-    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
-    let cosplaysTienda = cosplays.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad
-    cargarGaleria(cosplaysTienda);
+    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");/* 
+    let cosplaysEnTienda = cosplays.map(x => x);    // Hago una copia
+    cosplaysEnTienda.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad */
+    mostrarTienda(arrCosplaysEnTienda, 2);   // Cuando carga por primera vez, muestro 2 filas
 }
+
+
 
 /* FUNCIONES UTILIZADAS Y EVENTOS */
 
-// Convierte los cosplays al formato que tienen que tener en el html y los agrega
-function cargarGaleria (arrCosplays) {
-    for (const cosplay of arrCosplays) {
-        galeriaCosplays.append(cosplay.toHtml());
+
+function mostrarTienda (arrCosplays, mult = 2) {
+    // Obtengo la cantidad de cosplays que entran en una fila
+    let resolucion = window.innerWidth;
+    let cantPorFila;
+    switch (true) {
+        case (resolucion < 576):
+            cantPorFila = 1 * 4;    // Entra uno pero muestro de a 4
+            break;
+        case (resolucion >= 576 && resolucion < 768):
+            cantPorFila = 2 * 2;        // Entran 2 pero muestro de a 4
+            break;
+        case (resolucion >= 768 && resolucion < 992):
+            cantPorFila = 3;
+            break;
+        case (resolucion >= 992 && resolucion < 1400):
+            cantPorFila = 4;
+            break;
+        case (resolucion >= 1400):
+            cantPorFila = 5;
+            break;
     }
+
+    cantPorFila *= mult;    // Si se desea que se muestre un número distinto de filas enteras
+
+    let cant = arrCosplays.length < cantPorFila ? arrCosplays.length : cantPorFila; // Muestro dependiendo de los que me quedan para mostrar
+
+    for (let i = 0; i < cant; i++) {
+        let thisCosplay = arrCosplays.shift();
+        galeriaCosplays.append(thisCosplay.toHtml());      // Lo agrego al html
+    }
+
+    // Por último si no tengo más desactivo el botón y si, se restaura el arreglo original (por un filtro por ejemplo), se vuelve a activar.
+    let botonMas = document.querySelector(".main--tienda .botonMasTienda");
+    botonMas.disabled = arrCosplays.length == 0 ? true : false;
 }
+
 
 // Modificación de galería, se puede pasar un cartel para mostrar antes de la galeria
 function actualizarGaleria (cosplaysModificados, mensaje = "") {
@@ -87,7 +160,7 @@ function actualizarGaleria (cosplaysModificados, mensaje = "") {
     titulo.innerHTML = `<h2>${mensaje}</h2>`;
     galeriaCosplays.append(titulo);
 
-    cargarGaleria(cosplaysModificados);
+    mostrarTienda(cosplaysModificados, 2);
 }
 
 // Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados)
@@ -104,10 +177,12 @@ function getCosplaysFromHtml () {
 }
 
 if (thisURL.includes("tienda.html")){   // Eventos de la tienda
+    let cosplaysEnTienda = cosplays.map(x => x);
+
     // Orden en la galería  - Ordena lo que está a la vista (o sea, lo que está en el html), si se filtra o se busca, ordena eso y no el arreglo original.
     let opcionesOrden = document.querySelector("#ordenCosplaysTienda");
     opcionesOrden.onchange = () => {
-        let cosplaysOrdenados = getCosplaysFromHtml();
+        let cosplaysOrdenados = cosplays.map(x => x);
 
         switch (opcionesOrden.value) {
             case "nombre-asc-anime":
@@ -163,7 +238,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
             case "pred":
                 cosplaysOrdenados.sort((a, b) => b.popularidad - a.popularidad); // No hay default porque la opción ya está validada
         }
-
+        cosplaysEnTienda = cosplaysOrdenados;       // Borrar
         actualizarGaleria(cosplaysOrdenados);
     }
 
@@ -194,8 +269,9 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
 
             return funcion;
         }
-        
+
         let cosplaysFiltrados = cosplays.filter(filtro);
+        cosplaysEnTienda = cosplaysFiltrados;
         actualizarGaleria(cosplaysFiltrados); 
     }
 
@@ -228,15 +304,15 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         } else {                    // Se llamó desenfocando el input
             word = form.value;
         }
-    
-        cosplays = cosplays.filter(c => 
+
+        let cosplaysBuscados = cosplays.filter(c => 
             c.personaje.toLowerCase().includes(word.toLowerCase()) ||
             c.anime.toLowerCase().includes(word.toLowerCase())  ||
             c.tipo.toLowerCase().includes(word.toLowerCase())
         )
     
         let mensaje = "";
-        if (cosplays.length == 0) {
+        if (cosplaysBuscados.length == 0) {
             mensaje = "No hay coincidencias con la búsqueda";
         }
     
@@ -249,6 +325,14 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
             cb.checked = false;
         }
     }
+
+    // Click en el botón más de la galería
+    let botonMas = document.querySelector(".main--tienda .botonMasTienda");
+    botonMas.addEventListener("click", () => {
+        efectoCarga(galeriaCosplays).then(() => {
+            mostrarTienda(arrCosplaysEnTienda, 1);
+        });
+    });
 }
 
 /**************************************************************/
