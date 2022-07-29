@@ -1,7 +1,7 @@
-async function main () {
+function main () {
     // Recupero información de la base de datos
     codigosDescuento = getCodigosFromDB();
-    cosplays = await getCosplaysFromDB();
+    cosplays = getCosplaysFromDB();
 
     // Recupero carrito
     carrito.recuperarCarrito();
@@ -27,13 +27,7 @@ async function main () {
 
 }
 
-let arrancar = async () => {
-    await main();
-}
-arrancar();
-window.onload( () => {
-    alert("HOLA");
-})
+main();
 
 
 
@@ -514,7 +508,7 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigo"
 }
 
 // Click en carrito de los cosplays
-/* if(thisURL.includes("tienda.html") || thisURL.includes("index.html") || thisURL == "") {
+if(thisURL.includes("tienda.html") || thisURL.includes("index.html") || thisURL == "") {
     galeriaCosplays.addEventListener("submit", (e) => {
         e.preventDefault();
         let thisId = getIdCosplayHtml(e.submitter.parentElement);
@@ -546,7 +540,7 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigo"
             botonMas.click();
         }
     })
-} */
+}
 
 // Click en el más, menos, o tachito
 carritoHtmlGaleria.addEventListener("submit", (e) => {

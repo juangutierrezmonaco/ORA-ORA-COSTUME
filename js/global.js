@@ -100,27 +100,8 @@ async function efectoCarga(sectionNode, delay = 1000){
     }
 }
 
-
-async function getCosplaysFromDB(){
-    let res = await axios("../server/cosplays.json");
-    let cosplays = res.data;
-    let cPruebas = [];
-    for (const c of cosplays) {
-        let cosplay = new Cosplay();
-        Object.assign(cosplay, c);
-
-        if (!thisURL.includes("index.html") && thisURL != ""){  // Si no estoy en el index, la ruta es otra
-            cosplay.imagen = "." + cosplay.imagen;
-        }
-
-        cPruebas.push(cosplay);
-    }
-    
-    return cPruebas;
-}
-
 // Estas funciones simulan cómo se recupera la data de la base de datos
-/* function getCosplaysFromDB () {
+function getCosplaysFromDB () {
     let cosplays = [];
     
     cosplays.push(new Cosplay("Nobara Kugisaki", "Jujutsu Kaisen", "Cosplay", 7000, 0, 10, 5, "./assets/images/cosplays/hechos-a-medida/jujutsu-nobara.png", true));
@@ -151,7 +132,7 @@ async function getCosplaysFromDB(){
 
     return cosplays.sort((a, b) => b.popularidad - a.popularidad);
 }
- */
+
 function getCodigosFromDB () {
     let codigosDescuento = new Map();
     codigosDescuento.set("ORA10", 10);
