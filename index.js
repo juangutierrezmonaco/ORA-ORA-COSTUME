@@ -134,7 +134,7 @@ function actualizarGaleria (cosplaysModificados, mensaje = "") {
     mostrarCosplaysTienda(); // Cuando carga por primera vez, muestro 2 filas
 }
 
-// Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados)
+// Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados o filtrar cosplays buscados)
 function getCosplaysFromHtml () {
     let cosplaysModificados = [];
     let cosplaysHtml = galeriaCosplays.querySelectorAll(".cosplay");
