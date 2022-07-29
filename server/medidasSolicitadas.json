@@ -1,0 +1,184 @@
+[
+    {
+        "nombre": "Contorno de Cabeza",
+        "tipo": "img",
+        "url": "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=19&tipoEscala=stretch&width=863&height=480",
+        "yaCargada": false,
+        "id": 1
+    },
+    {
+        "nombre": "Contorno de Cuello",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/TZzaGHdcCZ0",
+        "yaCargada": false,
+        "id": 2
+    },
+    {
+        "nombre": "Largo Talle Trasero",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/6-uzsyLYXkU",
+        "yaCargada": false,
+        "id": 3
+    },
+    {
+        "nombre": "Largo Talle Delantero",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/Z8MqsQPbg70",
+        "yaCargada": false,
+        "id": 4
+    },
+    {
+        "nombre": "Ancho de Hombro",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/MC_mGKA8z_I",
+        "yaCargada": false,
+        "id": 5
+    },
+    {
+        "nombre": "Ancho de Espalda",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/bZFsfsP6eg4",
+        "yaCargada": false,
+        "id": 6
+    },
+    {
+        "nombre": "Contorno de Pecho",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/OM1PGABODys",
+        "yaCargada": false,
+        "id": 7
+    },
+    {
+        "nombre": "Altura de Busto",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/Eo2DlzDo7ko",
+        "yaCargada": false,
+        "id": 8
+    },
+    {
+        "nombre": "Separación de Busto",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/bqpSwMKQytI",
+        "yaCargada": false,
+        "id": 9
+    },
+    {
+        "nombre": "Contorno de Cintura",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/bgh9mdepiKI",
+        "yaCargada": false,
+        "id": 10
+    },
+    {
+        "nombre": "Contorno de Cadera",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/AoK47JJZ8w8",
+        "yaCargada": false,
+        "id": 11
+    },
+    {
+        "nombre": "Altura de Cadera",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/dDWjjlLYHl0",
+        "yaCargada": false,
+        "id": 12
+    },
+    {
+        "nombre": "Largo de Brazo",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/bnKqGqfcXYM",
+        "yaCargada": false,
+        "id": 13
+    },
+    {
+        "nombre": "Bajada de Sisa Delantera",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/QiUsB1tghK0",
+        "yaCargada": false,
+        "id": 14
+    },
+    {
+        "nombre": "Bajada de Sisa Espalda",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/QiUsB1tghK0",
+        "yaCargada": false,
+        "id": 15
+    },
+    {
+        "nombre": "Contorno de Brazo",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/sG6yboMbpvg",
+        "yaCargada": false,
+        "id": 16
+    },
+    {
+        "nombre": "Contorno de Muñeca",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/BLQDhfmsa5g",
+        "yaCargada": false,
+        "id": 17
+    },
+    {
+        "nombre": "Largo de Tiro",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/B24TUok7g2w",
+        "yaCargada": false,
+        "id": 18
+    },
+    {
+        "nombre": "Largo de Pierna",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/_E1__Pbu-r8",
+        "yaCargada": false,
+        "id": 19
+    },
+    {
+        "nombre": "Altura de Rodilla",
+        "tipo": "iframe",
+        "url": "https://www.youtube.com/embed/kehweIM6KmY",
+        "yaCargada": false,
+        "id": 20
+    },
+    {
+        "nombre": "Contorno de Pierna",
+        "tipo": "img",
+        "url": "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=21&tipoEscala=stretch&width=911&height=683",
+        "yaCargada": false,
+        "id": 21
+    },
+    {
+        "nombre": "Contorno de Rodilla",
+        "tipo": "img",
+        "url": "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=33&tipoEscala=stretch&width=920&height=668",
+        "yaCargada": false,
+        "id": 22
+    },
+    {
+        "nombre": "Contorno de Pantorrilla",
+        "tipo": "img",
+        "url": "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=25&tipoEscala=stretch&width=803&height=603",
+        "yaCargada": false,
+        "id": 23
+    },
+    {
+        "nombre": "Contorno de Tobillo",
+        "tipo": "img",
+        "url": "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=35&tipoEscala=stretch&width=920&height=550",
+        "yaCargada": false,
+        "id": 24
+    },
+    {
+        "nombre": "Largo de Tiro Delantero",
+        "tipo": "img",
+        "url": "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=29&tipoEscala=stretch&width=771&height=1028",
+        "yaCargada": false,
+        "id": 25
+    },
+    {
+        "nombre": "Largo de Tiro Trasero",
+        "tipo": "img",
+        "url": "https://ss-static-01.esmsv.com/id/79166/galeriaimagenes/obtenerimagen/?id=31&tipoEscala=stretch&width=771&height=1028",
+        "yaCargada": false,
+        "id": 26
+    }
+]

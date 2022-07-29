@@ -1,19 +1,12 @@
+let c;
 async function main () {
     // Recupero información de la base de datos
-    codigosDescuento = getCodigosFromDB();
-    cosplays = await getCosplaysFromDB();
-
-    // Recupero carrito
-    carrito.recuperarCarrito();
-
-    // Paso código de descuento si existía de antes
-    let codigoTexto = localStorage.getItem("inputCodigo") == null ? "" : localStorage.getItem("inputCodigo");
-    actualizarCarrito(codigoTexto);
-
+    codigosDescuento = await getCodigosFromDB();    // --> Lo necesito en todas las páginas porque el carrito está en todas
+    cosplays = await getCosplaysFromDB();           // --> Lo necesito en todas las páginas porque el carrito (que tiene cosplays) está en todas
 
     // Nota: Lo siguiente lo hago sin switch porque si hay un error o se va a una sección particular, la URL no es exactamente index o tienda, etc.
     //       Por ejemplo, sería /index.html? o /index.html#seccionX --> Lo hago con if para que se pueda usar el includes y cargar la página
-    if (thisURL.includes("index.html") || thisURL == ""){
+    if (estoyEnIndex()){
         cargarIndex();
     }
 
@@ -25,17 +18,12 @@ async function main () {
         cargarMedidas();
     }
 
+    // Recupero información del localStorage
+    carrito.recuperarCarrito();
+    cargarCarrito();    // Se cargan todos los eventos del carrito una vez que se recupero toda la información    
 }
 
-let arrancar = async () => {
-    await main();
-}
-arrancar();
-window.onload( () => {
-    alert("HOLA");
-})
-
-
+main();
 
 /**************************************************************/
 /*                      INDEX Y TIENDA                        */
@@ -54,7 +42,7 @@ function cargarGaleria (arrCosplays) {
     for (const cosplay of arrCosplays) {
         let cosplayHtml = cosplay.toHtml();
 
-        if ( !thisURL.includes("tienda.html")) {    // Si estoy en el index, que sean más grandes los cosplays
+        if (estoyEnIndex()) {    // Si estoy en el index, que sean más grandes los cosplays
             cosplayHtml.classList.remove("col-lg-2") 
             cosplayHtml.classList.remove("d-none"); // Muestro todos (Por defecto no se ven)
         } 
@@ -137,9 +125,13 @@ function actualizarGaleria (cosplaysModificados, mensaje = "") {
     titulo.innerHTML = `<h2>${mensaje}</h2>`;
     galeriaCosplays.append(titulo);
 
-    cargarGaleria(cosplaysModificados);
-    indiceUltimoCosplayVisto = 0;  // Actualizo porque se actualizó la galeria
-    mostrarCosplaysTienda(); // Cuando carga por primera vez, muestro 2 filas
+    if (estoyEnIndex()) {
+        cargarIndex();  // Cargo de vuelta todos porque el index muestra todos los que cumplen cierta condición
+    } else {
+        cargarGaleria(cosplaysModificados);
+        indiceUltimoCosplayVisto = 0;  // Actualizo porque se actualizó la galeria
+        mostrarCosplaysTienda(); // Cuando carga por primera vez, muestro 2 filas
+    }
 }
 
 // Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados o filtrar cosplays buscados)
@@ -275,10 +267,9 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         e.preventDefault();
         let word;
         let form = e.target;
-        form.querySelector(".btn").blur();  // Saco el focus del botón
+        /* form.querySelector("button").blur();  // Saco el focus del botón */
 
         if (e.type == "submit") {   // Se llamó haciendo click en el botón
-            
             word = form.children[0].value;
         } else {                    // Se llamó desenfocando el input
             word = form.value;
@@ -322,8 +313,8 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
 /**************************************************************/
 /*                         MEDIDAS                            */
 /**************************************************************/
-function cargarMedidas(){
-    let medidas = getMedidasFromDB();
+async function cargarMedidas(){
+    let medidas = await getMedidasFromDB();
 
     let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
     for (const medida of medidas) {
@@ -335,51 +326,50 @@ function cargarMedidas(){
 
 if (thisURL.includes("medidas.html")){
     let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
+    
+    galeriaDeMedidas.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-    galeriaDeMedidas.addEventListener("click", (e) => {
-        let elementoClickleado = e.target;
+        // Obtengo el valor ingresado
+        let valorMedida = e.target.querySelector("input").value;
 
-        if(elementoClickleado.classList.contains("botonMedida")){   // Si estoy haciendo click en guardar de la medida
-            // Obtengo el valor ingresado
-            let valorMedida = elementoClickleado.parentElement.querySelector("input").value;
-
-            // Obtengo el id de la medida
-            let padreMayor = elementoClickleado;
-            while (padreMayor.id == "") {
-                padreMayor = padreMayor.parentElement;
-            }
-
-            let idMedida = padreMayor.id;
-
-            // Y obtengo el padre mayor para cambiar el color y designar que la medida ya está cargada
-            padreMayor = padreMayor.parentElement.querySelector(".medida__titulo");
-
-            padreMayor.classList.remove("medida__cargada");      // Se descolorea */
-            
-            if (valorMedida != ""){         // Si ingreso algo 
-
-                padreMayor.classList.add("medida__cargada");    // Se colorea
-
-                // Lo guardo en el array de medidas
-                medidasPersona.push(idMedida, valorMedida);
-                localStorage.removeItem("medidas");
-                localStorage.setItem("medidas", medidasPersona);
-
-            } else {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    showConfirmButton: false,   
-                    timer: 5000,
-                    position: "top-end",
-                    color: "#645899"
-                }).fire({
-                        icon: 'error',
-                        title: 'No ingresaste nada! No se guardo la medida.'
-                })
-            }
-
+        // Obtengo el id de la medida
+        let padreMayor = e.target;
+        while (padreMayor.id == "") {       // Escalo hasta hallar un elemento con id (el padre)
+            padreMayor = padreMayor.parentElement;
         }
 
+        let idMedida = padreMayor.id;
+
+        // Y obtengo el titulo de la medida para cambiar el color y designar que la medida ya está cargada
+        let medidaTitulo = padreMayor.parentElement.querySelector(".medida__titulo");
+
+        medidaTitulo.classList.remove("medida__cargada");      // Se descolorea */
+        
+        if (valorMedida != ""){         // Si ingreso algo 
+
+            medidaTitulo.classList.add("medida__cargada");    // Se colorea
+
+            // Lo guardo en el array de medidas
+            /* medidasPersona.push(idMedida, valorMedida);
+            localStorage.removeItem("medidas");
+            localStorage.setItem("medidas", medidasPersona);  */
+            
+        } else {
+            const Toast = Swal.mixin({
+                toast: true,
+                showConfirmButton: false,   
+                timer: 5000,
+                position: "top-end",
+                color: "#645899"
+            }).fire({
+                    icon: 'error',
+                    title: 'No ingresaste nada! No se guardo la medida.'
+            })
+        }
+
+        // Cuando termino cierro la ventana abierta
+        document.querySelector(`#${idMedida} .btn-close`).click();
     })
 
 }
@@ -466,13 +456,13 @@ if (thisURL.includes("contacto.html")){
 /**************************************************************/
 
 // Se encarga de transportar todas las modificaciones en el carrito al html.
-function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigo")) {
+function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigoDesc")) {
     // Guardo en localStorage
     carrito.guardarCarrito();
 
     // Si pasa por parámetro tengo que actualizar
-    localStorage.removeItem("inputCodigo");
-    localStorage.setItem("inputCodigo", inputCodigoText);
+    localStorage.removeItem("inputCodigoDesc");
+    localStorage.setItem("inputCodigoDesc", inputCodigoText);
     
     // Actualizo cartel 
     let carritoVacio = document.querySelector("#carritoVacio");
@@ -502,156 +492,163 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigo"
     // Como actualicé todo, borré el código ingresado pero quiero que quede a la vista para el usuario.
     let inputCodigo = carritoHtmlFooter.querySelector("#codigoDescuento");
     if (inputCodigo != null) { 
-        inputCodigo.value = localStorage.getItem("inputCodigo");
+        inputCodigo.value = localStorage.getItem("inputCodigoDesc");
     }
 
     // Por último actualizo el localStorage si se borró el carrito o está vacío
     if (carrito.length() == 0) {
-        localStorage.removeItem("inputCodigo");
-        localStorage.setItem("inputCodigo", ""); 
+        localStorage.removeItem("inputCodigoDesc");
+        localStorage.setItem("inputCodigoDesc", ""); 
         carrito.descuento = 0;
     }
 }
 
-// Click en carrito de los cosplays
-/* if(thisURL.includes("tienda.html") || thisURL.includes("index.html") || thisURL == "") {
-    galeriaCosplays.addEventListener("submit", (e) => {
+function cargarCarrito () {
+    // Paso código de descuento si existía de antes
+    let codigoTexto = localStorage.getItem("inputCodigoDesc") == null ? "" : localStorage.getItem("inputCodigoDesc");
+    actualizarCarrito(codigoTexto);
+
+    // Click en carrito de los cosplays
+    if(estoyEnIndex() || thisURL.includes("tienda.html")) {
+        galeriaCosplays.addEventListener("submit", (e) => {
+            e.preventDefault();
+            let thisId = getIdCosplayHtml(e.submitter.parentElement);
+            let selectedCosplay = searchCosplayById(cosplays, thisId);
+        
+            // Primero veo si existe en el carrito
+            if (!carrito.existeCosplay(selectedCosplay)) {
+                carrito.agregarCosplay(selectedCosplay);
+                actualizarCarrito();
+            } else {
+                // Ahora necesito ir a la galería del carrito y buscar el cosplay que coincida y disparar el evento del botón más de ese,
+                // para validar si se puede agregar y mostrar el cartel de que no hay stock, y funcionalidades ya hechas ahí.
+                let nodosCarrito = carritoHtmlGaleria.childNodes;
+        
+                let nodoCosplay = "";   // Este sería el encontrado
+                let i = 0;
+                
+                // Mientras no lo encuentre o se recorran todos los nodos y no lo encuentre (error que no tendría que pasar, pero evito el loop infinito)
+                while (nodoCosplay == "" && i < nodosCarrito.length) {  
+                    let thisCosplay = nodosCarrito[i++].querySelector(".header__carrito__offcanvas__producto__info");
+        
+                    if (getIdCosplayHtml(thisCosplay) == selectedCosplay.id) {
+                        nodoCosplay = thisCosplay;
+                    }
+                }
+        
+                // Accedo a su botón de más y lo clickleo
+                let botonMas = nodoCosplay.querySelector(".carritoMas");
+                botonMas.click();
+            }
+        })
+    }
+
+    // Click en el más, menos, o tachito
+    carritoHtmlGaleria.addEventListener("submit", (e) => {
         e.preventDefault();
-        let thisId = getIdCosplayHtml(e.submitter.parentElement);
-        let selectedCosplay = searchCosplayById(cosplays, thisId);
-    
-        // Primero veo si existe en el carrito
-        if (!carrito.existeCosplay(selectedCosplay)) {
-            carrito.agregarCosplay(selectedCosplay);
-            actualizarCarrito();
-        } else {
-            // Ahora necesito ir a la galería del carrito y buscar el cosplay que coincida y disparar el evento del botón más de ese,
-            // para validar si se puede agregar y mostrar el cartel de que no hay stock, y funcionalidades ya hechas ahí.
-            let nodosCarrito = carritoHtmlGaleria.childNodes;
-    
-            let nodoCosplay = "";   // Este sería el encontrado
-            let i = 0;
+
+        // Recupero la información del cosplay actual y para eso necesito llegar al nodo padre que tiene el id.
+        let parent = e.submitter;
+        while (parent.className != "header__carrito__offcanvas__producto") {
+            parent = parent.parentNode;
+        }
+
+        let id = getIdCosplayHtml(parent.querySelector(".header__carrito__offcanvas__producto__info"));
+        let thisCosplay = searchCosplayById(cosplays, id);
+        
+        let cantidad = parseInt(parent.querySelector(".carritoCantidad").innerText);
+
+        if (e.submitter.className.includes("carritoMas")) {
             
-            // Mientras no lo encuentre o se recorran todos los nodos y no lo encuentre (error que no tendría que pasar, pero evito el loop infinito)
-            while (nodoCosplay == "" && i < nodosCarrito.length) {  
-                let thisCosplay = nodosCarrito[i++].querySelector(".header__carrito__offcanvas__producto__info");
-    
-                if (getIdCosplayHtml(thisCosplay) == selectedCosplay.id) {
-                    nodoCosplay = thisCosplay;
+            if (cantidad == thisCosplay.stock) {
+                // Escalo hasta llegar a la info del cosplay y voy stockAgotado para mostrar el cartel.
+                let mensaje = parent.querySelector(".stockAgotado"); 
+            
+                if (mensaje.innerText == "") {  // Si todavía no saltó el cartel
+                    mensaje.innerText = "¡UY! NO TENEMOS MÁS STOCK DE ESTE PRODUCTO PARA AGREGARLO AL CARRITO.";
+                } else {
+                    mensaje.classList.remove("shake-vertical");
+                    window.requestAnimationFrame(() => {
+                        mensaje.classList.add("shake-vertical");
+                    });
+                }
+            } else {
+                carrito.agregarCosplay(thisCosplay);
+                actualizarCarrito();
+            }
+
+        }
+
+        if (e.submitter.className.includes("carritoMenos")) {
+            if (cantidad > 1) {
+                carrito.eliminarCosplay(thisCosplay);
+                actualizarCarrito();
+            }
+        }   
+
+        if (e.submitter.className.includes("tachito")) {
+            carrito.eliminarCosplayCompleto(thisCosplay);
+            actualizarCarrito();
+        }    
+    })
+
+    // Click en el aplicar descuento o iniciar compra
+    carritoHtmlFooter.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        if (e.submitter.className.includes("aplicarCodigo")) {
+            let inputCodigo = carritoHtmlFooter.querySelector("#codigoDescuento");
+            let codigoDesc = inputCodigo.value.toUpperCase();   // Me traigo el código en el input
+            let desc = codigosDescuento.get(codigoDesc);
+            
+
+            let mensaje;
+            let color;
+
+            if (desc != undefined) {    // Si lo encontró
+                carrito.descuento = desc;
+                mensaje = `DESCUENTO APLICADO (${desc}% OFF) <i class="fa-solid fa-face-grin-stars"></i>`;
+                color = "text-success";
+            } else {
+                carrito.descuento = 0; 
+                mensaje = `CUPÓN INVÁLIDO <i class="fa-solid fa-face-grin-beam-sweat"></i> `;
+                color = "text-danger";
+            }
+            
+            actualizarCarrito(inputCodigo.value);    // Como reimprimo todo el carrito, necesito pasar el valor ingresado por el usuario para que perdure 
+
+            // Por último muestro un cartel si el código es o no inválido
+            let mensajeDescuento = document.querySelector(".cartelCodigoDescuento"); 
+            mensajeDescuento.innerHTML = mensaje;
+
+            mensajeDescuento.classList.remove("fade-out", color);
+                window.requestAnimationFrame(() => {
+                    mensajeDescuento.classList.add("fade-out", color);
+                });
+        }
+
+        if (e.submitter.className.includes("iniciarCompra")) {
+            alert(`Ahora será redirigido al sistema de venta por el monto de $ ${carrito.calcularTotal()}`)
+
+            if (compra(carrito.calcularTotal())) {  // Si se cobró exitosamente
+                // Actualizo stock
+                actualizarStock();
+
+                // Borro el carrito
+                carrito.borrarCarrito();
+                actualizarCarrito();
+
+                // Cierro la ventana del carrito
+                document.querySelector("#offcanvasCarrito .btn-close").click();
+
+                // Por último, si estoy en la tienda o en el index, actualizo la galería por si alguno se quedó sin stock
+                if (estoyEnIndex() || thisURL.includes("tienda.html")){
+                    actualizarGaleria(cosplays);
                 }
             }
-    
-            // Accedo a su botón de más y lo clickleo
-            let botonMas = nodoCosplay.querySelector(".carritoMas");
-            botonMas.click();
         }
     })
-} */
-
-// Click en el más, menos, o tachito
-carritoHtmlGaleria.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    // Recupero la información del cosplay actual y para eso necesito llegar al nodo padre que tiene el id.
-    let parent = e.submitter;
-    while (parent.className != "header__carrito__offcanvas__producto") {
-        parent = parent.parentNode;
-    }
-
-    let id = getIdCosplayHtml(parent.querySelector(".header__carrito__offcanvas__producto__info"));
-    let thisCosplay = searchCosplayById(cosplays, id);
-    
-    let cantidad = parseInt(parent.querySelector(".carritoCantidad").innerText);
-
-    if (e.submitter.className.includes("carritoMas")) {
-        
-        if (cantidad == thisCosplay.stock) {
-            // Escalo hasta llegar a la info del cosplay y voy stockAgotado para mostrar el cartel.
-            let mensaje = parent.querySelector(".stockAgotado"); 
-        
-            if (mensaje.innerText == "") {  // Si todavía no saltó el cartel
-                mensaje.innerText = "¡UY! NO TENEMOS MÁS STOCK DE ESTE PRODUCTO PARA AGREGARLO AL CARRITO.";
-            } else {
-                mensaje.classList.remove("shake-vertical");
-                window.requestAnimationFrame(() => {
-                    mensaje.classList.add("shake-vertical");
-                });
-            }
-        } else {
-            carrito.agregarCosplay(thisCosplay);
-            actualizarCarrito();
-        }
-
-    }
-
-    if (e.submitter.className.includes("carritoMenos")) {
-        if (cantidad > 1) {
-            carrito.eliminarCosplay(thisCosplay);
-            actualizarCarrito();
-        }
-    }   
-
-    if (e.submitter.className.includes("tachito")) {
-        carrito.eliminarCosplayCompleto(thisCosplay);
-        actualizarCarrito();
-    }    
-})
-
-// Click en el aplicar descuento o iniciar compra
-carritoHtmlFooter.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    if (e.submitter.className.includes("aplicarCodigo")) {
-        let inputCodigo = carritoHtmlFooter.querySelector("#codigoDescuento");
-        let codigoDesc = inputCodigo.value.toUpperCase();   // Me traigo el código en el input
-        let desc = codigosDescuento.get(codigoDesc);
-        
-
-        let mensaje;
-        let color;
-
-        if (desc != undefined) {    // Si lo encontró
-            carrito.descuento = desc;
-            mensaje = `DESCUENTO APLICADO (${desc}% OFF) <i class="fa-solid fa-face-grin-stars"></i>`;
-            color = "text-success";
-        } else {
-            carrito.descuento = 0; 
-            mensaje = `CUPÓN INVÁLIDO <i class="fa-solid fa-face-grin-beam-sweat"></i> `;
-            color = "text-danger";
-        }
-        
-        actualizarCarrito(inputCodigo.value);    // Como reimprimo todo el carrito, necesito pasar el valor ingresado por el usuario para que perdure 
-
-        // Por último muestro un cartel si el código es o no inválido
-        let mensajeDescuento = document.querySelector(".cartelCodigoDescuento"); 
-        mensajeDescuento.innerHTML = mensaje;
-
-        mensajeDescuento.classList.remove("fade-out", color);
-            window.requestAnimationFrame(() => {
-                mensajeDescuento.classList.add("fade-out", color);
-            });
-    }
-
-    if (e.submitter.className.includes("iniciarCompra")) {
-        alert(`Ahora será redirigido al sistema de venta por el monto de $ ${carrito.calcularTotal()}`)
-
-        if (compra(carrito.calcularTotal())) {  // Si se cobró exitosamente
-            // Actualizo stock
-            actualizarStock();
-
-            // Actualizo la galería por si alguno se quedó sin stock
-            actualizarGaleria(cosplays);
-
-            // Borro el carrito
-            carrito.borrarCarrito();
-            actualizarCarrito();
-
-            // Cierro la ventana del carrito
-            document.querySelector("#offcanvasCarrito .btn-close").click();
-            
-        }
-    }
-})
+}
 
 // De momento esto simula el sistema de compra, devuelve si se cobró exitosamente
 function compra (monto) {
