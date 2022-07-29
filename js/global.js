@@ -3,6 +3,7 @@ let codigosDescuento;
 let cosplays;
 let medidasPersona = [];
 let carrito = new Carrito();
+let indiceUltimoCosplayVisto = 0;
 
 let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
 let galeriaCosplays;
@@ -101,7 +102,7 @@ function getCosplaysFromDB () {
         }
     }
 
-    return cosplays;
+    return cosplays.sort((a, b) => b.popularidad - a.popularidad);
 }
 
 function getCodigosFromDB () {

@@ -45,7 +45,11 @@ function cargarIndex(){
 function cargarGaleria (arrCosplays) {
     for (const cosplay of arrCosplays) {
         let cosplayHtml = cosplay.toHtml();
-        !thisURL.includes("tienda.html") ? cosplayHtml.classList.remove("col-lg-2") : "";   // Si estoy en el index, que sean más grandes los cosplays
+
+        if ( !thisURL.includes("tienda.html")) {    // Si estoy en el index, que sean más grandes los cosplays
+            cosplayHtml.classList.remove("col-lg-2") 
+            cosplayHtml.classList.remove("d-none"); // Muestro todos (Por defecto no se ven)
+        } 
         galeriaCosplays.append(cosplayHtml);
     }
 }
@@ -104,10 +108,8 @@ function cargarTienda(){
     }
 
     // Referencia a la galería de la tienda
-    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");/* 
-    let cosplaysEnTienda = cosplays.map(x => x);    // Hago una copia
-    cosplaysEnTienda.sort((a, b) => b.popularidad - a.popularidad);   // Por defecto se ordenan por popularidad */
-    mostrarTienda(arrCosplaysEnTienda, 2);   // Cuando carga por primera vez, muestro 2 filas
+    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
+    cargarGaleria(cosplays);   
 }
 
 
@@ -115,7 +117,7 @@ function cargarTienda(){
 /* FUNCIONES UTILIZADAS Y EVENTOS */
 
 
-function mostrarTienda (arrCosplays, mult = 2) {
+function mostrarCosplaysTienda (arrCosplays, mult = 2) {    // Cuando carga por primera vez, muestro 2 filas
     // Obtengo la cantidad de cosplays que entran en una fila
     let resolucion = window.innerWidth;
     let cantPorFila;
@@ -140,9 +142,8 @@ function mostrarTienda (arrCosplays, mult = 2) {
     cantPorFila *= mult;    // Si se desea que se muestre un número distinto de filas enteras
 
     let cant = arrCosplays.length < cantPorFila ? arrCosplays.length : cantPorFila; // Muestro dependiendo de los que me quedan para mostrar
-
     for (let i = 0; i < cant; i++) {
-        let thisCosplay = arrCosplays.shift();
+
         galeriaCosplays.append(thisCosplay.toHtml());      // Lo agrego al html
     }
 
@@ -160,7 +161,7 @@ function actualizarGaleria (cosplaysModificados, mensaje = "") {
     titulo.innerHTML = `<h2>${mensaje}</h2>`;
     galeriaCosplays.append(titulo);
 
-    mostrarTienda(cosplaysModificados, 2);
+    cargarGaleria(cosplaysModificados);
 }
 
 // Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados)
@@ -177,12 +178,11 @@ function getCosplaysFromHtml () {
 }
 
 if (thisURL.includes("tienda.html")){   // Eventos de la tienda
-    let cosplaysEnTienda = cosplays.map(x => x);
 
     // Orden en la galería  - Ordena lo que está a la vista (o sea, lo que está en el html), si se filtra o se busca, ordena eso y no el arreglo original.
     let opcionesOrden = document.querySelector("#ordenCosplaysTienda");
     opcionesOrden.onchange = () => {
-        let cosplaysOrdenados = cosplays.map(x => x);
+        let cosplaysOrdenados = getCosplaysFromHtml();
 
         switch (opcionesOrden.value) {
             case "nombre-asc-anime":
@@ -238,7 +238,6 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
             case "pred":
                 cosplaysOrdenados.sort((a, b) => b.popularidad - a.popularidad); // No hay default porque la opción ya está validada
         }
-        cosplaysEnTienda = cosplaysOrdenados;       // Borrar
         actualizarGaleria(cosplaysOrdenados);
     }
 
@@ -271,7 +270,6 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         }
 
         let cosplaysFiltrados = cosplays.filter(filtro);
-        cosplaysEnTienda = cosplaysFiltrados;
         actualizarGaleria(cosplaysFiltrados); 
     }
 
@@ -305,14 +303,14 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
             word = form.value;
         }
 
-        let cosplaysBuscados = cosplays.filter(c => 
+        cosplays = cosplays.filter(c => 
             c.personaje.toLowerCase().includes(word.toLowerCase()) ||
             c.anime.toLowerCase().includes(word.toLowerCase())  ||
             c.tipo.toLowerCase().includes(word.toLowerCase())
         )
     
         let mensaje = "";
-        if (cosplaysBuscados.length == 0) {
+        if (cosplays.length == 0) {
             mensaje = "No hay coincidencias con la búsqueda";
         }
     
@@ -330,7 +328,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
     let botonMas = document.querySelector(".main--tienda .botonMasTienda");
     botonMas.addEventListener("click", () => {
         efectoCarga(galeriaCosplays).then(() => {
-            mostrarTienda(arrCosplaysEnTienda, 1);
+            mostrarTienda(cosplays, 1);
         });
     });
 }
