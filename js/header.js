@@ -2,13 +2,12 @@
 /* HEADER */
 /*        */
 
-
-let buscadorHeader = document.querySelector(".header__buscador");
+let buscadorHeader = document.querySelector(".header__buscador");    
 buscadorHeader.addEventListener("submit", (e) => {
     e.preventDefault();
 
     // Antes que nada restauro los cosplays y luego busco (Porque acá no tengo el evento de que se borre "\r" en el input. O sea, si se escribe algo en el header y se busca anda, pero si luego se vuelve a buscar no se restauran los cosplays)
-    cosplays = getCosplaysFromDB();
+    cosplaysTienda = cosplaysBackup;
     
     let buscadorHeaderInput = e.target.querySelector("input");
     
@@ -32,20 +31,19 @@ buscadorHeader.addEventListener("submit", (e) => {
         
         // Para ir a la tienda veo desde donde estoy yendo (index o las otras páginas)
         let tiendaURL;
-        switch (thisURL) {
-            case "":    // Estoy en el index pero sin la direccion index.html
+        switch (true) {
+            case (thisURL == ""):    // Estoy en el index pero sin la direccion index.html
                 tiendaURL = document.URL += "pages/tienda.html"; 
                 break;
-            case "index.html":    // Estoy en el index
+            case (thisURL.includes("index.html")):    // Estoy en el index
                 tiendaURL = document.URL.replace(thisURL, "pages/tienda.html")
                 break;
             default:    // Estoy al mismo nivel que tienda.html
                 tiendaURL = document.URL.replace(thisURL, "tienda.html")    
                 break;
         }
-        
-        location.href = tiendaURL;
 
+        location.href = tiendaURL;
     }
 })
 

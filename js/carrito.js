@@ -20,7 +20,7 @@ class Carrito {
 
         // Para que los cosplays recuperen su estado de clase y pueda acceder a sus métodos. No aplico el mismo método de arriba porque, de alguna manera, los cosplays quedan setteados de una manera que falla todo. Por lo cual, busco según id en el arreglo de cosplays global.
         for (let i = 0; i < this.cosplays.length; i++) {
-            this.cosplays[i] = searchCosplayById(cosplays, this.cosplays[i].id);
+            this.cosplays[i] = searchCosplayById(this.cosplays[i].id);
         }
     }
 

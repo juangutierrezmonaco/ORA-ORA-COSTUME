@@ -67,8 +67,8 @@ class Cosplay {
     }
 }
 
-function searchCosplayById (cosplays, id) {
-    return cosplays.find(c => c.id == parseInt(id));
+function searchCosplayById (id) {
+    return cosplaysBackup.find(c => c.id == parseInt(id));
 } 
 
 function getIdCosplayHtml (cosplayHtml) {

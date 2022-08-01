@@ -1,26 +1,45 @@
-let c;
+// Variables globales
+let codigosDescuento;   // Guarda los códigos de descuento recuperados de la base de datos
+let cosplaysBackup;     // Guarda los cosplays recuperados de la base de datos
+let cosplaysTienda;     // Lleva una constancia de los cosplays que están en la tienda (Por si se filtran o se buscan)
+let indiceUltimoCosplayVisto = 0;
+
+let medidasPersona = [];
+let carrito = new Carrito();
+
+let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
+let galeriaCosplays;
+
 async function main () {
-    // Recupero información de la base de datos
-    codigosDescuento = await getCodigosFromDB();    // --> Lo necesito en todas las páginas porque el carrito está en todas
-    cosplays = await getCosplaysFromDB();           // --> Lo necesito en todas las páginas porque el carrito (que tiene cosplays) está en todas
+    try {
+        // Recupero información de la base de datos
+        codigosDescuento = await getCodigosFromDB();    // --> Lo necesito en todas las páginas porque el carrito está en todas
+        cosplaysTienda = await getCosplaysFromDB();     // --> Lo necesito en todas las páginas porque el carrito (que tiene cosplays) está en todas
+        cosplaysBackup = cosplaysTienda.map(x => x);    // --> Hago un backup para poder recuperar lo que había sin ir a la base de datos
+        
+        // Nota: Lo siguiente lo hago sin switch porque si hay un error o se va a una sección particular, la URL no es exactamente index o tienda, etc.
+        //       Por ejemplo, sería /index.html? o /index.html#seccionX --> Lo hago con if para que se pueda usar el includes y cargar la página
+        if (estoyEnIndex()){
+            cargarIndex();
+        }
 
-    // Nota: Lo siguiente lo hago sin switch porque si hay un error o se va a una sección particular, la URL no es exactamente index o tienda, etc.
-    //       Por ejemplo, sería /index.html? o /index.html#seccionX --> Lo hago con if para que se pueda usar el includes y cargar la página
-    if (estoyEnIndex()){
-        cargarIndex();
+        if (thisURL.includes("tienda.html")){
+            cargarTienda();
+        }
+        
+        if (thisURL.includes("medidas.html")){
+            cargarMedidas();
+        }
+        
+        // Recupero información del localStorage
+        carrito.recuperarCarrito();
+        cargarCarrito();    // Se cargan todos los eventos del carrito una vez que se recupero toda la información  
+    } catch (error) {
+        alert("ERROR");
+        console.log(error);
     }
 
-    if (thisURL.includes("tienda.html")){
-        cargarTienda();
-    }
-    
-    if (thisURL.includes("medidas.html")){
-        cargarMedidas();
-    }
-
-    // Recupero información del localStorage
-    carrito.recuperarCarrito();
-    cargarCarrito();    // Se cargan todos los eventos del carrito una vez que se recupero toda la información    
+      
 }
 
 main();
@@ -33,7 +52,7 @@ function cargarIndex(){
     galeriaCosplays = document.querySelector(".main--index .galeriaCosplays");
 
     // Creación de galería y muestra
-    let cosplaysIndex = cosplays.filter((c) => c.especial);
+    let cosplaysIndex = cosplaysTienda.filter((c) => c.especial);
     cargarGaleria(cosplaysIndex);
 }
 
@@ -51,6 +70,10 @@ function cargarGaleria (arrCosplays) {
 }
 
 function cargarTienda(){  
+    // Referencia a la galería de la tienda
+    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
+    cargarGaleria(cosplaysTienda);   
+    mostrarCosplaysTienda(); 
 
     // Si alguien buscó en el header DE OTRA PÁGINA, recupero la búsqueda del localStorage
     if (localStorage.getItem("busquedaTermino")){
@@ -62,17 +85,8 @@ function cargarTienda(){
         buscadorInput.value = localStorage.getItem("busquedaTermino");
         localStorage.removeItem("busquedaTermino");
 
-        
-        // Hago click en el boton, UNA VEZ QUE LA PÁGINA YA ESTÁ CARGADA (Sino error de asincronía)
-        window.addEventListener("DOMContentLoaded", () => {
-            buscadorBoton.click();
-        })
+        buscadorBoton.click();
     }
-
-    // Referencia a la galería de la tienda
-    galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
-    cargarGaleria(cosplays);   
-    mostrarCosplaysTienda(); 
 }
 
 function mostrarCosplaysTienda (mult = 2) {     // Cuando recarga toda la galería, muestro 2 filas
@@ -141,14 +155,13 @@ function getCosplaysFromHtml () {
 
     for (const cosplay of cosplaysHtml) {
         let thisId = getIdCosplayHtml(cosplay);
-        cosplaysModificados.push(searchCosplayById(cosplays, thisId));
+        cosplaysModificados.push(searchCosplayById(thisId));
     }
 
     return cosplaysModificados;
 }
 
 if (thisURL.includes("tienda.html")){   // Eventos de la tienda
-
     // Orden en la galería  - Ordena lo que está a la vista (o sea, lo que está en el html), si se filtra o se busca, ordena eso y no el arreglo original.
     let opcionesOrden = document.querySelector("#ordenCosplaysTienda");
     opcionesOrden.onchange = () => {
@@ -239,10 +252,10 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
             return funcion;
         }
 
-        let cosplaysFiltrados = cosplays.filter(filtro);
+        let cosplaysFiltrados = cosplaysTienda.filter(filtro);
         actualizarGaleria(cosplaysFiltrados); 
     }
-
+    
     // Búsqueda en la galería
     let buscadorTienda = document.querySelector("#buscadorTienda");
     let buscadorTiendaInput = buscadorTienda.querySelector("input");
@@ -258,8 +271,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
 
         // Si se borra, se restaura el arreglo al original y se busca nuevamente (porque en la búsqueda modifico el arreglo). También aplica para el caso que no se ponga nada en la búsqueda, se restaura el arreglo. Luego de que se restaura se disparan los otros eventos para buscar.
         if (e.key = "\r") {     
-            cosplays = getCosplaysFromDB();
-            
+            cosplaysTienda = cosplaysBackup;
         }
     });
 
@@ -275,18 +287,18 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
             word = form.value;
         }
 
-        cosplays = cosplays.filter(c => 
+        cosplaysTienda = cosplaysTienda.filter(c => 
             c.personaje.toLowerCase().includes(word.toLowerCase()) ||
             c.anime.toLowerCase().includes(word.toLowerCase())  ||
             c.tipo.toLowerCase().includes(word.toLowerCase())
         )
     
         let mensaje = "";
-        if (cosplays.length == 0) {
+        if (cosplaysTienda.length == 0) {
             mensaje = "No hay coincidencias con la búsqueda";
         }
     
-        actualizarGaleria(cosplays, mensaje);
+        actualizarGaleria(cosplaysTienda, mensaje);
     
         // Por último, cuando se busca se borran todos los filtros.
         // Esto es porque se puede buscar y filtrar esos resultados, pero no buscar en los resultados filtrados.
@@ -300,7 +312,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
         opcionesOrden.value = "pred"; 
     }
 
-    // Click en el botón más de la galería
+    // Click en el botón de mostrar más de la galería
     let botonMas = document.querySelector(".main--tienda .botonMasTienda");
     botonMas.addEventListener("click", (e) => {
         efectoCarga(galeriaCosplays).then(() => {
@@ -424,7 +436,6 @@ if (thisURL.includes("contacto.html")){
     formContacto.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        
         let email = e.target.querySelector("#email--contacto").value;
 
         const Toast = Swal.mixin({
@@ -454,6 +465,8 @@ if (thisURL.includes("contacto.html")){
 /**************************************************************/
 /*                          CARRITO                           */
 /**************************************************************/
+let carritoHtmlGaleria = document.querySelector("#galeria__carrito");
+let carritoHtmlFooter = document.querySelector("#footer__carrito");
 
 // Se encarga de transportar todas las modificaciones en el carrito al html.
 function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigoDesc")) {
@@ -513,8 +526,8 @@ function cargarCarrito () {
         galeriaCosplays.addEventListener("submit", (e) => {
             e.preventDefault();
             let thisId = getIdCosplayHtml(e.submitter.parentElement);
-            let selectedCosplay = searchCosplayById(cosplays, thisId);
-        
+            let selectedCosplay = searchCosplayById(thisId);
+
             // Primero veo si existe en el carrito
             if (!carrito.existeCosplay(selectedCosplay)) {
                 carrito.agregarCosplay(selectedCosplay);
@@ -554,7 +567,7 @@ function cargarCarrito () {
         }
 
         let id = getIdCosplayHtml(parent.querySelector(".header__carrito__offcanvas__producto__info"));
-        let thisCosplay = searchCosplayById(cosplays, id);
+        let thisCosplay = searchCosplayById(id);
         
         let cantidad = parseInt(parent.querySelector(".carritoCantidad").innerText);
 
@@ -643,7 +656,7 @@ function cargarCarrito () {
 
                 // Por último, si estoy en la tienda o en el index, actualizo la galería por si alguno se quedó sin stock
                 if (estoyEnIndex() || thisURL.includes("tienda.html")){
-                    actualizarGaleria(cosplays);
+                    actualizarGaleria(cosplaysTienda);
                 }
             }
         }
