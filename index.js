@@ -44,82 +44,6 @@ async function main () {
 main();
 
 /**************************************************************/
-/*              EVENTOS DEL HEADER Y EL FOOTER                */
-/**************************************************************/
-
-let buscadorHeader = document.querySelector(".header__buscador");    
-buscadorHeader.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    // Antes que nada restauro los cosplays y luego busco (Porque acá no tengo el evento de que se borre "\r" en el input. O sea, si se escribe algo en el header y se busca anda, pero si luego se vuelve a buscar no se restauran los cosplays)
-    cosplaysTienda = cosplaysBackup;
-    
-    let buscadorHeaderInput = e.target.querySelector("input");
-    
-    if (thisURL.includes("tienda.html")){   // Si estoy en la tienda
-        let buscadorTienda = document.querySelector("#buscadorTienda");
-        let buscadorTiendaInput = buscadorTienda.querySelector("input");
-
-        // Pongo la palabra en el input del buscador de la tienda, le hago focus y disparo el botón
-        let buscadorTiendaBoton = buscadorTienda.querySelector("button");
-        buscadorTiendaInput.focus();
-        buscadorTiendaInput.value = buscadorHeaderInput.value;
-        buscadorTiendaBoton.click();
-        
-        // Luego limpio el input del buscador del header, le saco el focus y scrolleo hasta la sección
-        buscadorHeaderInput.value = "";
-        buscadorHeaderInput.blur();
-        document.querySelector(".main--tienda .main__titulo").scrollIntoView();
-
-    } else {    // Voy a la tienda y guardo la información para lanzar el evento en la carga
-        localStorage.setItem("busquedaTermino", buscadorHeaderInput.value);
-        
-        // Para ir a la tienda veo desde donde estoy yendo (index o las otras páginas)
-        let tiendaURL;
-        switch (true) {
-            case (thisURL == ""):    // Estoy en el index pero sin la direccion index.html
-                tiendaURL = document.URL += "pages/tienda.html"; 
-                break;
-            case (thisURL.includes("index.html")):    // Estoy en el index
-                tiendaURL = document.URL.replace(thisURL, "pages/tienda.html")
-                break;
-            default:    // Estoy al mismo nivel que tienda.html
-                tiendaURL = document.URL.replace(thisURL, "tienda.html")    
-                break;
-        }
-
-        location.href = tiendaURL;
-    }
-})
-
-let newsletter = document.querySelector(".footer__newsletter");
-newsletter.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    let email = e.target.querySelector("input").value;
-
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'bottom-end',
-        showConfirmButton: false,
-        timer: 5000,
-        color: "#645899"
-    })
-
-    if (validarEmail(email)) {
-        Toast.fire({
-            icon: 'success',
-            title: 'Gracias por suscribirte! Te vamos a estar comunicando todas nuestras novedades ♡'
-        })
-    } else {
-        Toast.fire({
-            icon: 'error',
-            title: 'Vamos a necesitar un email válido para poder comunicarnos con vos!'
-        })
-    }
-})
-
-/**************************************************************/
 /*                      INDEX Y TIENDA                        */
 /**************************************************************/
 function cargarIndex(){
@@ -402,6 +326,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
 /**************************************************************/
 let medidasPersona;
 let medidaTitulo;
+
 async function cargarMedidas(){
     // Recupero las medidas ya cargadas
     medidasPersona = recuperarMedidas();
@@ -409,8 +334,8 @@ async function cargarMedidas(){
     let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
     
     try {
-        let medidas = await getMedidasFromDB();     // Estas medidas hacen referencia al elemento que muestra cómo tomar las medidas, NO SU VALOR
-        
+        let medidas = await getMedidasFromDB();
+
         for (const medida of medidas) {
             // Si estaba guardada la recupero
             let medidaGuardada = medidasPersona.find( (m) => numbersInString(m.idMedida) == medida.id);
@@ -433,7 +358,48 @@ async function cargarMedidas(){
     }
 }
 
+function sendMailMedidas (form) {
+    let nombre = form.querySelector("#nombre").value.toUpperCase();
+    let boton = form.querySelector(".botonMedidas");
+
+    boton.innerText = 'Enviando...';
+
+    const Toast = Swal.mixin({
+        toast: true,
+        showConfirmButton: false,   
+        timer: 5000,
+        position: "top-end",
+        color: "#645899"
+    });
+
+    const serviceID = "service_hopw67s";
+    const templateID = "template_gunk3ul";
+
+    emailjs.send(serviceID, templateID, {   
+        name_cosplay: form.querySelector("#nombre-cosplay").value,
+        age: form.querySelector("#edad").value,
+        name: form.querySelector("#nombre").value,
+        phone: form.querySelector("#celular").value,
+        message: form.querySelector("#comentario").value,
+        html: tablaConMedidasCargadas(medidasPersona)
+    }).then(() => {
+        Toast.fire({
+            icon: 'success',
+            title: `${nombre}! Vamos a estar comunicandonos con vos lo antes posible!`,
+        })
+        boton.innerText  = 'Enviar';
+    }).catch(error => {
+        Toast.fire({
+            icon: 'error',
+            title: "Hubo un error. Espera un rato e intenta nuevamente."
+        });
+        console.log(error);
+        boton.innerText  = 'Enviar';
+    });
+}
+
 if (thisURL.includes("medidas.html")){
+    // Carga de medidas
     let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
     galeriaDeMedidas.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -472,7 +438,8 @@ if (thisURL.includes("medidas.html")){
             if (medidaGuardada != undefined){
                 medidaGuardada.valorMedida = valorMedida;
             } else {
-                medidasPersona.push({idMedida, valorMedida});
+                let nombreMedida = padreMayor.parentElement.querySelector(".medida__titulo").innerText;
+                medidasPersona.push({idMedida, valorMedida, nombreMedida});
             }
             
             guardarMedidas();
@@ -493,6 +460,42 @@ if (thisURL.includes("medidas.html")){
         document.querySelector(`#${idMedida} .btn-close`).click();
     })
 
+    // Formulario de medidas
+    let formMedidas = document.querySelector(".formMedidas");
+    formMedidas.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        sendMailMedidas(e.target);
+    })
+
+}
+
+function tablaConMedidasCargadas(arrMedidas) {
+    let tabla = document.createElement("table");
+
+    tabla.innerHTML = `<thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre de la medida</th>
+                                <th scope="col">Valor de la medida (cm)</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>`
+
+    let bodyTabla = tabla.querySelector("tbody");
+
+    let i = 1;
+    for (const medida of arrMedidas) {
+        let fila = document.createElement("tr");
+        fila.innerHTML = `  <th scope="row">${i++}</th>
+                            <td>${medida.nombreMedida}</td>
+                            <td>${medida.valorMedida}</td>`
+        bodyTabla.append(fila)
+    }
+
+    return tabla.outerHTML;
 }
 
 /**************************************************************/
@@ -539,34 +542,65 @@ if (thisURL.includes("envios.html")){
 /**************************************************************/
 /*                        CONTACTO                            */
 /**************************************************************/
+function sendMailContacto (form) {
+    let nombre = form.querySelector("#nombre--contacto").value.toUpperCase();
+    let boton = form.querySelector(".boton--contacto");
+    
+    boton.innerText = 'Enviando...';
+
+    const Toast = Swal.mixin({
+        toast: true,
+        showConfirmButton: false,   
+        timer: 5000,
+        position: "top-end",
+        color: "#645899"
+    });
+
+    const serviceID = "service_hopw67s";
+    const templateID = "template_wyd82p8";
+
+    emailjs.send(serviceID, templateID, {
+        name: form.querySelector("#nombre--contacto").value,
+        email: form.querySelector("#email--contacto").value,
+        phone: form.querySelector("#telefono--contacto").value,
+        message: form.querySelector("#mensaje--contacto").value,
+    })
+    .then((res) => {
+        Toast.fire({
+            icon: 'success',
+            title: `${nombre}! Vamos a estar comunicandonos con vos lo antes posible!`,
+        })
+        boton.innerText  = 'Enviar';
+    }).catch(error => {
+        Toast.fire({
+            icon: 'error',
+            title: "Hubo un error. Espera un rato e intenta nuevamente."
+        });
+        console.log(error);
+        boton.innerText  = 'Enviar';
+    });
+}
+
 if (thisURL.includes("contacto.html")){
     let formContacto = document.querySelector(".main--contacto .formContacto");
 
     formContacto.addEventListener("submit", (e) => {
         e.preventDefault();
-
         let email = e.target.querySelector("#email--contacto").value;
-
-        const Toast = Swal.mixin({
-            toast: true,
-            showConfirmButton: false,   
-            timer: 5000,
-            position: "top-end",
-            color: "#645899"
-        })
         
         if (validarEmail(email)){
-            let nombre = e.target.querySelector("#nombre--contacto").value.toUpperCase();
-
-            Toast.fire({
-                icon: 'success',
-                title: `${nombre}! Vamos a estar comunicandonos con vos lo antes posible!`,
-            })
+            sendMail(e.target);
         } else {
-            Toast.fire({
+            const Toast = Swal.mixin({
+                toast: true,
+                showConfirmButton: false,   
+                timer: 5000,
+                position: "top-end",
+                color: "#645899"
+            }).fire({
                 icon: 'error',
                 title: 'Vamos a necesitar un email válido para poder comunicarnos con vos!'
-            })
+            });
         }
     })
 }
@@ -777,3 +811,79 @@ function compra (monto) {
     alert(`Se cobraron $${monto}.`);
     return true;    // De momento devuelve que la compra fue exitosa
 }
+
+/**************************************************************/
+/*              EVENTOS DEL HEADER Y EL FOOTER                */
+/**************************************************************/
+
+let buscadorHeader = document.querySelector(".header__buscador");    
+buscadorHeader.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Antes que nada restauro los cosplays y luego busco (Porque acá no tengo el evento de que se borre "\r" en el input. O sea, si se escribe algo en el header y se busca anda, pero si luego se vuelve a buscar no se restauran los cosplays)
+    cosplaysTienda = cosplaysBackup;
+    
+    let buscadorHeaderInput = e.target.querySelector("input");
+    
+    if (thisURL.includes("tienda.html")){   // Si estoy en la tienda
+        let buscadorTienda = document.querySelector("#buscadorTienda");
+        let buscadorTiendaInput = buscadorTienda.querySelector("input");
+
+        // Pongo la palabra en el input del buscador de la tienda, le hago focus y disparo el botón
+        let buscadorTiendaBoton = buscadorTienda.querySelector("button");
+        buscadorTiendaInput.focus();
+        buscadorTiendaInput.value = buscadorHeaderInput.value;
+        buscadorTiendaBoton.click();
+        
+        // Luego limpio el input del buscador del header, le saco el focus y scrolleo hasta la sección
+        buscadorHeaderInput.value = "";
+        buscadorHeaderInput.blur();
+        document.querySelector(".main--tienda .main__titulo").scrollIntoView();
+
+    } else {    // Voy a la tienda y guardo la información para lanzar el evento en la carga
+        localStorage.setItem("busquedaTermino", buscadorHeaderInput.value);
+        
+        // Para ir a la tienda veo desde donde estoy yendo (index o las otras páginas)
+        let tiendaURL;
+        switch (true) {
+            case (thisURL == ""):    // Estoy en el index pero sin la direccion index.html
+                tiendaURL = document.URL += "pages/tienda.html"; 
+                break;
+            case (thisURL.includes("index.html")):    // Estoy en el index
+                tiendaURL = document.URL.replace(thisURL, "pages/tienda.html")
+                break;
+            default:    // Estoy al mismo nivel que tienda.html
+                tiendaURL = document.URL.replace(thisURL, "tienda.html")    
+                break;
+        }
+
+        location.href = tiendaURL;
+    }
+})
+
+let newsletter = document.querySelector(".footer__newsletter");
+newsletter.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    let email = e.target.querySelector("input").value;
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 5000,
+        color: "#645899"
+    })
+
+    if (validarEmail(email)) {
+        Toast.fire({
+            icon: 'success',
+            title: 'Gracias por suscribirte! Te vamos a estar comunicando todas nuestras novedades ♡'
+        })
+    } else {
+        Toast.fire({
+            icon: 'error',
+            title: 'Vamos a necesitar un email válido para poder comunicarnos con vos!'
+        })
+    }
+})

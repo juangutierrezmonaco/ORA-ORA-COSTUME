@@ -96,9 +96,13 @@
     &__cuenta {
         font-size: 0.9rem;
 
-        a{
+        &__boton{
             position: relative;
-
+            outline: none;
+            box-shadow: none;
+            border: none;
+            background-color: transparent;
+            
             &::after {
                 content: "";
                 height: 1px;
