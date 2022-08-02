@@ -4,7 +4,6 @@ let cosplaysBackup;     // Guarda los cosplays recuperados de la base de datos
 let cosplaysTienda;     // Lleva una constancia de los cosplays que están en la tienda (Por si se filtran o se buscan)
 let indiceUltimoCosplayVisto = 0;
 
-let medidasPersona = [];
 let carrito = new Carrito();
 
 let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
@@ -43,6 +42,82 @@ async function main () {
 }
 
 main();
+
+/**************************************************************/
+/*              EVENTOS DEL HEADER Y EL FOOTER                */
+/**************************************************************/
+
+let buscadorHeader = document.querySelector(".header__buscador");    
+buscadorHeader.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Antes que nada restauro los cosplays y luego busco (Porque acá no tengo el evento de que se borre "\r" en el input. O sea, si se escribe algo en el header y se busca anda, pero si luego se vuelve a buscar no se restauran los cosplays)
+    cosplaysTienda = cosplaysBackup;
+    
+    let buscadorHeaderInput = e.target.querySelector("input");
+    
+    if (thisURL.includes("tienda.html")){   // Si estoy en la tienda
+        let buscadorTienda = document.querySelector("#buscadorTienda");
+        let buscadorTiendaInput = buscadorTienda.querySelector("input");
+
+        // Pongo la palabra en el input del buscador de la tienda, le hago focus y disparo el botón
+        let buscadorTiendaBoton = buscadorTienda.querySelector("button");
+        buscadorTiendaInput.focus();
+        buscadorTiendaInput.value = buscadorHeaderInput.value;
+        buscadorTiendaBoton.click();
+        
+        // Luego limpio el input del buscador del header, le saco el focus y scrolleo hasta la sección
+        buscadorHeaderInput.value = "";
+        buscadorHeaderInput.blur();
+        document.querySelector(".main--tienda .main__titulo").scrollIntoView();
+
+    } else {    // Voy a la tienda y guardo la información para lanzar el evento en la carga
+        localStorage.setItem("busquedaTermino", buscadorHeaderInput.value);
+        
+        // Para ir a la tienda veo desde donde estoy yendo (index o las otras páginas)
+        let tiendaURL;
+        switch (true) {
+            case (thisURL == ""):    // Estoy en el index pero sin la direccion index.html
+                tiendaURL = document.URL += "pages/tienda.html"; 
+                break;
+            case (thisURL.includes("index.html")):    // Estoy en el index
+                tiendaURL = document.URL.replace(thisURL, "pages/tienda.html")
+                break;
+            default:    // Estoy al mismo nivel que tienda.html
+                tiendaURL = document.URL.replace(thisURL, "tienda.html")    
+                break;
+        }
+
+        location.href = tiendaURL;
+    }
+})
+
+let newsletter = document.querySelector(".footer__newsletter");
+newsletter.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    let email = e.target.querySelector("input").value;
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 5000,
+        color: "#645899"
+    })
+
+    if (validarEmail(email)) {
+        Toast.fire({
+            icon: 'success',
+            title: 'Gracias por suscribirte! Te vamos a estar comunicando todas nuestras novedades ♡'
+        })
+    } else {
+        Toast.fire({
+            icon: 'error',
+            title: 'Vamos a necesitar un email válido para poder comunicarnos con vos!'
+        })
+    }
+})
 
 /**************************************************************/
 /*                      INDEX Y TIENDA                        */
@@ -325,23 +400,44 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
 /**************************************************************/
 /*                         MEDIDAS                            */
 /**************************************************************/
+let medidasPersona;
+let medidaTitulo;
 async function cargarMedidas(){
-    let medidas = await getMedidasFromDB();
+    // Recupero las medidas ya cargadas
+    medidasPersona = recuperarMedidas();
 
     let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
-    for (const medida of medidas) {
-        galeriaDeMedidas.append(medida.toHtml());
-    }
+    
+    try {
+        let medidas = await getMedidasFromDB();     // Estas medidas hacen referencia al elemento que muestra cómo tomar las medidas, NO SU VALOR
+        
+        for (const medida of medidas) {
+            // Si estaba guardada la recupero
+            let medidaGuardada = medidasPersona.find( (m) => numbersInString(m.idMedida) == medida.id);
 
-    // Recupero las que ya están cargadas   ---> Próximamente
+            let medidaHTML;
+
+            if (medidaGuardada != undefined) {  // Si estaba guardada pongo el valor en el input y la coloreo
+                medidaHTML = medida.toHtml(medidaGuardada.valorMedida);
+
+                medidaTitulo = medidaHTML.querySelector(".medida__titulo");
+                medidaTitulo.classList.add("medida__cargada");    // Se colorea
+            } else {                            // Sino la agrego por defecto
+                medidaHTML = medida.toHtml();
+            }
+
+            galeriaDeMedidas.append(medidaHTML);
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 if (thisURL.includes("medidas.html")){
     let galeriaDeMedidas = document.querySelector(".main--medidas .galeriaMedidas");
-    
     galeriaDeMedidas.addEventListener("submit", (e) => {
         e.preventDefault();
-
+        
         // Obtengo el valor ingresado
         let valorMedida = e.target.querySelector("input").value;
 
@@ -357,27 +453,40 @@ if (thisURL.includes("medidas.html")){
         let medidaTitulo = padreMayor.parentElement.querySelector(".medida__titulo");
 
         medidaTitulo.classList.remove("medida__cargada");      // Se descolorea */
-        
-        if (valorMedida != ""){         // Si ingreso algo 
 
-            medidaTitulo.classList.add("medida__cargada");    // Se colorea
-
-            // Lo guardo en el array de medidas
-            /* medidasPersona.push(idMedida, valorMedida);
-            localStorage.removeItem("medidas");
-            localStorage.setItem("medidas", medidasPersona);  */
-            
-        } else {
-            const Toast = Swal.mixin({
+        const Toast = Swal.mixin({
                 toast: true,
                 showConfirmButton: false,   
                 timer: 5000,
                 position: "top-end",
                 color: "#645899"
-            }).fire({
+        })
+        
+        if (valorMedida != ""){         // Si ingreso algo 
+
+            medidaTitulo.classList.add("medida__cargada");    // Se colorea
+
+            // Lo guardo en el array de medidas. Si estaba guardado en el arreglo tengo que modificar el valor guardado
+            let medidaGuardada = medidasPersona.find( (m) => m.idMedida == idMedida);
+
+            if (medidaGuardada != undefined){
+                medidaGuardada.valorMedida = valorMedida;
+            } else {
+                medidasPersona.push({idMedida, valorMedida});
+            }
+            
+            guardarMedidas();
+            
+            Toast.fire({
+                icon: 'success',
+                title: 'Se guardo correctamente la medida!'
+            });
+
+        } else {
+            Toast.fire({
                     icon: 'error',
                     title: 'No ingresaste nada! No se guardo la medida.'
-            })
+            });
         }
 
         // Cuando termino cierro la ventana abierta
@@ -516,7 +625,7 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigoD
     }
 }
 
-function cargarCarrito () {
+function cargarCarrito () {     // EVENTOS DEL CARRITO
     // Paso código de descuento si existía de antes
     let codigoTexto = localStorage.getItem("inputCodigoDesc") == null ? "" : localStorage.getItem("inputCodigoDesc");
     actualizarCarrito(codigoTexto);

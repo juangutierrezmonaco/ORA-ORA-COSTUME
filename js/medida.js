@@ -10,7 +10,7 @@ class Medida {
         this.id = ++Medida.count; 
     }
 
-    toHtml () {
+    toHtml (valorMedida = "") {
         let medidaHtml = document.createElement("div");
         medidaHtml.classList.add("col-8", "col-sm-4", "col-md-3");
 
@@ -33,6 +33,9 @@ class Medida {
 
         let idMedida = `medida${this.id}`;
 
+        // Por último, si ya estaba cargada, settear el valor
+        let valorGuardado = valorMedida && `value=${valorMedida}`;
+        
         medidaHtml.innerHTML = 
             `<div type="button" data-bs-toggle="modal" data-bs-target="#${idMedida}">
                 <div class="medida card">
@@ -55,9 +58,9 @@ class Medida {
 
                         <div class="modal-footer">
                             <form class="input-group">
-                                <label class="input-group-text">Medida</label>
-                                <input required type="number" class="form-control">
-                                <button type="button" class="btn btn-primary ms-2 botonMedida" data-bs-dismiss="modal" aria-label="Close">Guardar</button>
+                                <label class="input-group-text">Medida (en CM)</label>
+                                <input type="number" class="form-control" step=".01" ${valorGuardado}>
+                                <button type="submit" class="btn btn-primary ms-2">Guardar</button>
                             </form>
                         </div>
                     </div>
@@ -65,4 +68,13 @@ class Medida {
 
         return medidaHtml;
     }
+}
+
+function guardarMedidas () {
+    localStorage.removeItem("medidas");
+    localStorage.setItem("medidas", JSON.stringify(medidasPersona)); 
+}
+
+function recuperarMedidas () {
+    return JSON.parse(localStorage.getItem("medidas")) || [];
 }

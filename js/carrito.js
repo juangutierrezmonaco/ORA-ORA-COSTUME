@@ -6,7 +6,7 @@ class Carrito {
         this.total = 0;
     }
 
-    guardarCarrito() {
+    guardarCarrito() {  // Guarda en local storage
         localStorage.removeItem("carrito");
         localStorage.setItem("carrito", JSON.stringify(this));
     }
@@ -24,20 +24,20 @@ class Carrito {
         }
     }
 
-    getCantidad(cosplay) {
+    getCantidad(cosplay) {      // Devuelve la cantidad de veces que hay un cosplay
         let indiceCosplay = this.cosplays.indexOf(cosplay);
         return this.cantidades[indiceCosplay];
     }
 
-    getCantidadTotal() {
+    getCantidadTotal() {        // Devuelve la cantidad total de items
         return this.cantidades.reduce( (ac, el) => ac + el, 0);
     }
 
-    existeCosplay(cosplay) {
+    existeCosplay(cosplay) {    // Devuelve si un cosplay existe en el carrito
         return (this.cosplays.indexOf(cosplay) != -1)? true : false;
     }
 
-    agregarCosplay(cosplay) {
+    agregarCosplay(cosplay) {   // Agrega un cosplay al carrito
         let indiceCosplay = this.cosplays.indexOf(cosplay);
 
         if (indiceCosplay == -1) {  // Si no está en el carrito
@@ -50,14 +50,14 @@ class Carrito {
         this.total += cosplay.calcularPrecio();    // Actualizo el precio total
     }
 
-    eliminarCosplay(cosplay) {
+    eliminarCosplay(cosplay) {      // Elimina una vez la cantidad de un cosplay
         let indiceCosplay = this.cosplays.indexOf(cosplay);
         this.cantidades[indiceCosplay] -= 1; // Disminuyo la cantidad
 
         this.total -= cosplay.calcularPrecio();    // Actualizo el precio total
     }
 
-    eliminarCosplayCompleto(cosplay) {
+    eliminarCosplayCompleto(cosplay) {      // Elimina todas las ocurrencias de un cosplay en el carrito
         let indiceCosplay = this.cosplays.indexOf(cosplay);
         let cantidadEnCarrito = this.cantidades[indiceCosplay];
 
@@ -73,7 +73,7 @@ class Carrito {
         return (this.total >= 7000)? 0: 1000;
     }
 
-    calcularSubcosto(cosplay) {
+    calcularSubcosto(cosplay) {     // Calcula el costo de un cosplay la cantidad de veces que se haya seleccionado
         let indiceCosplay = this.cosplays.indexOf(cosplay);
         return this.cosplays[indiceCosplay].calcularPrecio()*this.cantidades[indiceCosplay];
     }
@@ -82,7 +82,7 @@ class Carrito {
         return calcularDescuento(this.total, this.descuento);
     }
 
-    calcularTotal () {
+    calcularTotal () {      
         let totalConEnvio = calcularPrecioConDescuento(this.total, this.descuento) + this.costoEnvio();
         return totalConEnvio;
     }
@@ -98,7 +98,7 @@ class Carrito {
         return this.cosplays.length;
     }
 
-    cosplayToHtml (cosplay) {
+    cosplayToHtml (cosplay) {       // Pasa de un objeto de la clase cosplay al formato que tiene que tener en el html
         let cosplayHtml = document.createElement("div");
         cosplayHtml.classList.add("header__carrito__offcanvas__producto");
 
@@ -133,7 +133,7 @@ class Carrito {
         return cosplayHtml;
     }
 
-    footerToHtml () {
+    footerToHtml () {       // Genera el footer en formato html
         let footerCarrito = document.createElement("div");
         footerCarrito.classList.add("header__carrito__offcanvas__footer");
         footerCarrito.innerHTML = 
