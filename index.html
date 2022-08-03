@@ -73,7 +73,37 @@
 
                     <div class="d-flex justify-content-evenly header__cuenta">
 
-                        <button type="button" class="header__cuenta__boton">CREAR CUENTA</button>
+                        <button type="button" class="header__cuenta__boton" data-bs-toggle="modal" data-bs-target="#registerModal" >CREAR CUENTA</button>
+
+                        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="registerModalLabel">Registro</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="formRegistro">
+                                            <div class="mb-3">
+                                              <label for="userNameRegister" class="form-label">Nombre</label>
+                                              <input type="text" class="form-control" id="userNameRegister">
+                                            </div>
+                                            <div class="mb-3">
+                                              <label for="userEmailRegister" class="form-label">Email</label>
+                                              <input type="email" autocomplete="username" class="form-control" id="userEmailRegister" aria-describedby="emailHelp">
+                                              <div id="emailHelp" class="form-text">Nunca vamos a compartir tu email con nadie.</div>
+                                            </div>
+                                            <div class="mb-3">
+                                              <label for="userPasswordRegister" class="form-label">Contraseña</label>
+                                              <input type="password" autocomplete="new-password" class="form-control" id="userPasswordRegister">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Registrarme</button>
+                                          </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <span>|</span>
 
                         <div class="dropdown">
@@ -81,14 +111,14 @@
                                 INICIAR SESIÓN
                             </button>
 
-                            <form class="dropdown-menu p-4">
+                            <form class="dropdown-menu p-2 formLogin">
                                 <div class="mb-3">
                                     <label for="formInicioSesionEmail" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="formInicioSesionEmail">
+                                    <input type="email" autocomplete="username" class="form-control" id="formInicioSesionEmail">
                                 </div>
                                 <div class="mb-3">
                                     <label for="formInicioSesionPassword" class="form-label">Contraseña</label>
-                                    <input type="password" class="form-control" id="formInicioSesionPassword">
+                                    <input type="password" autocomplete="current-password" class="form-control" id="formInicioSesionPassword">
                                 </div>
                                 <div class="mb-3">
                                     <div class="form-check">
@@ -251,7 +281,7 @@
                     <h3>NEWSLETTER</h3>
                     <form class="input-group footer__newsletter">
                         <input type="text" class="form-control py-3" placeholder="Mail..." name="email--footer">
-                        <button class="btn btn-dark text-white" type="submit" id="button">
+                        <button class="btn btn-dark text-white" type="submit" id="buttonNewsletter">
                             <i class="fa-solid fa-paper-plane"></i>
                         </button>
                     </form>

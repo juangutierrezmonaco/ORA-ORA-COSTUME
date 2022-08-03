@@ -4,6 +4,8 @@ class Carrito {
         this.cantidades = [];   // Arreglo paralelo con la cantidad de cada cosplay
         this.descuento = 0;     // Descuento porcentual
         this.total = 0;
+        this.envio = 0;
+        this.codigoPostal = "";
     }
 
     guardarCarrito() {  // Guarda en local storage
@@ -70,7 +72,7 @@ class Carrito {
     // De momento, si el total es más de 7000, el envío es gratis, sino es 1000 (Para evitar calcular con los C.P.). N
     // Nota: Si el total es superior a 7000 pero con el descuento queda menos, el envío sigue siendo gratis.
     costoEnvio () {    
-        return (this.total >= 7000)? 0: 1000;
+        return (this.total >= 7000)? 0: this.envio;
     }
 
     calcularSubcosto(cosplay) {     // Calcula el costo de un cosplay la cantidad de veces que se haya seleccionado
@@ -91,6 +93,7 @@ class Carrito {
         this.cosplays.splice(0, this.cosplays.length);
         this.cantidades.splice(0, this.cantidades.length);
         this.descuento = 0;
+        this.codigoPostal = "";
         this.total = 0;
     }
 
@@ -140,21 +143,21 @@ class Carrito {
             `<div class="row">
                 <div class="fs-5 flex-column col-9">
                     <span>Subtotal (sin envío):</span>
-                    <span>Envío (CP 7600): </span>
+                    <span>Envío (CP ${this.codigoPostal}): </span>
                     <span>Descuentos: </span>
                     <span class="fs-4">TOTAL: </span>
                 </div>
 
                 <div class="fs-5 flex-column col-3 p-0 px-md-2">
                     <div class>
-                        <span>$</span> ${carrito.total}
+                        <span>$</span> ${this.total}
                     </div>
 
-                    <div><span>$</span> ${carrito.costoEnvio()}</div>
+                    <div><span>$</span> ${this.costoEnvio()}</div>
 
-                    <div><span>$</span> ${carrito.calcularDescuento()}</div>
+                    <div><span>$</span> ${this.calcularDescuento()}</div>
 
-                    <div class="fs-4"><span>$</span> ${carrito.calcularTotal()}</div>
+                    <div class="fs-4"><span>$</span> ${this.calcularTotal()}</div>
 
                 </div>
             </div>

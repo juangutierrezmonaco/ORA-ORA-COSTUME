@@ -372,7 +372,7 @@ function sendMailMedidas (form) {
         color: "#645899"
     });
 
-    const serviceID = "service_hopw67s";
+    const serviceID = "d";
     const templateID = "template_gunk3ul";
 
     emailjs.send(serviceID, templateID, {   
@@ -534,6 +534,9 @@ if (thisURL.includes("envios.html")){
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire('Código postal guardado!', '', 'success')
+                carrito.codigoPostal = codigoPostal;
+                carrito.envio = costoEnvio;
+                actualizarCarrito();
             }
         })
     })
@@ -589,7 +592,7 @@ if (thisURL.includes("contacto.html")){
         let email = e.target.querySelector("#email--contacto").value;
         
         if (validarEmail(email)){
-            sendMail(e.target);
+            sendMailContacto(e.target);
         } else {
             const Toast = Swal.mixin({
                 toast: true,
@@ -859,7 +862,39 @@ buscadorHeader.addEventListener("submit", (e) => {
 
         location.href = tiendaURL;
     }
+});
+
+let formRegistro = document.querySelector(".formRegistro");
+formRegistro.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    let form = e.target;
+    let datos = {   name: form.querySelector("#userNameRegister").value,
+                    mail: form.querySelector("#userEmailRegister").value,
+                    psw: form.querySelector("#userPasswordRegister").value };
+});
+
+let formLogin = document.querySelector(".formLogin");
+formLogin.addEventListener("submit", (e) => {
+    e.preventDefault();
+    /* let hijo = e.target.parentElement.querySelector("button"); */
+    
+    let cla = document.querySelector(".header__cuenta");
+    cla.innerHTML = `<button type="button" class="header__cuenta__boton">
+                        CUENTA
+                    </button>
+                    <span>|</span>
+                    <button type="button" class="header__cuenta__boton">
+                        SALIR
+                    </button>`;
+    
+
+
 })
+
+function sendMailNewsletter (form) {
+    // DESARROLLAR --> No me quedan plantillas en emailjs
+}
 
 let newsletter = document.querySelector(".footer__newsletter");
 newsletter.addEventListener("submit", (e) => {
@@ -876,6 +911,7 @@ newsletter.addEventListener("submit", (e) => {
     })
 
     if (validarEmail(email)) {
+        sendMailNewsletter(e.target);
         Toast.fire({
             icon: 'success',
             title: 'Gracias por suscribirte! Te vamos a estar comunicando todas nuestras novedades ♡'
