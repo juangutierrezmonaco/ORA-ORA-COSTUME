@@ -5,6 +5,7 @@ let cosplaysTienda;     // Lleva una constancia de los cosplays que están en la
 let indiceUltimoCosplayVisto = 0;
 
 let carrito = new Carrito();
+let cliente = new User();
 
 let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
 let galeriaCosplays;
@@ -33,16 +34,28 @@ async function main () {
         // Recupero información del localStorage
         carrito.recuperarCarrito();
         cargarCarrito();    // Se cargan todos los eventos del carrito una vez que se recupero toda la información  
+
+        // Recupero datos del usuario
+        if (cliente.recuperarUser()) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            }).fire({
+                icon: 'success',
+                title: `Bienvenido de nuevo ${cliente.nombre.toUpperCase()}!`
+            });
+            switchBotonesUsuario();
+        }
     } catch (error) {
         alert("ERROR");
         console.log(error);
-    }
-
-      
+    }      
 }
 
 main();
-
 /**************************************************************/
 /*                      INDEX Y TIENDA                        */
 /**************************************************************/
@@ -73,18 +86,18 @@ function cargarTienda(){
     galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
     cargarGaleria(cosplaysTienda);   
     mostrarCosplaysTienda(); 
-
+    
     // Si alguien buscó en el header DE OTRA PÁGINA, recupero la búsqueda del localStorage
-    if (localStorage.getItem("busquedaTermino")){
+    if (localStorage.getItem("busquedaTermino") != null){
         let buscadorBoton = buscadorHeader.querySelector("button");
         let buscadorInput = buscadorHeader.querySelector("input");
-
+        
         // Pongo la palabra en el input y la borro del storage
         buscadorInput.focus();
         buscadorInput.value = localStorage.getItem("busquedaTermino");
         localStorage.removeItem("busquedaTermino");
 
-        buscadorBoton.click();
+        buscadorBoton.click();  
     }
 }
 
@@ -822,7 +835,6 @@ function compra (monto) {
 let buscadorHeader = document.querySelector(".header__buscador");    
 buscadorHeader.addEventListener("submit", (e) => {
     e.preventDefault();
-
     // Antes que nada restauro los cosplays y luego busco (Porque acá no tengo el evento de que se borre "\r" en el input. O sea, si se escribe algo en el header y se busca anda, pero si luego se vuelve a buscar no se restauran los cosplays)
     cosplaysTienda = cosplaysBackup;
     
@@ -864,33 +876,103 @@ buscadorHeader.addEventListener("submit", (e) => {
     }
 });
 
+let buscadorHeaderMobile = document.querySelector("#headerBuscadorMobile");
+buscadorHeaderMobile.addEventListener("click", () => {
+    buscadorHeader.querySelector("input").value = " ";
+    buscadorHeader.querySelector("button").click();
+})
+
+// Eventos de usuario
+function switchBotonesUsuario () {
+    // Luego cambio los botones 
+    let botonesCuenta = document.querySelectorAll(".header__cuenta button");
+
+    for (const boton of botonesCuenta) {
+        if (boton.classList.contains("d-none")){
+            boton.classList.remove("d-none");
+        } else {
+            boton.classList.add("d-none");
+        }
+    }
+}
+
 let formRegistro = document.querySelector(".formRegistro");
 formRegistro.addEventListener("submit", (e) => {
+
     e.preventDefault();
 
+    // Guardo al usuario
     let form = e.target;
-    let datos = {   name: form.querySelector("#userNameRegister").value,
-                    mail: form.querySelector("#userEmailRegister").value,
-                    psw: form.querySelector("#userPasswordRegister").value };
+    cliente = new User(form.querySelector("#userNameRegister").value, form.querySelector("#userEmailRegister").value, form.querySelector("#userPasswordRegister").value);
+    cliente.guardarUser();
+
+    // Cierro el modal
+    form.parentElement.parentElement.querySelector(".btn-close").click();
+
+    // Cambio los botones
+    switchBotonesUsuario();
+
+    // Alerta
+    Swal.fire({
+        title: `${cliente.nombre} gracias por registrarte! Te va a llegar un email de confirmación`,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+    });
 });
+
 
 let formLogin = document.querySelector(".formLogin");
 formLogin.addEventListener("submit", (e) => {
     e.preventDefault();
-    /* let hijo = e.target.parentElement.querySelector("button"); */
-    
-    let cla = document.querySelector(".header__cuenta");
-    cla.innerHTML = `<button type="button" class="header__cuenta__boton">
-                        CUENTA
-                    </button>
-                    <span>|</span>
-                    <button type="button" class="header__cuenta__boton">
-                        SALIR
-                    </button>`;
-    
 
+    // Cierro el modal
+    let form = e.target;  
+    form.parentElement.parentElement.querySelector(".btn-close").click();
 
+    // Cambio los botones
+    switchBotonesUsuario();
+
+    // Alerta
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    }).fire({
+        icon: 'success',
+        title: 'Ingreso correcto!'
+    });
 })
+
+let botonesSalir = document.querySelectorAll(".botonSalir");
+for (const boton of botonesSalir) {
+    boton.addEventListener("click", () => {
+        switchBotonesUsuario();
+    })
+}
+
+let botonesCuenta = document.querySelectorAll(".botonCuenta");
+for (const boton of botonesCuenta) {
+    boton.addEventListener("click", () => {
+        
+        Swal.fire({
+            title: 'La página está en desarrollo actualmente. Próximamente vas a poder ver tu cuenta y tus compras!',
+            showClass: {
+              popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOutUp'
+            }
+        })
+
+
+    })
+}
 
 function sendMailNewsletter (form) {
     // DESARROLLAR --> No me quedan plantillas en emailjs

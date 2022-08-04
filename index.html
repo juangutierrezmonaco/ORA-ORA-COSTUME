@@ -37,6 +37,69 @@
 
     <!-- HEADER -->
     <header class="container-md header">
+        
+
+        <!-- Botones de usuario afuera para que estén visibles en vista mobile -->
+        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registerModalLabel">Registro</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="formRegistro">
+                            <div class="mb-3">
+                                <label for="userNameRegister" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="userNameRegister" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="userEmailRegister" class="form-label">Email</label>
+                                <input type="email" autocomplete="username" class="form-control" id="userEmailRegister" aria-describedby="emailHelp" required>
+                                <div id="emailHelp" class="form-text">Nunca vamos a compartir tu email con nadie.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="userPasswordRegister" class="form-label">Contraseña</label>
+                                <input type="password" autocomplete="new-password" class="form-control" id="userPasswordRegister" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrarme</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">INCIO DE SESIÓN</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="p-2 formLogin">
+                            <div class="mb-3">
+                                <label for="formInicioSesionEmail" class="form-label">Email</label>
+                                <input type="email" autocomplete="username" class="form-control" id="formInicioSesionEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="formInicioSesionPassword" class="form-label">Contraseña</label>
+                                <input type="password" autocomplete="current-password" class="form-control" id="formInicioSesionPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="formInicioSesionRecordar">
+                                    <label class="form-check-label" for="formInicioSesionRecordar">
+                                        Recuérdame
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ingresar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Parte superior del header -->
         <div class="row m-0 mb-3 d-none d-md-flex">
@@ -73,64 +136,15 @@
 
                     <div class="d-flex justify-content-evenly header__cuenta">
 
-                        <button type="button" class="header__cuenta__boton" data-bs-toggle="modal" data-bs-target="#registerModal" >CREAR CUENTA</button>
-
-                        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="registerModalLabel">Registro</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form class="formRegistro">
-                                            <div class="mb-3">
-                                              <label for="userNameRegister" class="form-label">Nombre</label>
-                                              <input type="text" class="form-control" id="userNameRegister">
-                                            </div>
-                                            <div class="mb-3">
-                                              <label for="userEmailRegister" class="form-label">Email</label>
-                                              <input type="email" autocomplete="username" class="form-control" id="userEmailRegister" aria-describedby="emailHelp">
-                                              <div id="emailHelp" class="form-text">Nunca vamos a compartir tu email con nadie.</div>
-                                            </div>
-                                            <div class="mb-3">
-                                              <label for="userPasswordRegister" class="form-label">Contraseña</label>
-                                              <input type="password" autocomplete="new-password" class="form-control" id="userPasswordRegister">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Registrarme</button>
-                                          </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+                        <!-- Botón registro -->
+                        <button type="button" class="header__cuenta__boton" data-bs-toggle="modal" data-bs-target="#registerModal">CREAR CUENTA</button>
+                        <button type="button" class="header__cuenta__boton d-none botonCuenta">CUENTA</button>
+                      
                         <span>|</span>
 
-                        <div class="dropdown">
-                            <button type="button" class="header__cuenta__boton" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                INICIAR SESIÓN
-                            </button>
-
-                            <form class="dropdown-menu p-2 formLogin">
-                                <div class="mb-3">
-                                    <label for="formInicioSesionEmail" class="form-label">Email</label>
-                                    <input type="email" autocomplete="username" class="form-control" id="formInicioSesionEmail">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="formInicioSesionPassword" class="form-label">Contraseña</label>
-                                    <input type="password" autocomplete="current-password" class="form-control" id="formInicioSesionPassword">
-                                </div>
-                                <div class="mb-3">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="formInicioSesionRecordar">
-                                        <label class="form-check-label" for="formInicioSesionRecordar">
-                                            Recuérdame
-                                        </label>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Ingresar</button>
-                            </form>
-                        </div>
+                        <!-- Botón Login -->
+                        <button type="button" class="header__cuenta__boton" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
+                        <button type="button" class="header__cuenta__boton d-none botonSalir">SALIR</button>
                     </div>  
                 </div> 
             </div>
@@ -139,14 +153,30 @@
         <!-- Navbar -->
         <div class="row">
             <nav class="navbar navbar-expand-md navbar-light p-md-0 header__nav">
-                
+
+                <!-- Nota: Todos los elementos de abajo son para la vista mobile -->
+
                 <!-- Logo -->
-                <a class="navbar-toggler header__nav__item" href="./index.html">
+                <a class="navbar-toggler header__nav__item header__nav__item__logo" href="./index.html">
                     <img src="./assets/images/logo.jfif" alt="Ora Ora Costume Logo" class="rounded-circle img-fluid">
                 </a>
+
+                <!-- Opciones de usuario -->
+                <div class="dropup d-md-none">
+                    <button class="navbar-toggler header__nav__item dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-regular fa-user"></i>
+                    </button>
+                    <div class="dropdown-menu text-center mb-3 header__cuenta bg-dark">
+                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#registerModal">CREAR CUENTA</button>
+                        <button type="button" class="btn btn-light d-none botonCuenta" data-bs-toggle="modal" data-bs-target="#registerModal">CUENTA</button>
+
+                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
+                        <button type="button" class="btn btn-dark d-none botonSalir">SALIR</button>
+                    </div>
+                </div>
         
                 <!-- Buscador -->
-                <button class="navbar-toggler header__nav__item">
+                <button class="navbar-toggler header__nav__item" id="headerBuscadorMobile">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
 
@@ -159,11 +189,7 @@
                 <a target="_blank" href="https://api.whatsapp.com/send?phone=2236690005&text=Hola necesito más información!" class="navbar-toggler header__nav__item">
                     <i class="fa-brands fa-whatsapp"></i>
                 </a>
-
-                <!-- Opciones de usuario -->
-                <button class="navbar-toggler header__nav__item">
-                    <i class="fa-regular fa-user"></i>
-                </button>
+                
 
                 <!-- Icono de hamburguesa -->
                 <button class="navbar-toggler header__nav__item" type="button" data-bs-toggle="collapse" data-bs-target="#header__nav__ul" aria-controls="header__nav__ul" aria-expanded="false" aria-label="Toggle navigation">
@@ -217,7 +243,7 @@
         </div>
 
         <!-- Seccion 1 -->
-        <section class="main__seccion row">
+        <section class="main__seccion">
 
             <form class="row d-flex gap-5 justify-content-center mb-5 text-center w-100 galeriaCosplays">
 
@@ -351,6 +377,7 @@
     <script type="text/javascript">emailjs.init('p76buhZlK6AVJngU4')</script>
 
     <!-- JS -->
+    <script src="./js/user.js"></script>
     <script src="./js/cosplay.js"></script>
     <script src="./js/carrito.js"></script>
     <script src="./js/global.js"></script>
