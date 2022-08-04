@@ -120,6 +120,20 @@ function estoyEnIndex () {
     return false;
 }
 
+function mostrarCartelError (){
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Parece que hubo un problema con la carga de la página.',
+        confirmButtonText:
+        '<a href="">Recargar página</a>',
+        imageUrl: './assets/images/imagenError.PNG',
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Gatito con mala suerte',
+    });
+}
+
 async function efectoCarga(sectionNode, delay = 1000){
     try {
         // Hago efecto de carga
@@ -139,7 +153,7 @@ async function efectoCarga(sectionNode, delay = 1000){
         }
         
         await later(delay).then(() => {
-            galeriaCosplays.removeChild(efectoCarga);
+            sectionNode.removeChild(efectoCarga);
         });
 
         return Promise.resolve();   // Devuelvo una promesa resuelta para hacer el then afuera
@@ -148,6 +162,31 @@ async function efectoCarga(sectionNode, delay = 1000){
     }
 }
 
+async function efectoCargaPagina(delay = 1500){
+    try {
+        let efectoCarga = document.createElement("div");
+        efectoCarga.classList.add("afterBody");
+        efectoCarga.innerHTML = `<div class="lds-spinner">
+                                    <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                                </div>`
+            
+        document.body.prepend(efectoCarga);
+
+        let later =  (delay) => {
+            return new Promise((resolve) => {
+                setTimeout(resolve, delay);
+            })
+        }
+        
+        await later(delay).then(() => {
+            document.body.removeChild(efectoCarga);
+        });
+
+        return Promise.resolve();   // Devuelvo una promesa resuelta para hacer el then afuera
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 async function getCosplaysFromDB(){
     let res = await axios("../server/cosplays.json");

@@ -19,4 +19,8 @@ class User {
             return false;
         }
     }
+
+    borrarUser () {
+        localStorage.removeItem("user");
+    }
 }

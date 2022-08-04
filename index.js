@@ -30,32 +30,39 @@ async function main () {
         if (thisURL.includes("medidas.html")){
             cargarMedidas();
         }
-        
         // Recupero información del localStorage
         carrito.recuperarCarrito();
         cargarCarrito();    // Se cargan todos los eventos del carrito una vez que se recupero toda la información  
 
-        // Recupero datos del usuario
-        if (cliente.recuperarUser()) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true
-            }).fire({
-                icon: 'success',
-                title: `Bienvenido de nuevo ${cliente.nombre.toUpperCase()}!`
-            });
+        // Recupero datos del usuario y si todavía no está loggeado muestro un cartel de bienvenida 
+        if ( cliente.recuperarUser()) {
+            if (!usuarioEstaLoggeado()){
+                await efectoCargaPagina();
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                }).fire({
+                    icon: 'success',
+                    title: `Bienvenido de nuevo ${cliente.nombre.toUpperCase()}!`
+                });
+                localStorage.setItem("usuarioLoggeado", JSON.stringify(true));
+            }
             switchBotonesUsuario();
         }
+        
     } catch (error) {
-        alert("ERROR");
+        mostrarCartelError();
         console.log(error);
     }      
 }
 
+
+
 main();
+
 /**************************************************************/
 /*                      INDEX Y TIENDA                        */
 /**************************************************************/
@@ -800,32 +807,72 @@ function cargarCarrito () {     // EVENTOS DEL CARRITO
         }
 
         if (e.submitter.className.includes("iniciarCompra")) {
-            alert(`Ahora será redirigido al sistema de venta por el monto de $ ${carrito.calcularTotal()}`)
 
-            if (compra(carrito.calcularTotal())) {  // Si se cobró exitosamente
-                // Actualizo stock
-                actualizarStock();
+            // Cierro la ventana del carrito
+            document.querySelector("#offcanvasCarrito .btn-close").click();
+            
+            // Lanzo una alerta para ir a mercado pago
+            Swal.fire({
+                title: `Esta por ser redireccionado a la página de MERCADO PAGO para abonar el monto de $ ${carrito.calcularTotal()}`,
+                text: "Fijate de permitir las pop-ups"
+            }).then(() => {
+                // Cartel que va a comunicar el resultado de la operación
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    width: 500,
+                    showConfirmButton: false,
+                    timer: 5000,
+                    timerProgressBar: true
+                });
 
-                // Borro el carrito
-                carrito.borrarCarrito();
-                actualizarCarrito();
+                // Función que ejecuta la compra
+                compra(carrito.calcularTotal())
+                    .then(() => {   // Si la compra fue exitosa
+                        // Actualizo stock
+                        actualizarStock();
 
-                // Cierro la ventana del carrito
-                document.querySelector("#offcanvasCarrito .btn-close").click();
+                        // Borro el carrito
+                        carrito.borrarCarrito();
+                        actualizarCarrito();
 
-                // Por último, si estoy en la tienda o en el index, actualizo la galería por si alguno se quedó sin stock
-                if (estoyEnIndex() || thisURL.includes("tienda.html")){
-                    actualizarGaleria(cosplaysTienda);
-                }
-            }
+                        // Por último, si estoy en la tienda o en el index, actualizo la galería por si alguno se quedó sin stock
+                        if (estoyEnIndex() || thisURL.includes("tienda.html")){
+                            actualizarGaleria(cosplaysTienda);
+                        }
+
+                        // Alerta de que todo está correcto
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Felicitaciones! Dentro de poco te vamos a estar mandando el detalle de tu compra!'
+                        });
+                    })
+                    . catch(error => {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Hubo un error con tu compra y no pudo ser procesada.'
+                        });
+                        console.log(error);
+                    })
+            })
         }
     })
 }
 
-// De momento esto simula el sistema de compra, devuelve si se cobró exitosamente
-function compra (monto) {
-    alert(`Se cobraron $${monto}.`);
-    return true;    // De momento devuelve que la compra fue exitosa
+// De momento esto simula el sistema de compra, devuelve una promesa (de momento resuelta para simular el éxito)
+async function compra (monto) {
+    let wnd = window.open('https://www.mercadopago.com.ar/', '_blank');
+    let later =  () => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, 1500);
+        })
+    };
+    
+    await later().then(() => {
+        wnd.close();
+    });
+
+    return Promise.resolve();   // Devuelvo una promesa resuelta para hacer el then afuera 
 }
 
 /**************************************************************/
@@ -883,8 +930,13 @@ buscadorHeaderMobile.addEventListener("click", () => {
 })
 
 // Eventos de usuario
+function usuarioEstaLoggeado () {
+    let estaLoggeado = JSON.parse(localStorage.getItem("usuarioLoggeado")) || false;
+    
+    return estaLoggeado;
+}
+
 function switchBotonesUsuario () {
-    // Luego cambio los botones 
     let botonesCuenta = document.querySelectorAll(".header__cuenta button");
 
     for (const boton of botonesCuenta) {
@@ -904,12 +956,15 @@ formRegistro.addEventListener("submit", (e) => {
     // Guardo al usuario
     let form = e.target;
     cliente = new User(form.querySelector("#userNameRegister").value, form.querySelector("#userEmailRegister").value, form.querySelector("#userPasswordRegister").value);
-    cliente.guardarUser();
+    cliente.guardarUser();/* 
+    
+    // Guardo que el usuario se loggeo
+    localStorage.setItem("usuarioLoggeado", JSON.stringify(true)); */
 
     // Cierro el modal
     form.parentElement.parentElement.querySelector(".btn-close").click();
 
-    // Cambio los botones
+    // Cambio los botones simulando que se ingresó
     switchBotonesUsuario();
 
     // Alerta
@@ -953,6 +1008,10 @@ let botonesSalir = document.querySelectorAll(".botonSalir");
 for (const boton of botonesSalir) {
     boton.addEventListener("click", () => {
         switchBotonesUsuario();
+        cliente.borrarUser();
+        
+        // Guardo que el usuario se desloggeo
+        localStorage.setItem("usuarioLoggeado", JSON.stringify(false));
     })
 }
 
