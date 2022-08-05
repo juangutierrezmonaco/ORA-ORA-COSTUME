@@ -36,30 +36,17 @@ async function main () {
 
         // Recupero datos del usuario y si todavía no está loggeado muestro un cartel de bienvenida 
         if ( clienteLoggeado.recuperarUser()) {
-            /* if (!usuarioEstaLoggeado()){
-                await efectoCargaPagina();
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true
-                }).fire({
-                    icon: 'success',
-                    title: `Bienvenido de nuevo ${clienteLoggeado.nombre.toUpperCase()}!`
-                });
-                localStorage.setItem("usuarioLoggeado", JSON.stringify(true));
-            } */
-            if (!usuarioEstaLoggeado()) {
+            if (!usuarioEstaLoggeado()) {   // Si es la primera vez que se abre la página después de loggearse
                 // Disparo el evento de login
                 let formLogin = document.querySelector(".formLogin");
                 
                 formLogin.querySelector("#formInicioSesionEmail").value = clienteLoggeado.email;
                 formLogin.querySelector("#formInicioSesionPassword").value = clienteLoggeado.password;
 
-                /* formLogin.submit(); */
+                formLogin.querySelector("button").click();
+            } else {
+                switchBotonesUsuario(); // Si ya está loggeado sólo cambio los botones
             }
-            /* switchBotonesUsuario(); */
         }
         
     } catch (error) {
@@ -970,7 +957,7 @@ formRegistro.addEventListener("submit", (e) => {
     clienteLoggeado.guardarUser();
     
     // Guardo en el arreglo de clientes del localStorage el nuevo usuario
-    let clientesRegistrados = JSON.parse(localStorage.getItem("usuariosRegistrados"));
+    let clientesRegistrados = JSON.parse(localStorage.getItem("usuariosRegistrados")) || [];
     console.log(clientesRegistrados);
     clientesRegistrados.push(clienteLoggeado);
     localStorage.setItem("usuariosRegistrados", JSON.stringify(clientesRegistrados));
@@ -1008,7 +995,7 @@ formLogin.addEventListener("submit", (e) => {
     });
 
     // Veo si está registrado --> De momento el localStorage simula la base de datos
-    let clientesRegistrados = JSON.parse(localStorage.getItem("usuariosRegistrados"));
+    let clientesRegistrados = JSON.parse(localStorage.getItem("usuariosRegistrados")) || [];
     
     let thisEmail = e.target.querySelector("#formInicioSesionEmail").value;
     let clienteDB = clientesRegistrados.find(c => c.email == thisEmail);
@@ -1017,24 +1004,29 @@ formLogin.addEventListener("submit", (e) => {
 
         let thisPassword = e.target.querySelector("#formInicioSesionPassword").value;
         if (clienteDB.password == thisPassword){        // Si matchea la constraseña
-            Object.assign(clienteLoggeado, clienteDB);
-
-            clienteLoggeado.guardarUser();
-            
+                
             // Cierro el modal
             let form = e.target;  
             form.parentElement.parentElement.querySelector(".btn-close").click();
-            
-            // Cambio los botones
-            switchBotonesUsuario();
 
-            Toast.fire({
-                icon: 'success',
-                title: `Bienvenido de nuevo ${clienteLoggeado.nombre.toUpperCase()}!`
+            efectoCargaPagina().then(() => {
+                Object.assign(clienteLoggeado, clienteDB);
+    
+                clienteLoggeado.guardarUser();
+    
+                localStorage.setItem("usuarioLoggeado", JSON.stringify(true));  // Setteo que está loggeado
+                
+                // Cambio los botones
+                switchBotonesUsuario();
+    
+                Toast.fire({
+                    icon: 'success',
+                    title: `Bienvenido de nuevo ${clienteLoggeado.nombre.toUpperCase()}!`
+                });
+    
+                // Guardo que el usuario está loggeado
+                localStorage.setItem("usuarioLoggeado", JSON.stringify(true));
             });
-
-            // Guardo que el usuario está loggeado
-            localStorage.setItem("usuarioLoggeado", JSON.stringify(true));
         } else {
             Toast.fire({
                 icon: 'error',
