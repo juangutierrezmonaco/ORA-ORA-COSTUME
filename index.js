@@ -1084,9 +1084,15 @@ for (const boton of botonesSalir) {
 let botonesCuenta = document.querySelectorAll(".botonCuenta");
 for (const boton of botonesCuenta) {
     boton.addEventListener("click", () => {
-        
         Swal.fire({
             title: 'La página está en desarrollo actualmente. Próximamente vas a poder ver tu cuenta y tus compras!',
+            text: "De momento sólo te mostraremos tus datos:",
+            html: `<div class="d-flex justify-content-center">
+                        <div class="d-flex flex-column align-items-start">
+                            <span>Nombre: ${clienteLoggeado.nombre}</span>
+                            <span>Mail: ${clienteLoggeado.email}</span>
+                        </div>
+                    </div>`,
             showClass: {
               popup: 'animate__animated animate__fadeInDown'
             },
