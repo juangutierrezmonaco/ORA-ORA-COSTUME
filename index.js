@@ -37,6 +37,9 @@ async function main () {
         // Recupero datos del usuario y si todavía no está loggeado muestro un cartel de bienvenida 
         if ( clienteLoggeado.recuperarUser()) {
             if (!usuarioEstaLoggeado()) {   // Si es la primera vez que se abre la página después de loggearse
+            // Esta sección simularía cuando el cliente ingresa y se ingresa en la cuenta guardada automáticamente.
+            // Nota: Sólo funciona la primera vez de momento, ya que sino cada vez que se cambia de página haría el mismo efecto.
+
                 // Disparo el evento de login
                 let formLogin = document.querySelector(".formLogin");
                 
