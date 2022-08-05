@@ -387,6 +387,7 @@ function sendMailMedidas (form) {   // Manda un mail al dueño de la página con
         color: "#645899"
     });
 
+    emailjs.init('9oAkw-6MONbCSxNDH');
     const serviceID = "service_hopw67s";
     const templateID = "template_gunk3ul";
 
@@ -573,7 +574,8 @@ function sendMailContacto (form) {  // Manda el mail al dueño de la página con
         position: "top-end",
         color: "#645899"
     });
-
+    
+    emailjs.init('9oAkw-6MONbCSxNDH');
     const serviceID = "service_hopw67s";
     const templateID = "template_wyd82p8";
 
@@ -1110,6 +1112,8 @@ function sendMailNewsletter (form) {
     boton.classList.remove("btn-dark", "text-white");
     boton.classList.add("btn-light", "text-dark", "border", "border-dark", "border-3");
 
+    // Nota: Inicio de nuevo porque esto es otra cuenta de emailjs (por el limite de 2 templates)
+    emailjs.init('p76buhZlK6AVJngU4');
     const serviceID = "service_2pdul4c";
     const templateID = "template_4o3fb4l";
 
@@ -1120,7 +1124,7 @@ function sendMailNewsletter (form) {
     }).then(() => {
         Toast.fire({
             icon: 'success',
-            title: `Vamos a estar comunicandonos con vos lo antes posible!`,
+            title: `Gracias por suscribirte. Te van a llegar todas nuestras novedades!`,
         })
         boton.classList.remove("btn-light", "text-dark", "border", "border-dark", "border-3");
         boton.classList.add("btn-dark", "text-white");
