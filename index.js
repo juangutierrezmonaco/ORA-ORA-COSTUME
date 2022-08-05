@@ -1095,7 +1095,7 @@ for (const boton of botonesCuenta) {
 // Manda un mail a una persona de que se suscribió correctamente al newsletter
 function sendMailNewsletter (form) {
     let emailUser = form.querySelector("input").value;
-    let boton = form.querySelector("#buttonNewsletter");
+    let boton = form.querySelector("button");
     let codigoDesc = "ORA10";
 
     const Toast = Swal.mixin({
@@ -1105,7 +1105,7 @@ function sendMailNewsletter (form) {
         position: "top-end",
         color: "#645899"
     });
-
+    
     // Cambio estilos botón mientras se envía y después lo vuelvo a la normalidad
     boton.classList.remove("btn-dark", "text-white");
     boton.classList.add("btn-light", "text-dark", "border", "border-dark", "border-3");
