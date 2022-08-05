@@ -161,7 +161,7 @@ async function efectoCarga(sectionNode, delay = 1000){  // Efecto de carga que s
     }
 }
 
-async function efectoCargaPagina(delay = 1500){ // Efecto de carga sobre toda la página
+async function efectoCargaPagina(delay = 1300){ // Efecto de carga sobre toda la página
     try {
         let efectoCarga = document.createElement("div");
         efectoCarga.classList.add("afterBody");
