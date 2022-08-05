@@ -59,8 +59,8 @@
     }
 
     .swal2-container {  // Para que en vista mobile se ponga encima del header
-        z-index: 100000000;
-        margin-bottom: 17vh;
+        z-index: 200000000;
+        margin-bottom: 15vh;
     }
 
     // Footer
@@ -97,6 +97,15 @@
             position: relative;
             z-index: 0;
         }
+    }
+
+    .modal {    // Para que en vista mobile se ponga encima del header
+        padding-bottom: 17vh;
+    }
+
+    .swal2-container {  // Para que en vista mobile se ponga encima del header
+        z-index: 200000000;
+        margin-bottom: 15vh;
     }
 
     // Footer
