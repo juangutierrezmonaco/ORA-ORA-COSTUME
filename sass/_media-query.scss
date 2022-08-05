@@ -59,9 +59,7 @@
     }
 
     .swal2-container {  // Para que en vista mobile se ponga encima del header
-        z-index: 200000000;
-        margin-bottom: 15vh;
-        height: 100vh;
+        z-index: 200000000 !important;
     }
 
     // Footer
