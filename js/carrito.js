@@ -159,7 +159,7 @@ class Carrito {
                         <span>$</span> ${this.total}
                     </div>
 
-                    <div><span>$</span> ${this.costoEnvio()}</div>
+                    <div><span>$</span> ${this.costoEnvio() || "Gratis!"}</div>
 
                     <div><span>$</span> ${this.calcularDescuento()}</div>
 
