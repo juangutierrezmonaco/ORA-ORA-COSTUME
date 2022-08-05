@@ -10,11 +10,27 @@ no es un emprendimiento en funcionamiento actualmente.
 
 
 ## Tecnologias Utilizadas
- - HTML / CSS
- - SASS
- - Bootstrap v5.2
- - Javascript
- - Librearías: Axios, EmailsJS y SweetAlert2
+- HTML (semántico)
+- CSS
+  - Flex
+  - Grid
+  - Transition
+  - Media queries
+  - Pseudoclases y pseudoelementos
+- Metodología BEM
+- Git
+- Github / Github pages
+- SEO onpage básico
+- SASS
+  - Variables y mapas
+  - Anidamientos (nesting y &)
+  - extend
+  - mixin e include
+  - each
+- Bootstrap v5.2
+- Javascript
+- Librearías: Axios, EmailsJS y SweetAlert2
+
 ## Demo
 
 https://oraoracostume.vercel.app/
