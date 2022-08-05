@@ -956,46 +956,48 @@ formRegistro.addEventListener("submit", (e) => {
     let thisEmail = e.target.querySelector("#userEmailRegister").value;
     let clienteDB = clientesRegistrados.find(c => c.email == thisEmail);
     
-    if (clienteDB) {    // Si ya está registrado
-        // Alerta
-        Swal.fire({
-            title: `${clienteDB.nombre} ya estás registrado con este mail!`,
-            icon: 'error',
-            showClass: {
-            popup: 'animate__animated animate__fadeInDown'
-            },
-            hideClass: {
-            popup: 'animate__animated animate__fadeOutUp'
-            }
-        });
-    } else {    // Si no está registrado
-        // Guardo al usuario
-        let form = e.target;
-        clienteLoggeado = new User(form.querySelector("#userNameRegister").value, form.querySelector("#userEmailRegister").value, form.querySelector("#userPasswordRegister").value);
-
-        clienteLoggeado.guardarUser();
-        
-        // Guardo en el arreglo de clientes del localStorage el nuevo usuario
-        clientesRegistrados.push(clienteLoggeado);
-        localStorage.setItem("usuariosRegistrados", JSON.stringify(clientesRegistrados));
-
-        // Cierro el modal
-        form.parentElement.parentElement.querySelector(".btn-close").click();
-
-        // Cambio los botones simulando que se ingresó
-        switchBotonesUsuario();
-
-        // Alerta
-        Swal.fire({
-            title: `${clienteLoggeado.nombre} gracias por registrarte! Te va a llegar un email de confirmación`,
-            showClass: {
-            popup: 'animate__animated animate__fadeInDown'
-            },
-            hideClass: {
-            popup: 'animate__animated animate__fadeOutUp'
-            }
-        });
-    }
+    
+    // Cierro el modal
+    let form = e.target;
+    form.parentElement.parentElement.querySelector(".btn-close").click();
+    efectoCargaPagina().then(() => {
+        if (clienteDB) {    // Si ya está registrado
+            // Alerta
+            Swal.fire({
+                title: `${clienteDB.nombre} ya estás registrado con este mail!`,
+                icon: 'error',
+                showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+        } else {    // Si no está registrado
+            // Guardo al usuario
+            clienteLoggeado = new User(form.querySelector("#userNameRegister").value, form.querySelector("#userEmailRegister").value, form.querySelector("#userPasswordRegister").value);
+    
+            clienteLoggeado.guardarUser();
+            
+            // Guardo en el arreglo de clientes del localStorage el nuevo usuario
+            clientesRegistrados.push(clienteLoggeado);
+            localStorage.setItem("usuariosRegistrados", JSON.stringify(clientesRegistrados));
+    
+            // Cambio los botones simulando que se ingresó
+            switchBotonesUsuario();
+    
+            // Alerta
+            Swal.fire({
+                title: `${clienteLoggeado.nombre} gracias por registrarte! Te va a llegar un email de confirmación`,
+                showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+        }
+    })
 });
 
 // Evento de Login
@@ -1063,11 +1065,13 @@ formLogin.addEventListener("submit", (e) => {
 let botonesSalir = document.querySelectorAll(".botonSalir");
 for (const boton of botonesSalir) {
     boton.addEventListener("click", () => {
-        switchBotonesUsuario();
-        clienteLoggeado.borrarUser();
-        
-        // Guardo que el usuario se desloggeo
-        localStorage.setItem("usuarioLoggeado", JSON.stringify(false));
+        efectoCargaPagina().then(() => {
+            switchBotonesUsuario();
+            clienteLoggeado.borrarUser();
+            
+            // Guardo que el usuario se desloggeo
+            localStorage.setItem("usuarioLoggeado", JSON.stringify(false));
+        })
     })
 }
 
