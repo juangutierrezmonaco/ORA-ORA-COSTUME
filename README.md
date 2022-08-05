@@ -27,8 +27,8 @@ no es un emprendimiento en funcionamiento actualmente.
   - extend
   - mixin e include
   - each
-- Bootstrap v5.2
 - Javascript
+- Frameworks: Bootstrap v5.2
 - Librearías: Axios, EmailsJS y SweetAlert2
 
 ## Demo
