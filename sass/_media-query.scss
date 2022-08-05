@@ -58,6 +58,10 @@
         padding-bottom: 15vh;
     }
 
+    .swal2-container {// Para que todas las alertas se vean hasta el header
+        margin-bottom: 15vh;
+    }
+
     // Footer
     .footer {
         &__redes {
