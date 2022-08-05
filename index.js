@@ -950,34 +950,52 @@ let formRegistro = document.querySelector(".formRegistro");
 formRegistro.addEventListener("submit", (e) => {
 
     e.preventDefault();
-
-    // Guardo al usuario
-    let form = e.target;
-    clienteLoggeado = new User(form.querySelector("#userNameRegister").value, form.querySelector("#userEmailRegister").value, form.querySelector("#userPasswordRegister").value);
-    clienteLoggeado.guardarUser();
     
-    // Guardo en el arreglo de clientes del localStorage el nuevo usuario
+    // Veo si ya está registrado --> De momento el localStorage simula la base de datos
     let clientesRegistrados = JSON.parse(localStorage.getItem("usuariosRegistrados")) || [];
-    console.log(clientesRegistrados);
-    clientesRegistrados.push(clienteLoggeado);
-    localStorage.setItem("usuariosRegistrados", JSON.stringify(clientesRegistrados));
+    let thisEmail = e.target.querySelector("#userEmailRegister").value;
+    let clienteDB = clientesRegistrados.find(c => c.email == thisEmail);
+    
+    if (clienteDB) {    // Si ya está registrado
+        // Alerta
+        Swal.fire({
+            title: `${clienteDB.nombre} ya estás registrado con este mail!`,
+            icon: 'error',
+            showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+            }
+        });
+    } else {    // Si no está registrado
+        // Guardo al usuario
+        let form = e.target;
+        clienteLoggeado = new User(form.querySelector("#userNameRegister").value, form.querySelector("#userEmailRegister").value, form.querySelector("#userPasswordRegister").value);
 
-    // Cierro el modal
-    form.parentElement.parentElement.querySelector(".btn-close").click();
+        clienteLoggeado.guardarUser();
+        
+        // Guardo en el arreglo de clientes del localStorage el nuevo usuario
+        clientesRegistrados.push(clienteLoggeado);
+        localStorage.setItem("usuariosRegistrados", JSON.stringify(clientesRegistrados));
 
-    // Cambio los botones simulando que se ingresó
-    switchBotonesUsuario();
+        // Cierro el modal
+        form.parentElement.parentElement.querySelector(".btn-close").click();
 
-    // Alerta
-    Swal.fire({
-        title: `${clienteLoggeado.nombre} gracias por registrarte! Te va a llegar un email de confirmación`,
-        showClass: {
-          popup: 'animate__animated animate__fadeInDown'
-        },
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp'
-        }
-    });
+        // Cambio los botones simulando que se ingresó
+        switchBotonesUsuario();
+
+        // Alerta
+        Swal.fire({
+            title: `${clienteLoggeado.nombre} gracias por registrarte! Te va a llegar un email de confirmación`,
+            showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+            }
+        });
+    }
 });
 
 // Evento de Login
