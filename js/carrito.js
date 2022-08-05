@@ -1,10 +1,16 @@
+/**
+ *  CLASE CARRITO   -->   Representa al objeto carrito.
+ *  
+ *  Se encarga de manejar toda la funcionalidad del carrito, así mismo sabe cómo es su formato html y cómo interactuar con el localStorage.
+ */
+
 class Carrito {
     constructor () {
         this.cosplays = [];
         this.cantidades = [];   // Arreglo paralelo con la cantidad de cada cosplay
         this.descuento = 0;     // Descuento porcentual
         this.total = 0;
-        this.envio = 0;
+        this.envio = 1000;
         this.codigoPostal = "";
     }
 
@@ -69,7 +75,7 @@ class Carrito {
         carrito.cantidades.splice(indiceCosplay, 1);
     }
 
-    // De momento, si el total es más de 7000, el envío es gratis, sino es 1000 (Para evitar calcular con los C.P.). N
+    // De momento, si el total es más de 7000, el envío es gratis, sino es lo que está setteado.
     // Nota: Si el total es superior a 7000 pero con el descuento queda menos, el envío sigue siendo gratis.
     costoEnvio () {    
         return (this.total >= 7000)? 0: this.envio;
@@ -84,12 +90,12 @@ class Carrito {
         return calcularDescuento(this.total, this.descuento);
     }
 
-    calcularTotal () {      
+    calcularTotal () {      // Devuelve el total con el descuento aplicado y el costo de envío 
         let totalConEnvio = calcularPrecioConDescuento(this.total, this.descuento) + this.costoEnvio();
         return totalConEnvio;
     }
 
-    borrarCarrito () {
+    borrarCarrito () {      // Elimina el contenido del carrito
         this.cosplays.splice(0, this.cosplays.length);
         this.cantidades.splice(0, this.cantidades.length);
         this.descuento = 0;
@@ -97,11 +103,11 @@ class Carrito {
         this.total = 0;
     }
 
-    length () {
+    length () {         // Devuelve la cantidad de cosplays (sin repetir) que hay en el carrito
         return this.cosplays.length;
     }
 
-    cosplayToHtml (cosplay) {       // Pasa de un objeto de la clase cosplay al formato que tiene que tener en el html
+    cosplayToHtml (cosplay) {       // Pasa de un objeto de la clase cosplay al formato que tiene que tener en el html del carrito
         let cosplayHtml = document.createElement("div");
         cosplayHtml.classList.add("header__carrito__offcanvas__producto");
 
@@ -136,7 +142,7 @@ class Carrito {
         return cosplayHtml;
     }
 
-    footerToHtml () {       // Genera el footer en formato html
+    footerToHtml () {       // Genera el footer del carrito en formato html
         let footerCarrito = document.createElement("div");
         footerCarrito.classList.add("header__carrito__offcanvas__footer");
         footerCarrito.innerHTML = 

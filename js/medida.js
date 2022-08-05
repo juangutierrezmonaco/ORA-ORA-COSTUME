@@ -1,3 +1,12 @@
+/**
+ *  CLASE MEDIDA   -->   Representa al objeto medida. No es la medida del usuario, sino la representación del "tutorial" de cómo tomar
+ *                       la medida. Sin embargo, guarda el valor para algunas operaciones. Pero las medidas del usuario se guardan en el
+ *                       localStorage con otro formato.   
+ *  
+ *  Sabe cómo mostrarse por html, generarse un id y hay funciones que no son de la clase pero que están relacionadas
+ *  con la interacción con el localStorage del arreglo de medidas.
+ */
+
 class Medida {
     static count = 0;   // Por el momento, es para generar un id
 

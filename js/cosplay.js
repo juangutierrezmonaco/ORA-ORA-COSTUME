@@ -1,3 +1,10 @@
+/**
+ *  CLASE COSPLAY   -->   Representa al objeto cosplay.
+ *  
+ *  Sabe cómo mostrarse por html, cómo calcular su precio, generarse un id y hay funciones que no son de la clase pero que están relacionadas
+ *  con los arreglos de cosplays.
+ */
+
 class Cosplay {
     static count = 0;   // Por el momento, es para generar un id
 
@@ -15,11 +22,11 @@ class Cosplay {
         this.id = ++Cosplay.count; 
     }
 
-    calcularPrecio () {
+    calcularPrecio () {     // Si no tiene descuento devuelve el precio y sino calcula el precio con descuento
         return (this.oferta == 0) ? this.precio : calcularPrecioConDescuento(this.precio, this.oferta);
     }
 
-    toHtml () {
+    toHtml () {         // Pasa un cosplay al formato que tiene que tener en el html
         let cosplayHtml = document.createElement("article");
         cosplayHtml.id = `galeriaIndex${this.id}`;
         cosplayHtml.classList.add("col-6", "col-sm-4", "col-md-3", "col-lg-2", "cosplay", "d-flex", "justify-content-start", "d-none");
@@ -67,10 +74,10 @@ class Cosplay {
     }
 }
 
-function searchCosplayById (id) {
+function searchCosplayById (id) {   // Busca un cosplay según id en el arreglo que se recuperó de la "base de datos"
     return cosplaysBackup.find(c => c.id == parseInt(id));
 } 
 
-function getIdCosplayHtml (cosplayHtml) {
+function getIdCosplayHtml (cosplayHtml) {   // Obtiene el id de un cosplay en su representación html
     return (numbersInString(cosplayHtml.id));
 }

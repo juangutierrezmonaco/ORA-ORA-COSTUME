@@ -1,3 +1,9 @@
+/**
+ *  CLASE USER
+ *  
+ *  Sabe cómo mostrarse por html e interactuar con el localStorage.
+ */
+
 class User {
     constructor (nombre, email, password) {
         this.nombre = nombre;

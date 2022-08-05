@@ -2,14 +2,14 @@
 let codigosDescuento;   // Guarda los códigos de descuento recuperados de la base de datos
 let cosplaysBackup;     // Guarda los cosplays recuperados de la base de datos
 let cosplaysTienda;     // Lleva una constancia de los cosplays que están en la tienda (Por si se filtran o se buscan)
-let indiceUltimoCosplayVisto = 0;
+let indiceUltimoCosplayVisto = 0;   // Es una variable para la tienda, para llevar una constancia de cuántos se están mostrando
 
-let carrito = new Carrito();
-let cliente = new User();
-
+let carrito = new Carrito();    // Carrito de cosplays
+let clienteLoggeado = new User();   // Se usa para llevar el usuario loggeado la última vez y recuperarlo
 let thisURL = document.URL.split("/").pop();  // Ruta relativa de la página en la que estoy
-let galeriaCosplays;
 
+
+// MAIN --> Función que representa la carga de todos los elementos dinámicos de la página
 async function main () {
     try {
         // Recupero información de la base de datos
@@ -17,26 +17,26 @@ async function main () {
         cosplaysTienda = await getCosplaysFromDB();     // --> Lo necesito en todas las páginas porque el carrito (que tiene cosplays) está en todas
         cosplaysBackup = cosplaysTienda.map(x => x);    // --> Hago un backup para poder recuperar lo que había sin ir a la base de datos
         
-        // Nota: Lo siguiente lo hago sin switch porque si hay un error o se va a una sección particular, la URL no es exactamente index o tienda, etc.
-        //       Por ejemplo, sería /index.html? o /index.html#seccionX --> Lo hago con if para que se pueda usar el includes y cargar la página
-        if (estoyEnIndex()){
-            cargarIndex();
-        }
-
-        if (thisURL.includes("tienda.html")){
-            cargarTienda();
+        // Carga de elementos dinámicos de las páginas que lo tienes
+        switch (true) {
+            case estoyEnIndex():
+                cargarIndex();
+                break;
+            case thisURL.includes("tienda.html"):
+                cargarTienda();
+                break;
+            case thisURL.includes("medidas.html"):
+                cargarMedidas();
+                break;
         }
         
-        if (thisURL.includes("medidas.html")){
-            cargarMedidas();
-        }
-        // Recupero información del localStorage
+        // Recupero información del localStorage del carrito
         carrito.recuperarCarrito();
         cargarCarrito();    // Se cargan todos los eventos del carrito una vez que se recupero toda la información  
 
         // Recupero datos del usuario y si todavía no está loggeado muestro un cartel de bienvenida 
-        if ( cliente.recuperarUser()) {
-            if (!usuarioEstaLoggeado()){
+        if ( clienteLoggeado.recuperarUser()) {
+            /* if (!usuarioEstaLoggeado()){
                 await efectoCargaPagina();
                 const Toast = Swal.mixin({
                     toast: true,
@@ -46,11 +46,20 @@ async function main () {
                     timerProgressBar: true
                 }).fire({
                     icon: 'success',
-                    title: `Bienvenido de nuevo ${cliente.nombre.toUpperCase()}!`
+                    title: `Bienvenido de nuevo ${clienteLoggeado.nombre.toUpperCase()}!`
                 });
                 localStorage.setItem("usuarioLoggeado", JSON.stringify(true));
+            } */
+            if (!usuarioEstaLoggeado()) {
+                // Disparo el evento de login
+                let formLogin = document.querySelector(".formLogin");
+                
+                formLogin.querySelector("#formInicioSesionEmail").value = clienteLoggeado.email;
+                formLogin.querySelector("#formInicioSesionPassword").value = clienteLoggeado.password;
+
+                /* formLogin.submit(); */
             }
-            switchBotonesUsuario();
+            /* switchBotonesUsuario(); */
         }
         
     } catch (error) {
@@ -59,21 +68,12 @@ async function main () {
     }      
 }
 
-
-
 main();
 
 /**************************************************************/
 /*                      INDEX Y TIENDA                        */
 /**************************************************************/
-function cargarIndex(){
-    // Referencia a la galería del index
-    galeriaCosplays = document.querySelector(".main--index .galeriaCosplays");
-
-    // Creación de galería y muestra
-    let cosplaysIndex = cosplaysTienda.filter((c) => c.especial);
-    cargarGaleria(cosplaysIndex);
-}
+let galeriaCosplays;    // Galeria en el html de la tienda o el index, como se usa en muchas funciones lo deje de variable global para comodidad.
 
 // Convierte los cosplays al formato que tienen que tener en el html y los agrega
 function cargarGaleria (arrCosplays) {
@@ -88,13 +88,22 @@ function cargarGaleria (arrCosplays) {
     }
 }
 
+function cargarIndex(){
+    // Referencia a la galería del index
+    galeriaCosplays = document.querySelector(".main--index .galeriaCosplays");
+
+    // Creación de galería y muestra
+    let cosplaysIndex = cosplaysTienda.filter((c) => c.especial);
+    cargarGaleria(cosplaysIndex);
+}
+
 function cargarTienda(){  
     // Referencia a la galería de la tienda
     galeriaCosplays = document.querySelector(".main--tienda .galeriaCosplays");
     cargarGaleria(cosplaysTienda);   
     mostrarCosplaysTienda(); 
     
-    // Si alguien buscó en el header DE OTRA PÁGINA, recupero la búsqueda del localStorage
+    // Si alguien buscó en el header DE OTRA PÁGINA, recupero la búsqueda del localStorage y disparo el evento de búsqueda
     if (localStorage.getItem("busquedaTermino") != null){
         let buscadorBoton = buscadorHeader.querySelector("button");
         let buscadorInput = buscadorHeader.querySelector("input");
@@ -108,7 +117,7 @@ function cargarTienda(){
     }
 }
 
-function mostrarCosplaysTienda (mult = 2) {     // Cuando recarga toda la galería, muestro 2 filas
+function mostrarCosplaysTienda (mult = 2) {     // Por defecto se muestran dos filas de cosplays
     // Obtengo la cantidad de cosplays que entran en una fila
     let resolucion = window.innerWidth;
     let cantPorFila;
@@ -130,25 +139,24 @@ function mostrarCosplaysTienda (mult = 2) {     // Cuando recarga toda la galer�
             break;
     }
 
-    let quieroMostrar = cantPorFila * mult;    // quieroMostrar 
+    let quieroMostrar = cantPorFila * mult;    // Cantidad de filas que se quieren mostrar
 
-    let quedanPorMostrar = galeriaCosplays.querySelectorAll(".cosplay.d-none").length;
+    let quedanPorMostrar = galeriaCosplays.querySelectorAll(".cosplay.d-none").length;  // Cantidad de cosplays que quedan para mostrar
 
     let cant = quedanPorMostrar < quieroMostrar ? quedanPorMostrar : quieroMostrar; // Muestro dependiendo de los que me quedan para mostrar
-    quedanPorMostrar -= cant;   // Actualizo quedanPorMostrar 
+    quedanPorMostrar -= cant;   // Actualizo quedanPorMostrar
     
     for (let i = indiceUltimoCosplayVisto; i < indiceUltimoCosplayVisto + cant; i++) {
         galeriaCosplays.childNodes[i + 1].classList.remove("d-none");
     }
 
-    // Actualizo índice
+    // Actualizo índice del último cosplay visible
     indiceUltimoCosplayVisto += cant;
 
     // Por último si no tengo más desactivo el botón y si, se restaura el arreglo original (por un filtro por ejemplo), se vuelve a activar.
     let botonMas = document.querySelector(".main--tienda .botonMasTienda");
     botonMas.disabled = quedanPorMostrar == 0 ? true : false;
 }
-
 
 // Modificación de galería, se puede pasar un cartel para mostrar antes de la galeria
 function actualizarGaleria (cosplaysModificados, mensaje = "") {
@@ -167,7 +175,7 @@ function actualizarGaleria (cosplaysModificados, mensaje = "") {
     }
 }
 
-// Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados o filtrar cosplays buscados)
+// Esta función es para obtener el estado actual de los cosplays en la galería  (Por ejemplo: si se quiere ordenar cosplays ya filtrados o filtrar cosplays buscados) --> Devuelve los que están seleccionados en el DOM (inclusive los que no se ven)
 function getCosplaysFromHtml () {
     let cosplaysModificados = [];
     let cosplaysHtml = galeriaCosplays.querySelectorAll(".cosplay");
@@ -180,7 +188,8 @@ function getCosplaysFromHtml () {
     return cosplaysModificados;
 }
 
-if (thisURL.includes("tienda.html")){   // Eventos de la tienda
+// Eventos de la tienda
+if (thisURL.includes("tienda.html")){
     // Orden en la galería  - Ordena lo que está a la vista (o sea, lo que está en el html), si se filtra o se busca, ordena eso y no el arreglo original.
     let opcionesOrden = document.querySelector("#ordenCosplaysTienda");
     opcionesOrden.onchange = () => {
@@ -344,8 +353,7 @@ if (thisURL.includes("tienda.html")){   // Eventos de la tienda
 /**************************************************************/
 /*                         MEDIDAS                            */
 /**************************************************************/
-let medidasPersona;
-let medidaTitulo;
+let medidasPersona;    // Luego será un arreglo con las medidas ya cargadas
 
 async function cargarMedidas(){
     // Recupero las medidas ya cargadas
@@ -365,7 +373,7 @@ async function cargarMedidas(){
             if (medidaGuardada != undefined) {  // Si estaba guardada pongo el valor en el input y la coloreo
                 medidaHTML = medida.toHtml(medidaGuardada.valorMedida);
 
-                medidaTitulo = medidaHTML.querySelector(".medida__titulo");
+                let medidaTitulo = medidaHTML.querySelector(".medida__titulo");
                 medidaTitulo.classList.add("medida__cargada");    // Se colorea
             } else {                            // Sino la agrego por defecto
                 medidaHTML = medida.toHtml();
@@ -378,7 +386,7 @@ async function cargarMedidas(){
     }
 }
 
-function sendMailMedidas (form) {
+function sendMailMedidas (form) {   // Manda un mail al dueño de la página con las medidas que se cargaron y los datos pedidos
     let nombre = form.querySelector("#nombre").value.toUpperCase();
     let boton = form.querySelector(".botonMedidas");
 
@@ -392,7 +400,7 @@ function sendMailMedidas (form) {
         color: "#645899"
     });
 
-    const serviceID = "d";
+    const serviceID = "service_hopw67s";
     const templateID = "template_gunk3ul";
 
     emailjs.send(serviceID, templateID, {   
@@ -440,7 +448,7 @@ if (thisURL.includes("medidas.html")){
 
         medidaTitulo.classList.remove("medida__cargada");      // Se descolorea */
 
-        const Toast = Swal.mixin({
+        const Toast = Swal.mixin({  // Alerta que se dispara según cómo se completó más abajo
                 toast: true,
                 showConfirmButton: false,   
                 timer: 5000,
@@ -452,17 +460,17 @@ if (thisURL.includes("medidas.html")){
 
             medidaTitulo.classList.add("medida__cargada");    // Se colorea
 
-            // Lo guardo en el array de medidas. Si estaba guardado en el arreglo tengo que modificar el valor guardado
+            // Lo guardo en el array de medidas. Si ya estaba guardado en el arreglo tengo que modificar el valor guardado
             let medidaGuardada = medidasPersona.find( (m) => m.idMedida == idMedida);
-
-            if (medidaGuardada != undefined){
+            
+            if (medidaGuardada != undefined){   // Estaba guardada de antes
                 medidaGuardada.valorMedida = valorMedida;
-            } else {
+            } else {    // No estaba guardada
                 let nombreMedida = padreMayor.parentElement.querySelector(".medida__titulo").innerText;
                 medidasPersona.push({idMedida, valorMedida, nombreMedida});
             }
             
-            guardarMedidas();
+            guardarMedidas();   // Se guarda el arreglo en el localStorage
             
             Toast.fire({
                 icon: 'success',
@@ -476,11 +484,11 @@ if (thisURL.includes("medidas.html")){
             });
         }
 
-        // Cuando termino cierro la ventana abierta
+        // Cuando termino cierro la ventana abierta de la medida
         document.querySelector(`#${idMedida} .btn-close`).click();
     })
 
-    // Formulario de medidas
+    // Formulario con las medidas y la información complementaria
     let formMedidas = document.querySelector(".formMedidas");
     formMedidas.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -490,7 +498,7 @@ if (thisURL.includes("medidas.html")){
 
 }
 
-function tablaConMedidasCargadas(arrMedidas) {
+function tablaConMedidasCargadas(arrMedidas) {  // Función que genera una tabla con las medidas en formato html para mandar por mail
     let tabla = document.createElement("table");
 
     tabla.innerHTML = `<thead>
@@ -565,7 +573,7 @@ if (thisURL.includes("envios.html")){
 /**************************************************************/
 /*                        CONTACTO                            */
 /**************************************************************/
-function sendMailContacto (form) {
+function sendMailContacto (form) {  // Manda el mail al dueño de la página con la información de la persona
     let nombre = form.querySelector("#nombre--contacto").value.toUpperCase();
     let boton = form.querySelector(".boton--contacto");
     
@@ -588,7 +596,7 @@ function sendMailContacto (form) {
         phone: form.querySelector("#telefono--contacto").value,
         message: form.querySelector("#mensaje--contacto").value,
     })
-    .then((res) => {
+    .then(() => {
         Toast.fire({
             icon: 'success',
             title: `${nombre}! Vamos a estar comunicandonos con vos lo antes posible!`,
@@ -606,7 +614,6 @@ function sendMailContacto (form) {
 
 if (thisURL.includes("contacto.html")){
     let formContacto = document.querySelector(".main--contacto .formContacto");
-
     formContacto.addEventListener("submit", (e) => {
         e.preventDefault();
         let email = e.target.querySelector("#email--contacto").value;
@@ -631,15 +638,15 @@ if (thisURL.includes("contacto.html")){
 /**************************************************************/
 /*                          CARRITO                           */
 /**************************************************************/
-let carritoHtmlGaleria = document.querySelector("#galeria__carrito");
-let carritoHtmlFooter = document.querySelector("#footer__carrito");
+let carritoHtmlGaleria = document.querySelector("#galeria__carrito");   // Cosplays en el carrito
+let carritoHtmlFooter = document.querySelector("#footer__carrito");     // Footer del carrito
 
 // Se encarga de transportar todas las modificaciones en el carrito al html.
 function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigoDesc")) {
     // Guardo en localStorage
     carrito.guardarCarrito();
 
-    // Si pasa por parámetro tengo que actualizar
+    // Si pasa algo por parámetro tengo que actualizar el localStorage del código de descuento
     localStorage.removeItem("inputCodigoDesc");
     localStorage.setItem("inputCodigoDesc", inputCodigoText);
     
@@ -679,6 +686,7 @@ function actualizarCarrito (inputCodigoText = localStorage.getItem("inputCodigoD
         localStorage.removeItem("inputCodigoDesc");
         localStorage.setItem("inputCodigoDesc", ""); 
         carrito.descuento = 0;
+        carrito.codigoPostal = "";
     }
 }
 
@@ -801,9 +809,9 @@ function cargarCarrito () {     // EVENTOS DEL CARRITO
             mensajeDescuento.innerHTML = mensaje;
 
             mensajeDescuento.classList.remove("fade-out", color);
-                window.requestAnimationFrame(() => {
-                    mensajeDescuento.classList.add("fade-out", color);
-                });
+            window.requestAnimationFrame(() => {
+                mensajeDescuento.classList.add("fade-out", color);
+            });
         }
 
         if (e.submitter.className.includes("iniciarCompra")) {
@@ -923,6 +931,7 @@ buscadorHeader.addEventListener("submit", (e) => {
     }
 });
 
+// Botón en vista mobile que redirige al buscador de la tienda
 let buscadorHeaderMobile = document.querySelector("#headerBuscadorMobile");
 buscadorHeaderMobile.addEventListener("click", () => {
     buscadorHeader.querySelector("input").value = " ";
@@ -936,7 +945,8 @@ function usuarioEstaLoggeado () {
     return estaLoggeado;
 }
 
-function switchBotonesUsuario () {
+// Cambia el estado de visibilidad de los botones de usuario
+function switchBotonesUsuario () {  
     let botonesCuenta = document.querySelectorAll(".header__cuenta button");
 
     for (const boton of botonesCuenta) {
@@ -948,6 +958,7 @@ function switchBotonesUsuario () {
     }
 }
 
+// Evento de registro
 let formRegistro = document.querySelector(".formRegistro");
 formRegistro.addEventListener("submit", (e) => {
 
@@ -955,11 +966,14 @@ formRegistro.addEventListener("submit", (e) => {
 
     // Guardo al usuario
     let form = e.target;
-    cliente = new User(form.querySelector("#userNameRegister").value, form.querySelector("#userEmailRegister").value, form.querySelector("#userPasswordRegister").value);
-    cliente.guardarUser();/* 
+    clienteLoggeado = new User(form.querySelector("#userNameRegister").value, form.querySelector("#userEmailRegister").value, form.querySelector("#userPasswordRegister").value);
+    clienteLoggeado.guardarUser();
     
-    // Guardo que el usuario se loggeo
-    localStorage.setItem("usuarioLoggeado", JSON.stringify(true)); */
+    // Guardo en el arreglo de clientes del localStorage el nuevo usuario
+    let clientesRegistrados = JSON.parse(localStorage.getItem("usuariosRegistrados"));
+    console.log(clientesRegistrados);
+    clientesRegistrados.push(clienteLoggeado);
+    localStorage.setItem("usuariosRegistrados", JSON.stringify(clientesRegistrados));
 
     // Cierro el modal
     form.parentElement.parentElement.querySelector(".btn-close").click();
@@ -969,7 +983,7 @@ formRegistro.addEventListener("submit", (e) => {
 
     // Alerta
     Swal.fire({
-        title: `${cliente.nombre} gracias por registrarte! Te va a llegar un email de confirmación`,
+        title: `${clienteLoggeado.nombre} gracias por registrarte! Te va a llegar un email de confirmación`,
         showClass: {
           popup: 'animate__animated animate__fadeInDown'
         },
@@ -979,18 +993,11 @@ formRegistro.addEventListener("submit", (e) => {
     });
 });
 
-
+// Evento de Login
 let formLogin = document.querySelector(".formLogin");
 formLogin.addEventListener("submit", (e) => {
     e.preventDefault();
-
-    // Cierro el modal
-    let form = e.target;  
-    form.parentElement.parentElement.querySelector(".btn-close").click();
-
-    // Cambio los botones
-    switchBotonesUsuario();
-
+    
     // Alerta
     const Toast = Swal.mixin({
         toast: true,
@@ -998,23 +1005,63 @@ formLogin.addEventListener("submit", (e) => {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true
-    }).fire({
-        icon: 'success',
-        title: 'Ingreso correcto!'
     });
+
+    // Veo si está registrado --> De momento el localStorage simula la base de datos
+    let clientesRegistrados = JSON.parse(localStorage.getItem("usuariosRegistrados"));
+    
+    let thisEmail = e.target.querySelector("#formInicioSesionEmail").value;
+    let clienteDB = clientesRegistrados.find(c => c.email == thisEmail);
+
+    if (clienteDB) {    // Si el cliente está registrado
+
+        let thisPassword = e.target.querySelector("#formInicioSesionPassword").value;
+        if (clienteDB.password == thisPassword){        // Si matchea la constraseña
+            Object.assign(clienteLoggeado, clienteDB);
+
+            clienteLoggeado.guardarUser();
+            
+            // Cierro el modal
+            let form = e.target;  
+            form.parentElement.parentElement.querySelector(".btn-close").click();
+            
+            // Cambio los botones
+            switchBotonesUsuario();
+
+            Toast.fire({
+                icon: 'success',
+                title: `Bienvenido de nuevo ${clienteLoggeado.nombre.toUpperCase()}!`
+            });
+
+            // Guardo que el usuario está loggeado
+            localStorage.setItem("usuarioLoggeado", JSON.stringify(true));
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: 'Contraseña incorrecta.'
+            });
+        }
+    } else {
+        Toast.fire({
+            icon: 'error',
+            title: 'No hay ningún usuario registrado con ese email.'
+        });
+    }
 })
 
+// Botón de salir de la cuenta(Está dos veces por el que está en la vista mobile escondido)
 let botonesSalir = document.querySelectorAll(".botonSalir");
 for (const boton of botonesSalir) {
     boton.addEventListener("click", () => {
         switchBotonesUsuario();
-        cliente.borrarUser();
+        clienteLoggeado.borrarUser();
         
         // Guardo que el usuario se desloggeo
         localStorage.setItem("usuarioLoggeado", JSON.stringify(false));
     })
 }
 
+// Botón de opciones de cuenta (Está dos veces por el que está en la vista mobile escondido)
 let botonesCuenta = document.querySelectorAll(".botonCuenta");
 for (const boton of botonesCuenta) {
     boton.addEventListener("click", () => {
@@ -1028,15 +1075,53 @@ for (const boton of botonesCuenta) {
               popup: 'animate__animated animate__fadeOutUp'
             }
         })
-
-
     })
 }
 
+// Manda un mail a una persona de que se suscribió correctamente al newsletter
 function sendMailNewsletter (form) {
-    // DESARROLLAR --> No me quedan plantillas en emailjs
+    let emailUser = form.querySelector("input").value;
+    let boton = form.querySelector("#buttonNewsletter");
+    let codigoDesc = "ORA10";
+
+    const Toast = Swal.mixin({
+        toast: true,
+        showConfirmButton: false,   
+        timer: 5000,
+        position: "top-end",
+        color: "#645899"
+    });
+
+    // Cambio estilos botón mientras se envía y después lo vuelvo a la normalidad
+    boton.classList.remove("btn-dark", "text-white");
+    boton.classList.add("btn-light", "text-dark", "border", "border-dark", "border-3");
+
+    const serviceID = "service_2pdul4c";
+    const templateID = "template_4o3fb4l";
+
+    emailjs.send(serviceID, templateID, {   
+        email: emailUser,
+        code: codigoDesc,
+        desc: codigosDescuento.get(codigoDesc)
+    }).then(() => {
+        Toast.fire({
+            icon: 'success',
+            title: `Vamos a estar comunicandonos con vos lo antes posible!`,
+        })
+        boton.classList.remove("btn-light", "text-dark", "border", "border-dark", "border-3");
+        boton.classList.add("btn-dark", "text-white");
+    }).catch(error => {
+        Toast.fire({
+            icon: 'error',
+            title: "Hubo un error. Espera un rato e intenta nuevamente."
+        });
+        console.log(error);
+        boton.classList.remove("btn-light", "text-dark", "border", "border-dark", "border-3");
+        boton.classList.add("btn-dark", "text-white");
+    });
 }
 
+// Evento de newsletter
 let newsletter = document.querySelector(".footer__newsletter");
 newsletter.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -1053,10 +1138,6 @@ newsletter.addEventListener("submit", (e) => {
 
     if (validarEmail(email)) {
         sendMailNewsletter(e.target);
-        Toast.fire({
-            icon: 'success',
-            title: 'Gracias por suscribirte! Te vamos a estar comunicando todas nuestras novedades ♡'
-        })
     } else {
         Toast.fire({
             icon: 'error',

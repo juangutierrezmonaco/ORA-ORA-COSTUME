@@ -8,7 +8,7 @@ function numbersInString (str) {    // Retorna los números de un string o NaN
     return parseInt(result.join(""));
 }
 
-function calcularDescuento (total, desc) {
+function calcularDescuento (total, desc) {  // Calcula el descuento de un total
     return total * desc/100;
 }
 
@@ -49,6 +49,8 @@ function calcularPrecioConDescuento (total, desc) {  // Se le pasa un total y un
 
     return true;
 }
+
+// Las 4 siguientes funciones son funciones auxiliares utilizadadas para validar un mail de forma básica
 
 /**
  * Acceptable email domain formats
@@ -107,20 +109,17 @@ function validarEmail (email){
     return _isDomainValid(domain) && _isPrefixValid(prefix);
 }
 
-function actualizarStock () {
+function actualizarStock () {   // Actualiza el stock en los cosplays del carrito y en el resto de los arreglos
     for (const cosplay of carrito.cosplays) {
         cosplay.stock -= carrito.getCantidad(cosplay);
     }
 }
 
 function estoyEnIndex () {
-    if (thisURL == "" || thisURL == "?" || thisURL.includes("index.html")){
-        return true;
-    }
-    return false;
+    return (thisURL == "" || thisURL == "?" || thisURL.includes("index.html")) ? true :false;
 }
 
-function mostrarCartelError (){
+function mostrarCartelError (){     // Función general para mostrar un error 
     Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -134,7 +133,7 @@ function mostrarCartelError (){
     });
 }
 
-async function efectoCarga(sectionNode, delay = 1000){
+async function efectoCarga(sectionNode, delay = 1000){  // Efecto de carga que se coloca abajo de un elemento del DOM pasado
     try {
         // Hago efecto de carga
         let efectoCarga = document.createElement("div");
@@ -162,7 +161,7 @@ async function efectoCarga(sectionNode, delay = 1000){
     }
 }
 
-async function efectoCargaPagina(delay = 1500){
+async function efectoCargaPagina(delay = 1500){ // Efecto de carga sobre toda la página
     try {
         let efectoCarga = document.createElement("div");
         efectoCarga.classList.add("afterBody");
@@ -188,7 +187,7 @@ async function efectoCargaPagina(delay = 1500){
     }
 }
 
-async function getCosplaysFromDB(){
+async function getCosplaysFromDB(){     // Simula levantar los cosplays de la base de datos
     let res = await axios("../server/cosplays.json");
     let cosplays = res.data;
 
@@ -207,7 +206,7 @@ async function getCosplaysFromDB(){
     return cosplaysObj;
 }
 
-async function getCodigosFromDB () {
+async function getCodigosFromDB () {     // Simula levantar los códigos de descuento de la base de datos
     let res = await axios("../server/codigosDesc.json");
     let codigosDescuento = res.data;
 
@@ -217,7 +216,7 @@ async function getCodigosFromDB () {
 }
 
 
-async function getMedidasFromDB () {
+async function getMedidasFromDB () {     // Simula levantar las medidas de la base de datos (MEDIDAS DEL INSTRUCTIVO DE CÓMO TOMARLAS)
     let res = await axios("../server/medidasSolicitadas.json");
     let medidas = res.data;
 
@@ -231,4 +230,3 @@ async function getMedidasFromDB () {
 
     return medidasObj;
 }
-
