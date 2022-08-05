@@ -1,5 +1,6 @@
 
-# ORA ORA COSTUME
+# ORA ORA COSTUME![image](https://user-images.githubusercontent.com/104147035/183025921-8aff4174-a07a-4313-b545-21f3af909588.png)
+
 
 Página creada desde 0 a través de los cursos de "Desarrollo Web" y "Javascript"
 de Coderhouse. Este repositorio toma como punto de partida el trabajo final
@@ -17,10 +18,6 @@ no es un emprendimiento en funcionamiento actualmente.
 ## Demo
 
 https://oraoracostume.vercel.app/
-
-![Logo]![image](https://user-images.githubusercontent.com/104147035/183022283-359e107f-7076-41cc-82bf-060c3db57270.png)
-
-
 
 ## Screenshots
 ![Captura1](https://user-images.githubusercontent.com/104147035/183021579-a85313aa-438d-481b-94d1-ee03a98bdcd6.PNG)
