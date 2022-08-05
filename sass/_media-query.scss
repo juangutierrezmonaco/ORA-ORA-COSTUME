@@ -54,12 +54,12 @@
         }
     }
 
-    .modal {    // Para que todos los modals se vean hasta el header
-        padding-bottom: 15vh;
+    .modal {    // Para que en vista mobile se ponga encima del header
+        padding-bottom: 17vh;
     }
 
-    .swal2-container {// Para que todas las alertas se vean hasta el header
-        margin-bottom: 15vh;
+    .swal2-container {  // Para que en vista mobile se ponga encima del header
+        z-index: 10000000;
     }
 
     // Footer
