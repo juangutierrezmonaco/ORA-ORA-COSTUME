@@ -49,6 +49,13 @@ Considerando que es una simulación, sin backend y realizada sólo con Javascrip
   al dueño de la página junto con los datos.
 - Se puede completar un formulario de contacto que será enviado al dueño con la información.
 
+En este video se juega un poco con las funcionalidades de la página:
+
+https://user-images.githubusercontent.com/104147035/185449744-7471b953-2702-413e-a00d-3c7b7f7ab2ea.mp4
+
+
+
+
 ## Screenshots
 ![Captura1](https://user-images.githubusercontent.com/104147035/183021579-a85313aa-438d-481b-94d1-ee03a98bdcd6.PNG)
 ![Captura2](https://user-images.githubusercontent.com/104147035/183021583-b6d07635-1cb6-48cd-8840-8d57f61031e6.PNG)
