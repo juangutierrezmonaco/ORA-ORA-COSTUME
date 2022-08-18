@@ -1,10 +1,9 @@
 
 # ORA ORA COSTUME![image](https://user-images.githubusercontent.com/104147035/183025921-8aff4174-a07a-4313-b545-21f3af909588.png)
 
-
 Página responsive creada desde 0 a través de los cursos de "Desarrollo Web" y "Javascript"
 de Coderhouse. Este repositorio toma como punto de partida el trabajo final
-del curso de "Desarrollo Web". Fue realizada sólo para fines educativos, 
+del curso de "Desarrollo Web". Es una tienda de cosplays que fue realizada sólo para fines educativos, 
 no es un emprendimiento en funcionamiento actualmente.
 
 
