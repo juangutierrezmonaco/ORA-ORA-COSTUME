@@ -1,23 +1,60 @@
 
 # ORA ORA COSTUME![image](https://user-images.githubusercontent.com/104147035/183025921-8aff4174-a07a-4313-b545-21f3af909588.png)
 
-
-Página creada desde 0 a través de los cursos de "Desarrollo Web" y "Javascript"
+Página responsive creada desde 0 a través de los cursos de "Desarrollo Web" y "Javascript"
 de Coderhouse. Este repositorio toma como punto de partida el trabajo final
-del curso de "Desarrollo Web". Fue realizada sólo para fines educativos, 
+del curso de "Desarrollo Web". Es una tienda de cosplays que fue realizada sólo para fines educativos, 
 no es un emprendimiento en funcionamiento actualmente.
 
 
 
 ## Tecnologias Utilizadas
- - HTML / CSS
- - SASS
- - Bootstrap v5.2
- - Javascript
- - Librearías: Axios, EmailsJS y SweetAlert2
+- HTML (semántico)
+- CSS
+  - Flex
+  - Grid
+  - Transition
+  - Media queries
+  - Pseudoclases y pseudoelementos
+- Metodología BEM
+- Git
+- Github / Github pages
+- SEO onpage básico
+- SASS
+  - Variables y mapas
+  - Anidamientos (nesting y &)
+  - extend
+  - mixin e include
+  - each
+- Javascript
+- Frameworks: Bootstrap v5.2
+- Librearías: Axios, EmailsJS y SweetAlert2
+
 ## Demo
 
 https://oraoracostume.vercel.app/
+
+## ¿Qué se puede hacer en la página?
+
+Considerando que es una simulación, sin backend y realizada sólo con Javascript Vanilla, se puede realizar lo siguiente:
+
+- Agregar o quitar del carrito y que esto tenga persistencia a través del local storage en todas las páginas.
+- Modificar en el carrito las cantidades que se deseen de productos.
+- Simular una compra con un código de descuento.
+- En cuanto a la tienda: se puede buscar, filtrar y ordenar los productos.
+- Buscar un término en el header y ser redireccionado a la tienda desde cualquier página.
+- Suscribirse a un newsletter que manda un mail con un código de descuento y una bienvenida.
+- Crear una cuenta y que esta se guarde para luego iniciar sesión. Y que si ya hay una cuenta guardada, se inicie automáticamente.
+- En cuánto a las medidas: se pueden ir guardando a medida que se ve el tutorial. Cuando se termina de completar el formulario con los datos, las medidas son enviadas
+  al dueño de la página junto con los datos.
+- Se puede completar un formulario de contacto que será enviado al dueño con la información.
+
+En este video se juega un poco con las funcionalidades de la página:
+
+https://user-images.githubusercontent.com/104147035/185449744-7471b953-2702-413e-a00d-3c7b7f7ab2ea.mp4
+
+
+
 
 ## Screenshots
 ![Captura1](https://user-images.githubusercontent.com/104147035/183021579-a85313aa-438d-481b-94d1-ee03a98bdcd6.PNG)
@@ -28,5 +65,3 @@ https://oraoracostume.vercel.app/
 ![Captura6](https://user-images.githubusercontent.com/104147035/183021593-c6afd36b-fba7-4c84-88b3-446a12666856.PNG)
 ![Captura7](https://user-images.githubusercontent.com/104147035/183021597-690a6875-074d-4b4b-bbbb-206cdd2a60e5.PNG)
 ![Captura8](https://user-images.githubusercontent.com/104147035/183025318-969ee826-b24a-4331-907a-0029889498b6.PNG)
-
-
