@@ -32,7 +32,7 @@ no es un emprendimiento en funcionamiento actualmente.
 
 ## Demo
 
-https://oraoracostume.vercel.app/
+[Link para ir a la página](https://oraoracostume.vercel.app/)
 
 ## ¿Qué se puede hacer en la página?
 
